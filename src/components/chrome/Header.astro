@@ -1,0 +1,452 @@
+---
+/**
+ * En-tête principal.
+ *
+ * — Fixe en haut, transparent par-dessus le hero, opaque dès le défilement.
+ * — Méga-menu Services ouvert au survol ET au focus clavier, sans JavaScript :
+ *   la révélation se fait en CSS via :hover / :focus-within. Le script en fin
+ *   de composant ne sert qu’à trois choses que le CSS ne sait pas faire —
+ *   l’état de défilement, le tiroir mobile et la touche Échap.
+ * — Sans JavaScript, la navigation reste utilisable : le bouton mobile est
+ *   masqué et un <noscript> affiche les liens en clair.
+ */
+import Logo from './Logo.astro';
+import { ENTREPRISE, NAV_PRINCIPALE, SERVICES, TEL_HREF } from '~/lib/site';
+
+interface Props {
+  /** true sur les pages dont le hero est une photo pleine hauteur. */
+  readonly surHero?: boolean;
+  /** Chemin courant, pour marquer le lien actif (aria-current). */
+  readonly chemin: string;
+}
+const { surHero = false, chemin } = Astro.props;
+
+/** Actif si le chemin courant est la page elle-même ou l’une de ses filles. */
+const estActif = (href: string) => chemin === href || chemin.startsWith(href);
+---
+
+<a
+  href="#contenu"
+  class="lien-evitement sr-only-focusable bg-accent text-on-accent rounded-xs absolute top-4 left-4 px-4 py-3 text-small font-semibold"
+>
+  Aller au contenu principal
+</a>
+
+<header
+  id="site-header"
+  data-sur-hero={surHero ? 'true' : 'false'}
+  data-scrolled="false"
+  class:list={['site-header fixed inset-x-0 top-0', surHero && 'on-ink']}
+>
+  <div class="wrap flex h-header items-center justify-between gap-8">
+    <!-- Marque -->
+    <a
+      href="/"
+      class="flex-none"
+      aria-label="Bellco Rénovation — retour à l’accueil"
+      aria-current={chemin === '/' ? 'page' : undefined}
+    >
+      <Logo />
+    </a>
+
+    <!-- Navigation bureau -->
+    <nav class="hidden lg:flex items-center gap-7 xl:gap-9" aria-label="Navigation principale">
+      <!-- Services : déclencheur + méga-menu -->
+      <div class="nav-services flex items-center">
+        <a
+          href="/services/"
+          class="nav-lien flex items-center gap-2 text-small font-medium"
+          aria-current={estActif('/services/') ? 'page' : undefined}
+        >
+          Services
+          <svg class="chevron size-3" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+            <path d="M2 4.5 6 8.5 10 4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+          </svg>
+        </a>
+
+        <div class="mega">
+          <div class="mega-grid wrap grid gap-12 py-8">
+            <div class="border-line md:border-r md:pr-10">
+              <p class="text-overline text-ink-500 uppercase">Tous corps d’état</p>
+              <p class="font-display text-h4 mt-3">
+                Un seul interlocuteur, du premier plan à la dernière finition.
+              </p>
+              <p class="text-ink-700 mt-3 text-small">
+                Devis détaillé par corps de métier, plans 2D/3D, garantie décennale.
+              </p>
+              <a
+                href="/services/"
+                class="text-accent hover:text-accent-hover mt-5 inline-flex items-center gap-2 text-small font-semibold"
+              >
+                Voir tous les services
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
+
+            <ul class="grid grid-cols-2 gap-x-6 gap-y-5 xl:grid-cols-3">
+              {
+                SERVICES.map((service) => (
+                  <li>
+                    <a href={`/services/${service.slug}/`} class="mega-lien block">
+                      <span class="block text-small font-semibold">{service.titre}</span>
+                      <span class="text-ink-500 mt-1 block text-caption">{service.accroche}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {
+        NAV_PRINCIPALE.map((lien) => (
+          <a
+            href={lien.href}
+            class="nav-lien text-small font-medium"
+            aria-current={estActif(lien.href) ? 'page' : undefined}
+          >
+            {lien.libelle}
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- Actions bureau -->
+    <div class="hidden lg:flex flex-none items-center gap-5">
+      <a href={TEL_HREF} class="hidden xl:flex items-center gap-2 text-small font-semibold">
+        <span class="bg-accent size-2 rounded-full" aria-hidden="true"></span>
+        <span class="sr-only">Téléphone :</span>
+        {ENTREPRISE.telephoneAffiche}
+      </a>
+      <a href="/devis/" class="btn-devis rounded px-5 py-3 text-small font-semibold">
+        Demander un devis
+      </a>
+    </div>
+
+    <!-- Déclencheur mobile. L’attribut `hidden` est retiré par le script :
+         sans JavaScript le bouton ne s’affiche jamais et le <noscript> prend
+         le relais, plutôt qu’un bouton mort. -->
+    <button
+      type="button"
+      id="nav-toggle"
+      hidden
+      class="lg:hidden -mr-2 flex flex-col gap-1.5 p-2"
+      aria-expanded="false"
+      aria-controls="nav-mobile"
+    >
+      <span class="sr-only">Ouvrir le menu</span>
+      <span class="bg-current block h-0.5 w-6" aria-hidden="true"></span>
+      <span class="bg-current block h-0.5 w-6" aria-hidden="true"></span>
+      <span class="bg-current block h-0.5 w-4" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <noscript>
+    <nav class="wrap lg:hidden pb-4" aria-label="Navigation principale">
+      <ul class="flex flex-wrap gap-x-5 gap-y-2 text-small font-medium">
+        <li><a href="/services/" class="link-rule">Services</a></li>
+        {
+          NAV_PRINCIPALE.map((lien) => (
+            <li>
+              <a href={lien.href} class="link-rule">
+                {lien.libelle}
+              </a>
+            </li>
+          ))
+        }
+        <li><a href="/devis/" class="link-rule">Demander un devis</a></li>
+      </ul>
+    </nav>
+  </noscript>
+</header>
+
+<!-- Tiroir mobile -->
+<div id="nav-mobile" class="nav-mobile on-ink" hidden>
+  <button
+    type="button"
+    id="nav-close"
+    class="border-ink-500 absolute top-5 right-5 flex size-10 items-center justify-center rounded-full border"
+  >
+    <span class="sr-only">Fermer le menu</span>
+    <svg class="size-5" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <path d="M4 4 16 16M16 4 4 16" stroke="currentColor" stroke-width="1.5" fill="none"></path>
+    </svg>
+  </button>
+
+  <div class="wrap flex min-h-dvh flex-col pt-24 pb-32">
+    <nav aria-label="Navigation principale mobile">
+      <ul class="flex flex-col">
+        <li>
+          <a href="/services/" class="nav-mobile-lien border-ink-700 border-b">Services</a>
+        </li>
+        {
+          NAV_PRINCIPALE.map((lien, i) => (
+            <li>
+              <a
+                href={lien.href}
+                class:list={[
+                  'nav-mobile-lien',
+                  i < NAV_PRINCIPALE.length - 1 && 'border-ink-700 border-b',
+                ]}
+              >
+                {lien.libelle}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a
+      href="/devis/"
+      class="bg-accent text-on-accent rounded mt-10 block px-6 py-4 text-center text-body-sm font-semibold"
+    >
+      Demander un devis gratuit
+    </a>
+
+    <p class="text-sand-300 mt-7 text-small">
+      {ENTREPRISE.adresse.rue}<br />
+      {ENTREPRISE.adresse.codePostal}&nbsp;{ENTREPRISE.adresse.ville}
+    </p>
+  </div>
+</div>
+
+<style>
+  /* z-index et gabarit du méga-menu : Tailwind v4 n’expose pas d’espace de
+     noms thématique pour z-index ni pour grid-template-columns. On les pose
+     donc ici, toujours depuis les jetons, plutôt qu’en valeurs arbitraires
+     (`z-[60]`, `grid-cols-[260px_1fr]`) dans le markup. */
+  .lien-evitement {
+    z-index: var(--z-drawer);
+  }
+  .mega-grid {
+    grid-template-columns: 1fr;
+  }
+  @media (width >= 860px) {
+    .mega-grid {
+      grid-template-columns: 260px 1fr;
+    }
+  }
+
+  /* --- Thème de l’en-tête selon l’état -----------------------------------
+     Toutes les valeurs viennent des jetons : aucune couleur en dur ici. */
+  .site-header {
+    z-index: var(--z-header);
+    color: var(--color-ink-900);
+    background-color: color-mix(in srgb, var(--color-ground) 92%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-line);
+    transition:
+      background-color var(--duration-slow) var(--ease-out-soft),
+      color var(--duration-slow) var(--ease-out-soft),
+      border-color var(--duration-slow) var(--ease-out-soft);
+  }
+
+  /* Par-dessus le hero, tant qu’on n’a pas défilé : fond transparent, texte
+     crème. Le hero porte son propre voile dégradé, le contraste du texte est
+     donc garanti côté hero. */
+  .site-header[data-sur-hero='true'][data-scrolled='false'] {
+    color: var(--color-on-primary);
+    background-color: transparent;
+    backdrop-filter: none;
+    border-bottom-color: color-mix(in srgb, var(--color-on-primary) 18%, transparent);
+  }
+
+  /* --- Liens de navigation ----------------------------------------------- */
+  .nav-lien {
+    padding-block: var(--spacing-1);
+    border-bottom: 1px solid transparent;
+    transition:
+      color var(--duration-fast) var(--ease-out-soft),
+      border-color var(--duration-fast) var(--ease-out-soft);
+  }
+  .nav-lien:hover,
+  .nav-lien[aria-current='page'] {
+    border-bottom-color: currentColor;
+  }
+  .site-header[data-scrolled='true'] .nav-lien:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+
+  /* --- Méga-menu ----------------------------------------------------------
+     Révélé au survol du groupe ou dès qu’un de ses éléments reçoit le focus :
+     tabuler sur « Services » ouvre le panneau, ce qui rend ses liens
+     focusables à leur tour. Aucun JavaScript n’est nécessaire.
+     Le panneau se positionne par rapport à l’en-tête (seul ancêtre
+     positionné) tout en restant un descendant DOM du groupe — c’est ce qui
+     permet à :hover et :focus-within de fonctionner. */
+  .mega {
+    position: absolute;
+    inset-inline: 0;
+    top: var(--spacing-header);
+    background-color: var(--color-paper);
+    color: var(--color-ink-900);
+    border-block: 1px solid var(--color-line);
+    box-shadow: var(--shadow-menu);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+      opacity var(--duration-fast) var(--ease-out-soft),
+      transform var(--duration-fast) var(--ease-out-soft),
+      visibility var(--duration-fast);
+  }
+  .nav-services:hover .mega,
+  .nav-services:focus-within .mega {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+  /* Échap lève ce drapeau : on referme même si le pointeur reste dessus. */
+  .nav-services[data-echap='true'] .mega {
+    visibility: hidden;
+    opacity: 0;
+  }
+  .chevron {
+    transition: transform var(--duration-fast) var(--ease-out-soft);
+  }
+  .nav-services:hover .chevron,
+  .nav-services:focus-within .chevron {
+    transform: rotate(180deg);
+  }
+
+  .mega-lien {
+    border-bottom: 1px solid transparent;
+    padding-bottom: var(--spacing-1);
+    transition: border-color var(--duration-fast) var(--ease-out-soft);
+  }
+  .mega-lien:hover {
+    border-bottom-color: var(--color-accent);
+  }
+  .mega-lien:hover span:first-child {
+    color: var(--color-accent);
+  }
+
+  /* --- Bouton devis ------------------------------------------------------- */
+  .btn-devis {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    border: 1px solid var(--color-primary);
+    transition:
+      background-color var(--duration-fast) var(--ease-out-soft),
+      border-color var(--duration-fast) var(--ease-out-soft);
+  }
+  .btn-devis:hover {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+  .site-header[data-sur-hero='true'][data-scrolled='false'] .btn-devis {
+    background-color: transparent;
+    color: var(--color-on-primary);
+    border-color: color-mix(in srgb, var(--color-on-primary) 45%, transparent);
+  }
+  .site-header[data-sur-hero='true'][data-scrolled='false'] .btn-devis:hover {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  /* --- Tiroir mobile ------------------------------------------------------ */
+  .nav-mobile {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-drawer);
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .nav-mobile-lien {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    padding-block: var(--spacing-3);
+  }
+  .nav-mobile-lien:hover {
+    color: var(--color-accent-on-dark);
+  }
+</style>
+
+<script>
+  /* En-tête : état de défilement, tiroir mobile, touche Échap.
+     Volontairement sans framework — une poignée de lignes, aucun îlot React. */
+  const entete = document.getElementById('site-header');
+  const bascule = document.getElementById('nav-toggle');
+  const tiroir = document.getElementById('nav-mobile');
+  const fermeture = document.getElementById('nav-close');
+  const services = document.querySelector<HTMLElement>('.nav-services');
+
+  /* 1. État de défilement — throttlé sur rAF pour ne pas peser sur l’INP. */
+  if (entete) {
+    let enAttente = false;
+    const majEtat = () => {
+      entete.dataset.scrolled = String(window.scrollY > 40);
+      enAttente = false;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!enAttente) {
+          enAttente = true;
+          requestAnimationFrame(majEtat);
+        }
+      },
+      { passive: true },
+    );
+    majEtat();
+  }
+
+  /* 2. Tiroir mobile. Le bouton n’apparaît que si ce script s’exécute. */
+  if (bascule && tiroir) {
+    bascule.hidden = false;
+
+    const basculer = (ouvert: boolean) => {
+      tiroir.hidden = !ouvert;
+      bascule.setAttribute('aria-expanded', String(ouvert));
+      document.documentElement.style.overflow = ouvert ? 'hidden' : '';
+      if (ouvert) {
+        tiroir.querySelector<HTMLElement>('a[href], button')?.focus();
+      } else {
+        bascule.focus();
+      }
+    };
+
+    bascule.addEventListener('click', () => basculer(tiroir.hidden));
+    fermeture?.addEventListener('click', () => basculer(false));
+
+    /* Piège au clavier : Tab reste dans le tiroir tant qu’il est ouvert. */
+    tiroir.addEventListener('keydown', (evenement) => {
+      if (evenement.key !== 'Tab') return;
+      const focusables = tiroir.querySelectorAll<HTMLElement>('a[href], button');
+      if (focusables.length === 0) return;
+      const premier = focusables[0]!;
+      const dernier = focusables[focusables.length - 1]!;
+      if (evenement.shiftKey && document.activeElement === premier) {
+        evenement.preventDefault();
+        dernier.focus();
+      } else if (!evenement.shiftKey && document.activeElement === dernier) {
+        evenement.preventDefault();
+        premier.focus();
+      }
+    });
+
+    document.addEventListener('keydown', (evenement) => {
+      if (evenement.key === 'Escape' && !tiroir.hidden) basculer(false);
+    });
+  }
+
+  /* 3. Échap referme le méga-menu ouvert au clavier. Le drapeau n’est levé
+        que le temps de la fermeture, pour ne pas bloquer le survol ensuite. */
+  if (services) {
+    services.addEventListener('keydown', (evenement) => {
+      if (evenement.key !== 'Escape') return;
+      services.dataset.echap = 'true';
+      (document.activeElement as HTMLElement | null)?.blur();
+      window.setTimeout(() => {
+        delete services.dataset.echap;
+      }, 200);
+    });
+  }
+</script>

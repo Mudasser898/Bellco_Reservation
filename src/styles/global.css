@@ -1,0 +1,160 @@
+/* ============================================================================
+   Bellco Rénovation — feuille de style globale
+   Ordre : polices → Tailwind → jetons → utilitaires → base.
+   ========================================================================= */
+
+/* Polices auto-hébergées (aucun appel à un CDN tiers, RGPD-compatible).
+   On charge l'axe de graisse seul (wght) et non la version « standard »
+   qui embarque aussi l'axe optique : 58 Ko contre 132 Ko pour Newsreader.
+   Les sous-ensembles latin / latin-ext sont sélectionnés par unicode-range,
+   le navigateur ne télécharge donc que ce dont le français a besoin. */
+@import '@fontsource-variable/newsreader/wght.css';
+@import '@fontsource-variable/newsreader/wght-italic.css';
+@import '@fontsource-variable/instrument-sans/wght.css';
+
+@import 'tailwindcss';
+@import './tokens.css';
+
+/* --- Utilitaires maison ---------------------------------------------------
+   Déclarés ici pour qu'aucune valeur arbitraire ne remonte dans le markup. */
+
+/* Conteneur principal : largeur de site + gouttière fluide. */
+@utility wrap {
+  margin-inline: auto;
+  max-width: var(--container-site);
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Rythme vertical d'une section. */
+@utility section-y {
+  padding-block: var(--spacing-section);
+}
+@utility section-y-sm {
+  padding-block: var(--spacing-section-sm);
+}
+
+/* Voile dégradé du hero, pour garder le texte lisible sur la photo. */
+@utility bg-hero-scrim {
+  background-image: var(--gradient-hero-scrim);
+}
+
+/* Lien de contenu souligné à la façon d'un filet, pas d'un soulignement brut. */
+@utility link-rule {
+  border-bottom: 1px solid var(--color-line-strong);
+  transition: border-color var(--duration-fast) var(--ease-out-soft),
+    color var(--duration-fast) var(--ease-out-soft);
+  &:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+}
+
+/* Masque visuellement sans retirer du flux d'accessibilité. */
+@utility sr-only-focusable {
+  &:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* --- Base ---------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* L'en-tête fixe ne doit pas masquer la cible d'une ancre. */
+    scroll-padding-top: calc(var(--spacing-header) + var(--spacing-4));
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ground);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Évite les lignes orphelines dans les paragraphes français. */
+    text-wrap: pretty;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    /* Équilibre les titres courts sur deux lignes. */
+    text-wrap: balance;
+  }
+
+  /* Le soulignement par défaut est remplacé par des filets maîtrisés,
+     mais tout lien non stylé reste visible : on ne supprime jamais
+     l'indication sans la remplacer. */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Focus visible obligatoire — WCAG 2.1 AA, critère 2.4.7.
+     Double anneau pour rester perceptible sur fond clair comme sur encre. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+  }
+  /* Sur fond sombre, l'accent argile manque de contraste : on bascule
+     sur la version claire. */
+  .on-ink :focus-visible {
+    outline-color: var(--color-accent-on-dark);
+  }
+
+  ::selection {
+    background-color: var(--color-accent-tint);
+    color: var(--color-ink-900);
+  }
+
+  /* Les champs héritent de la typographie du site. */
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* Astro `astro:assets` produit des <img> avec width/height : on préserve
+     le ratio pour que le CLS reste nul quand l'image arrive. */
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+}
+
+/* --- Mouvement réduit -----------------------------------------------------
+   Respecte prefers-reduced-motion : plus aucune animation ni défilement
+   animé. On neutralise aussi les transitions Tailwind. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

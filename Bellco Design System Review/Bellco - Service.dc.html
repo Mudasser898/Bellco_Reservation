@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Rénovation de salle de bain à Saint-Denis et en Île-de-France — Bellco Rénovation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#F6F1E9;color:#2A2522;font-family:'Instrument Sans',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+a{color:inherit;text-decoration:none}a:hover{color:#A8452A}
+button{font-family:inherit}
+@keyframes bellcoFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<header data-screen-label="Header" style="position:fixed;top:0;left:0;right:0;z-index:60;background:rgba(246,241,233,.94);backdrop-filter:blur(12px);border-bottom:1px solid #DED4C4">
+  <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,48px);height:76px;display:flex;align-items:center;justify-content:space-between;gap:32px">
+    <a href="Bellco - Accueil.dc.html" style="display:flex;align-items:center;gap:12px;flex:none">
+      <span style="width:30px;height:30px;background:#2A2522;display:block;border-radius:3px"></span>
+      <span style="display:flex;flex-direction:column;line-height:1"><span style="font-family:'Newsreader',Georgia,serif;font-size:24px;font-weight:500">Bellco</span><span style="font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-top:3px">Rénovation</span></span>
+    </a>
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <nav style="display:flex;align-items:center;gap:36px;font-size:15.5px;font-weight:500">
+      <a href="Bellco - Accueil.dc.html#services" style="border-bottom:1px solid #A8452A;padding-bottom:2px">Services</a>
+      <a href="Bellco - Accueil.dc.html#realisations">Réalisations</a>
+      <a href="Bellco - Accueil.dc.html#methode">Notre méthode</a>
+      <a href="Bellco - Accueil.dc.html#pourquoi">L'entreprise</a>
+      <a href="Bellco - Accueil.dc.html#contact">Contact</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:20px">
+      <a href="tel:+33148000000" style="font-size:15.5px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:6px;height:6px;border-radius:50%;background:#A8452A;display:inline-block"></span>01 48 00 00 00</a>
+      <a href="Bellco - Accueil.dc.html#devis" style="background:#2A2522;color:#F6F1E9;border:1px solid #2A2522;border-radius:4px;padding:11px 18px;font-size:14.5px;font-weight:600" style-hover="background:#A8452A;border-color:#A8452A;color:#FFFDF9">Demander un devis</a>
+    </div>
+    </sc-if>
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+      <a href="Bellco - Accueil.dc.html" aria-label="Menu" style="padding:8px;display:flex;flex-direction:column;gap:5px"><span style="width:24px;height:2px;background:currentColor;display:block"></span><span style="width:24px;height:2px;background:currentColor;display:block"></span><span style="width:16px;height:2px;background:currentColor;display:block"></span></a>
+    </sc-if>
+  </div>
+</header>
+
+<!-- HERO -->
+<section data-screen-label="Hero service" style="padding-top:76px;display:grid;grid-template-columns:{{ heroCols }};min-height:{{ heroH }};border-bottom:1px solid #DED4C4">
+  <div style="padding:clamp(48px,6vw,96px) clamp(20px,4vw,48px) clamp(48px,6vw,96px) max(clamp(20px,4vw,48px),calc((100vw - 1320px)/2 + 48px));display:flex;flex-direction:column;justify-content:flex-end">
+    <nav aria-label="Fil d'Ariane" style="font-size:13.5px;color:#6B625B;display:flex;gap:8px;margin-bottom:28px"><a href="Bellco - Accueil.dc.html">Accueil</a><span>/</span><a href="Bellco - Accueil.dc.html#services">Services</a><span>/</span><span style="color:#2A2522">Salles de bain</span></nav>
+    <p style="margin:0 0 16px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">Service · Plomberie, carrelage, électricité</p>
+    <h1 style="margin:0 0 22px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(38px,4.8vw,66px);line-height:1.04;letter-spacing:-0.02em;max-width:14ch">Rénovation de salle de bain</h1>
+    <p style="margin:0 0 32px;font-size:clamp(17px,1.3vw,20px);line-height:1.55;color:#4A423D;max-width:48ch">Douche à l'italienne, réseaux neufs, étanchéité garantie dix ans. De 2 à 4 semaines de chantier, un seul interlocuteur, un devis poste par poste.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+      <a href="Bellco - Accueil.dc.html#devis" style="background:#A8452A;color:#FFFDF9;border-radius:4px;padding:16px 28px;font-size:16px;font-weight:600;display:inline-flex" style-hover="background:#8E3A22;color:#FFFDF9">Demander un devis</a>
+      <a href="#galerie" style="font-size:16px;font-weight:600;display:inline-flex;gap:8px;align-items:center;text-decoration:underline;text-underline-offset:4px">Voir la galerie <span>→</span></a>
+    </div>
+  </div>
+  <div style="position:relative;background:repeating-linear-gradient(135deg,#C9BDAB 0 12px,#D6CCBC 12px 24px);min-height:{{ heroImgH }}">
+    <span style="position:absolute;left:16px;bottom:14px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#4A423D">photo bord perdu · salle de bain livrée, lumière du jour</span>
+  </div>
+</section>
+
+<!-- STICKY IN-PAGE NAV -->
+<nav data-screen-label="Nav sticky" aria-label="Sommaire" style="position:sticky;top:76px;z-index:40;background:rgba(246,241,233,.94);backdrop-filter:blur(12px);border-bottom:1px solid #DED4C4">
+  <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,48px);display:flex;gap:28px;overflow-x:auto;scrollbar-width:none;font-size:14.5px;font-weight:500">
+    <sc-for list="{{ toc }}" as="t" hint-placeholder-count="6">
+      <button onClick="{{ t.go }}" style="background:none;border:0;padding:16px 0;color:{{ t.fg }};border-bottom:2px solid {{ t.line }};cursor:pointer;white-space:nowrap;font-size:inherit;font-weight:inherit;transition:all .2s;margin-bottom:-1px">{{ t.label }}</button>
+    </sc-for>
+    <span style="margin-left:auto;padding:12px 0;flex:none;font-size:13px;color:#6B625B;display:{{ readDisplay }}">{{ readTime }}</span>
+  </div>
+</nav>
+
+<!-- APERÇU : long-form column with aside -->
+<section id="apercu" data-screen-label="Aperçu" style="max-width:1320px;margin:0 auto;padding:clamp(64px,8vw,112px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(12,1fr);gap:48px 24px">
+  <div style="grid-column:{{ proseCol }}">
+    <p style="font-family:'Newsreader',Georgia,serif;font-size:clamp(22px,2vw,28px);line-height:1.4;margin:0 0 32px;letter-spacing:-0.01em">La salle de bain est la pièce où une rénovation mal menée se voit le plus vite : une fuite derrière la faïence, une pente de douche insuffisante, une VMC oubliée. C'est aussi celle où un bon chantier change le quotidien pour vingt ans.</p>
+    <h2 style="margin:48px 0 16px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(28px,2.6vw,36px);line-height:1.15;letter-spacing:-0.015em">Ce que comprend une rénovation complète</h2>
+    <p style="margin:0 0 22px;font-size:18px;line-height:1.65;color:#2A2522;max-width:66ch">Une rénovation complète chez Bellco commence toujours par la dépose totale : sanitaires, revêtements, faux plafond, et le plus souvent les réseaux d'eau et d'électricité existants. C'est la seule façon de garantir l'étanchéité et de repartir sur des bases conformes aux normes actuelles, notamment la NF C 15-100 pour les volumes électriques.</p>
+    <p style="margin:0 0 22px;font-size:18px;line-height:1.65;max-width:66ch">Viennent ensuite la plomberie neuve en PER ou multicouche, l'électricité avec circuits dédiés et protection différentielle 30 mA, puis la pose du receveur ou la création de la douche à l'italienne avec son système d'étanchéité liquide (SEL) ou natte. Ce n'est qu'après le contrôle de l'étanchéité que nous engageons le carrelage, la faïence, le plafond, la ventilation, la peinture et enfin la pose des meubles, de la robinetterie et des accessoires.</p>
+    <p style="margin:0 0 22px;font-size:18px;line-height:1.65;max-width:66ch">Chaque poste apparaît dans le devis avec sa quantité, sa référence de matériau et son prix. Vous pouvez arbitrer ligne par ligne : changer une faïence, garder la baignoire, reporter le sèche-serviettes. Rien n'est caché dans un forfait.</p>
+    <figure style="margin:40px 0;padding:28px 32px;border-left:2px solid #A8452A;background:#EDE6DA">
+      <blockquote style="margin:0;font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:22px;line-height:1.4">« Une salle de bain rénovée sans reprendre les réseaux, c'est une salle de bain neuve posée sur un problème ancien. »</blockquote>
+      <figcaption style="margin-top:12px;font-size:14px;color:#6B625B">M. Assim, gérant</figcaption>
+    </figure>
+    <h2 style="margin:48px 0 16px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(28px,2.6vw,36px);line-height:1.15;letter-spacing:-0.015em">Combien de temps dure le chantier ?</h2>
+    <p style="margin:0 0 22px;font-size:18px;line-height:1.65;max-width:66ch">Comptez deux semaines pour une salle d'eau de 4 m² sans modification des réseaux, trois à quatre semaines pour une rénovation complète avec douche à l'italienne, et jusqu'à six semaines lorsque nous déplaçons des cloisons ou créons une seconde salle de bain. Le planning est écrit dans le devis, semaine par semaine, et vous recevez un point d'avancement chaque vendredi.</p>
+    <p style="margin:0 0 22px;font-size:18px;line-height:1.65;max-width:66ch">En site occupé, nous organisons le chantier pour que vous conserviez un point d'eau utilisable chaque soir, et nous protégeons les circulations du logement dès le premier jour.</p>
+  </div>
+  <aside style="grid-column:{{ asideCol }};align-self:start;position:{{ asidePos }};top:150px;display:flex;flex-direction:column;gap:28px">
+    <div style="border:1px solid #DED4C4;padding:24px;background:#FFFDF9;border-radius:6px">
+      <p style="margin:0 0 16px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#6B625B">En bref</p>
+      <dl style="margin:0;display:grid;gap:12px;font-size:15px">
+        <div style="display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #EDE6DA;padding-bottom:10px"><dt style="color:#6B625B">Durée</dt><dd style="margin:0;font-weight:600">2 à 4 semaines</dd></div>
+        <div style="display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #EDE6DA;padding-bottom:10px"><dt style="color:#6B625B">Budget indicatif</dt><dd style="margin:0;font-weight:600">8 – 25 k€</dd></div>
+        <div style="display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #EDE6DA;padding-bottom:10px"><dt style="color:#6B625B">Corps d'état</dt><dd style="margin:0;font-weight:600;text-align:right">Plomberie, élec., carrelage, peinture</dd></div>
+        <div style="display:flex;justify-content:space-between;gap:12px"><dt style="color:#6B625B">Garantie</dt><dd style="margin:0;font-weight:600">Décennale</dd></div>
+      </dl>
+    </div>
+    <div style="padding:0 4px">
+      <p style="margin:0 0 6px;font-size:13px;color:#6B625B">Une question avant de demander un devis ?</p>
+      <a href="tel:+33148000000" style="font-family:'Newsreader',Georgia,serif;font-size:26px">01 48 00 00 00</a>
+    </div>
+  </aside>
+</section>
+
+<!-- ALTERNATING ASYMMETRIC SECTIONS -->
+<section id="prestations" data-screen-label="Prestations" style="border-top:1px solid #DED4C4;padding:clamp(64px,8vw,112px) 0;display:flex;flex-direction:column;gap:clamp(64px,8vw,112px)">
+  <!-- image bleeding right -->
+  <div style="display:grid;grid-template-columns:{{ altColsA }};gap:clamp(32px,4vw,64px);align-items:center">
+    <div style="padding-left:max(clamp(20px,4vw,48px),calc((100vw - 1320px)/2 + 48px));padding-right:clamp(20px,4vw,48px)">
+      <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">01 · Douche à l'italienne</p>
+      <h2 style="margin:0 0 18px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(28px,2.8vw,40px);line-height:1.12;letter-spacing:-0.015em">L'étanchéité d'abord, l'esthétique ensuite.</h2>
+      <p style="margin:0 0 16px;font-size:18px;line-height:1.65;color:#4A423D;max-width:56ch">Receveur extra-plat ou douche maçonnée avec pente intégrée, caniveau ou bonde centrale : nous choisissons avec vous selon la hauteur de réservation disponible et l'évacuation existante. L'étanchéité est testée avant la pose du carrelage — et cela figure au procès-verbal.</p>
+      <p style="margin:0;font-size:18px;line-height:1.65;color:#4A423D;max-width:56ch">Pour un accès PMR, nous préconisons un receveur à fleur de sol et une paroi fixe, sans ressaut.</p>
+    </div>
+    <div style="aspect-ratio:{{ altRatio }};background:repeating-linear-gradient(135deg,#DED4C4 0 12px,#E9E1D4 12px 24px);position:relative;border-radius:{{ altRadiusA }}">
+      <span style="position:absolute;left:16px;bottom:14px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6B625B">photo bord perdu droite · douche italienne, zellige</span>
+    </div>
+  </div>
+  <!-- image bleeding left -->
+  <div style="display:grid;grid-template-columns:{{ altColsB }};gap:clamp(32px,4vw,64px);align-items:center">
+    <div style="aspect-ratio:{{ altRatio }};background:repeating-linear-gradient(135deg,#DED4C4 0 12px,#E9E1D4 12px 24px);position:relative;order:{{ imgOrderB }};border-radius:{{ altRadiusB }}">
+      <span style="position:absolute;left:16px;bottom:14px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6B625B">photo bord perdu gauche · réseaux avant fermeture</span>
+    </div>
+    <div style="padding-right:max(clamp(20px,4vw,48px),calc((100vw - 1320px)/2 + 48px));padding-left:clamp(20px,4vw,48px)">
+      <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">02 · Plomberie et électricité</p>
+      <h2 style="margin:0 0 18px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(28px,2.8vw,40px);line-height:1.12;letter-spacing:-0.015em">Des réseaux neufs, photographiés avant fermeture.</h2>
+      <p style="margin:0 0 16px;font-size:18px;line-height:1.65;color:#4A423D;max-width:56ch">Alimentation en multicouche, évacuations en PVC avec pentes contrôlées, nourrice accessible. Côté électricité : circuits dédiés, liaison équipotentielle, respect des volumes 0, 1 et 2, sèche-serviettes sur ligne propre.</p>
+      <p style="margin:0;font-size:18px;line-height:1.65;color:#4A423D;max-width:56ch">Chaque réseau est photographié avant d'être refermé. Vous recevez ces photos avec le dossier de fin de chantier.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCOPE OF WORK -->
+<section id="perimetre" data-screen-label="Périmètre" style="background:#2A2522;color:#F6F1E9">
+  <div style="max-width:1320px;margin:0 auto;padding:clamp(64px,8vw,112px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(12,1fr);gap:48px 24px">
+    <div style="grid-column:{{ leftCol }}">
+      <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#E0906F">Périmètre d'intervention</p>
+      <h2 style="margin:0 0 18px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(30px,3.2vw,44px);line-height:1.1;letter-spacing:-0.015em">Tout ce que nous prenons en charge.</h2>
+      <p style="margin:0;font-size:17px;line-height:1.65;color:#C9BDAB;max-width:38ch">Chaque ligne correspond à un poste du devis. Ce qui n'y figure pas n'est pas facturé.</p>
+    </div>
+    <div style="grid-column:{{ rightCol }};display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 40px">
+      <sc-for list="{{ scope }}" as="g" hint-placeholder-count="4">
+        <div style="border-top:1px solid #4A423D;padding:22px 0 28px">
+          <h3 style="margin:0 0 14px;font-size:14px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:#E0906F">{{ g.title }}</h3>
+          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;font-size:16px;line-height:1.5">
+            <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="5"><li style="display:flex;gap:12px"><span style="width:14px;height:1px;background:#C9BDAB;flex:none;margin-top:12px"></span><span>{{ it }}</span></li></sc-for>
+          </ul>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="galerie" data-screen-label="Galerie" style="max-width:1320px;margin:0 auto;padding:clamp(64px,8vw,112px) clamp(20px,4vw,48px)">
+  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px;margin-bottom:40px">
+    <h2 style="margin:0;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(30px,3.2vw,44px);line-height:1.1;letter-spacing:-0.015em">Salles de bain livrées</h2>
+    <a href="Bellco - Realisation.dc.html" style="font-size:15.5px;font-weight:600;color:#A8452A;display:inline-flex;gap:8px;align-items:center">Voir les études de cas <span>→</span></a>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:16px">
+    <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="6">
+      <figure style="margin:0;grid-column:{{ g.span }};aspect-ratio:{{ g.ratio }};background:repeating-linear-gradient(135deg,#DED4C4 0 12px,#E9E1D4 12px 24px);position:relative;border-radius:4px;overflow:hidden">
+        <figcaption style="position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:space-between;font-size:12px;color:#4A423D"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6B625B">photo · {{ g.slug }}</span><span style="font-weight:600">{{ g.commune }}</span></figcaption>
+      </figure>
+    </sc-for>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" data-screen-label="FAQ" style="border-top:1px solid #DED4C4">
+  <div style="max-width:1320px;margin:0 auto;padding:clamp(64px,8vw,112px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(12,1fr);gap:48px 24px">
+    <div style="grid-column:{{ leftCol }}">
+      <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">Questions fréquentes</p>
+      <h2 style="margin:0;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(30px,3.2vw,44px);line-height:1.1;letter-spacing:-0.015em">Salle de bain : ce qu'on nous demande le plus.</h2>
+    </div>
+    <div style="grid-column:{{ rightCol }};border-top:1px solid #DED4C4">
+      <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="5">
+        <div style="border-bottom:1px solid #DED4C4">
+          <button onClick="{{ f.toggle }}" aria-expanded="{{ f.open }}" style="width:100%;text-align:left;background:none;border:0;padding:22px 0;display:flex;justify-content:space-between;align-items:center;gap:24px;cursor:pointer;color:inherit;font-size:19px;font-weight:500;line-height:1.35" style-hover="color:#A8452A"><span>{{ f.q }}</span><span style="font-family:'Newsreader',Georgia,serif;font-size:28px;line-height:1;color:#A8452A;flex:none;width:28px;text-align:center">{{ f.icon }}</span></button>
+          <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:0 48px 26px 0;font-size:17px;line-height:1.65;color:#4A423D;max-width:62ch;animation:bellcoFade .25s ease">{{ f.a }}</p></sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE CTA -->
+<section id="devis" data-screen-label="CTA devis" style="background:#EDE6DA;border-top:1px solid #DED4C4">
+  <div style="max-width:1320px;margin:0 auto;padding:clamp(64px,8vw,112px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(12,1fr);gap:40px 24px;align-items:center">
+    <div style="grid-column:{{ ctaL }}">
+      <h2 style="margin:0 0 18px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(34px,4vw,56px);line-height:1.05;letter-spacing:-0.02em;max-width:18ch">Un devis salle de bain, poste par poste, sous 10 jours.</h2>
+      <p style="margin:0;font-size:18px;line-height:1.65;color:#4A423D;max-width:50ch">Visite conseil gratuite à Saint-Denis, en Seine-Saint-Denis, à Paris et en Île-de-France. Plans 2D/3D inclus pour les rénovations complètes.</p>
+    </div>
+    <div style="grid-column:{{ ctaR }};display:flex;flex-direction:column;gap:12px">
+      <a href="Bellco - Accueil.dc.html#devis" style="background:#A8452A;color:#FFFDF9;border-radius:4px;padding:18px 28px;font-size:16px;font-weight:600;display:flex;justify-content:space-between;align-items:center" style-hover="background:#8E3A22;color:#FFFDF9">Demander un devis <span>→</span></a>
+      <a href="tel:+33148000000" style="border:1px solid #2A2522;border-radius:4px;padding:18px 28px;font-size:16px;font-weight:600;display:flex;justify-content:space-between;align-items:center" style-hover="background:#2A2522;color:#F6F1E9">Appeler M. Assim <span style="font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:20px">01 48 00 00 00</span></a>
+    </div>
+  </div>
+</section>
+
+<footer data-screen-label="Footer" style="background:#2A2522;color:#C9BDAB">
+  <div style="max-width:1320px;margin:0 auto;padding:56px clamp(20px,4vw,48px) 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px 32px;font-size:15px;line-height:1.7">
+    <div style="min-width:240px">
+      <div style="display:flex;align-items:center;gap:12px;color:#F6F1E9;margin-bottom:16px"><span style="width:30px;height:30px;background:#F6F1E9;display:block;border-radius:3px"></span><span style="display:flex;flex-direction:column;line-height:1"><span style="font-family:'Newsreader',Georgia,serif;font-size:24px;font-weight:500">Bellco</span><span style="font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-top:3px">Rénovation</span></span></div>
+      <p style="margin:0;max-width:30ch">Entreprise de rénovation tous corps d'état. Garantie décennale, devis détaillé, interlocuteur unique.</p>
+    </div>
+    <div><p style="margin:0 0 12px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#F6F1E9">Services</p><ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px"><li><a href="#">Rénovation d'appartement</a></li><li><a href="#">Maisons &amp; villas</a></li><li><a href="#">Studios</a></li><li><a href="#">Salles de bain</a></li><li><a href="#">Cuisines</a></li><li><a href="#">Carrelage &amp; parquet</a></li><li><a href="#">Électricité &amp; plomberie</a></li><li><a href="#">Peinture &amp; menuiserie</a></li></ul></div>
+    <div><p style="margin:0 0 12px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#F6F1E9">Entreprise</p><ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px"><li><a href="Bellco - Accueil.dc.html#realisations">Réalisations</a></li><li><a href="Bellco - Accueil.dc.html#methode">Notre méthode</a></li><li><a href="Bellco - Accueil.dc.html#pourquoi">Garantie décennale</a></li><li><a href="Bellco - Accueil.dc.html#faq">Questions fréquentes</a></li></ul></div>
+    <div><p style="margin:0 0 12px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#F6F1E9">Contact</p><p style="margin:0 0 8px">235 avenue du Président Wilson<br>93210 Saint-Denis</p><a href="tel:+33148000000" style="color:#F6F1E9;font-weight:600">01 48 00 00 00</a><br><a href="mailto:contact@bellco-renovation.fr">contact@bellco-renovation.fr</a></div>
+  </div>
+  <div style="border-top:1px solid #4A423D"><div style="max-width:1320px;margin:0 auto;padding:20px clamp(20px,4vw,48px) {{ footPad }};display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:13px"><span>© 2026 Bellco Rénovation · SIRET 000 000 000 00000</span><span style="display:flex;gap:20px"><a href="#">Mentions légales</a><a href="#">Confidentialité</a></span></div></div>
+</footer>
+
+<sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Barre mobile" style="position:fixed;left:0;right:0;bottom:0;z-index:55;background:#FFFDF9;border-top:1px solid #DED4C4;display:grid;grid-template-columns:1fr 1fr 1.4fr;box-shadow:0 -12px 32px -16px rgba(42,37,34,.25);padding-bottom:env(safe-area-inset-bottom)">
+  <a href="tel:+33148000000" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:60px;font-size:12px;font-weight:600"><span style="font-size:15px">☏</span>Appeler</a>
+  <a href="https://wa.me/33600000000" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:60px;font-size:12px;font-weight:600;border-left:1px solid #DED4C4;border-right:1px solid #DED4C4"><span style="font-size:15px">✆</span>WhatsApp</a>
+  <a href="Bellco - Accueil.dc.html#devis" style="background:#A8452A;color:#FFFDF9;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center">Demander un devis</a>
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { w:1280, active:'apercu', faq:0 };
+  componentDidMount(){
+    this.ids=['apercu','prestations','perimetre','galerie','faq','devis'];
+    this.onResize=()=>this.setState({w:window.innerWidth});
+    this.onScroll=()=>{ let cur=this.ids[0]; for(const id of this.ids){const el=document.getElementById(id); if(el && el.getBoundingClientRect().top<=160) cur=id;} if(cur!==this.state.active) this.setState({active:cur}); };
+    window.addEventListener('resize',this.onResize); window.addEventListener('scroll',this.onScroll,{passive:true}); this.onResize();
+  }
+  componentWillUnmount(){ window.removeEventListener('resize',this.onResize); window.removeEventListener('scroll',this.onScroll); }
+  renderVals(){
+    const {w,active,faq}=this.state; const isMobile=w<1120, S=(a,b)=>isMobile?a:b;
+    const labels={apercu:'Aperçu',prestations:'Prestations',perimetre:'Périmètre',galerie:'Galerie',faq:'Questions',devis:'Devis'};
+    const toc=Object.keys(labels).map(id=>({label:labels[id],fg:active===id?'#2A2522':'#6B625B',line:active===id?'#A8452A':'transparent',
+      go:()=>{const el=document.getElementById(id); if(el) window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-130,behavior:'smooth'});}}));
+    const scope=[
+      {title:'Dépose et préparation',items:['Dépose des sanitaires et revêtements','Évacuation des gravats en déchetterie','Protection des circulations','Reprise des supports, ragréage']},
+      {title:'Réseaux',items:['Plomberie neuve multicouche / PER','Évacuations PVC, pentes contrôlées','Électricité NF C 15-100, volumes','VMC ou extracteur','Sèche-serviettes sur ligne dédiée']},
+      {title:'Étanchéité et revêtements',items:['SEL ou natte sous carrelage','Receveur ou douche maçonnée','Carrelage sol et faïence murale','Joints époxy en zone humide']},
+      {title:'Finitions et pose',items:['Faux plafond et spots','Peinture pièce humide','Meuble vasque, miroir, robinetterie','Paroi de douche','Nettoyage de fin de chantier']},
+    ];
+    const gallery=[
+      {slug:'sdb-01',commune:'Saint-Denis',span:'span 8',ratio:'16/10'},{slug:'sdb-02',commune:'Paris 19e',span:'span 4',ratio:'4/5'},
+      {slug:'sdb-03',commune:'Montreuil',span:'span 4',ratio:'1/1'},{slug:'sdb-04',commune:'Aubervilliers',span:'span 4',ratio:'1/1'},{slug:'sdb-05',commune:'Pantin',span:'span 4',ratio:'1/1'},
+      {slug:'sdb-06',commune:'Saint-Ouen',span:'span 12',ratio:'21/9'},
+    ].map(g=>({...g,span:isMobile?'span 12':g.span,ratio:isMobile?'4/3':g.ratio}));
+    const faqData=[
+      {q:'Peut-on remplacer une baignoire par une douche à l\u2019italienne dans un appartement ancien ?',a:"Dans la grande majorité des cas, oui. La contrainte est la hauteur de réservation sous le receveur pour l'évacuation. Nous la mesurons lors de la visite conseil et, si elle est insuffisante, proposons un receveur extra-plat ou un caniveau déporté."},
+      {q:'Faut-il prévenir le syndic ?',a:"Si les travaux touchent aux colonnes communes ou modifient l'emplacement d'une évacuation, une information ou une autorisation est nécessaire. Nous préparons le dossier (descriptif, planning, attestation d'assurance) pour vous."},
+      {q:'Combien coûte une rénovation de salle de bain ?',a:"Entre 8 000 et 25 000 € TTC selon la surface, le déplacement éventuel des réseaux et la gamme des matériaux. Le devis détaille chaque poste : vous voyez exactement ce qui pèse dans le total."},
+      {q:'Pourrai-je utiliser la salle de bain pendant les travaux ?',a:"Non, pas pendant la phase de dépose et de réseaux. Nous maintenons en revanche un point d'eau et des WC utilisables chaque soir, et nous vous indiquons dès le devis les jours de coupure."},
+      {q:'Quelle garantie sur l\u2019étanchéité ?',a:"L'étanchéité de la douche relève de la garantie décennale. Le test d'étanchéité réalisé avant carrelage est consigné et photographié dans le dossier de fin de chantier."},
+    ];
+    const faqs=faqData.map((f,i)=>({...f,open:faq===i,icon:faq===i?'−':'+',toggle:()=>this.setState({faq:faq===i?-1:i})}));
+    return { isMobile,isDesktop:!isMobile,toc,scope,gallery,faqs,
+      readTime:'Lecture · 9 min', readDisplay:S('none','block'),
+      heroCols:S('1fr','minmax(0,6fr) minmax(0,6fr)'), heroH:S('auto','78vh'), heroImgH:S('56vw','0'),
+      proseCol:S('span 12','1 / span 7'), asideCol:S('span 12','9 / span 4'), asidePos:S('static','sticky'),
+      altColsA:S('1fr','minmax(0,6fr) minmax(0,6fr)'), altColsB:S('1fr','minmax(0,6fr) minmax(0,6fr)'), altRatio:S('4/3','4/3'),
+      imgOrderB:S('-1','0'), altRadiusA:S('0','4px 0 0 4px'), altRadiusB:S('0','0 4px 4px 0'),
+      leftCol:S('span 12','1 / span 4'), rightCol:S('span 12','6 / span 7'),
+      ctaL:S('span 12','1 / span 7'), ctaR:S('span 12','9 / span 4'),
+      footPad:S('96px','20px') };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+/* ============================================================================
+   Bellco Rénovation — jetons de design
+   Source unique de vérité. Tailwind v4 lit ce bloc @theme et génère les
+   utilitaires (bg-ground, text-h2, p-6, rounded-md…) ET les variables CSS
+   correspondantes (--color-ground…), utilisables hors Tailwind (SVG inline,
+   dégradés, îlots React).
+
+   Règle : aucune valeur arbitraire dans le markup. Si une valeur manque ici,
+   on l'ajoute ici — on n'écrit jamais `text-[17px]` ou `bg-[#A8452A]`.
+   ========================================================================= */
+
+@theme {
+  /* --- Couleurs -------------------------------------------------------- */
+  /* Échelle brute */
+  --color-ink-900: #2a2522;
+  --color-ink-700: #4a423d;
+  --color-ink-500: #6b625b;
+
+  --color-sand-50: #f6f1e9;
+  --color-sand-100: #ede6da;
+  --color-sand-200: #ded4c4;
+  --color-sand-300: #c9bdab;
+  --color-sand-400: #8c8079;
+
+  --color-paper: #fffdf9;
+
+  --color-clay-50: #f4e4dc;
+  --color-clay-300: #e0906f;
+  --color-clay-600: #a8452a;
+  --color-clay-700: #8e3a22;
+
+  /* Alias sémantiques — à privilégier dans les composants */
+  --color-ground: var(--color-sand-50); /* fond de page */
+  --color-surface: var(--color-sand-100); /* fond de section alterné */
+  --color-line: var(--color-sand-200); /* filets, bordures */
+  --color-line-strong: var(--color-sand-300);
+
+  --color-primary: var(--color-ink-900);
+  --color-on-primary: var(--color-sand-50);
+  --color-primary-muted: var(--color-sand-300); /* texte atténué SUR encre */
+
+  /* NB : pas d'alias --color-body ni --color-muted. En Tailwind v4 l'utilitaire
+     text-* sert à la fois à la couleur et à la taille : --color-body serait
+     entré en collision avec --text-body. Pour le texte courant on utilise donc
+     directement text-ink-700 (secondaire) et text-ink-500 (atténué). */
+
+  --color-accent: var(--color-clay-600);
+  --color-accent-hover: var(--color-clay-700);
+  --color-accent-on-dark: var(--color-clay-300); /* accent SUR encre */
+  --color-accent-tint: var(--color-clay-50);
+  --color-on-accent: var(--color-paper);
+
+  /* État — uniquement pour les messages de formulaire */
+  --color-error: #9a2f1e;
+  --color-error-tint: #f7e3df;
+  --color-success: #2f5d3f;
+  --color-success-tint: #e2efe6;
+
+  /* --- Typographie ----------------------------------------------------- */
+  --font-display: 'Newsreader Variable', 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Instrument Sans Variable', 'Instrument Sans', Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, monospace;
+
+  /* Titres — Newsreader 400. Les tailles fluides évitent tout saut au resize. */
+  --text-display: clamp(40px, 5.6vw, 76px);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 400;
+
+  --text-h1: clamp(36px, 4.6vw, 64px);
+  --text-h1--line-height: 1.04;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h1--font-weight: 400;
+
+  --text-h2: clamp(32px, 3.4vw, 48px);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h2--font-weight: 400;
+
+  --text-h3: clamp(24px, 2.6vw, 36px);
+  --text-h3--line-height: 1.15;
+  --text-h3--letter-spacing: -0.015em;
+  --text-h3--font-weight: 400;
+
+  --text-h4: clamp(22px, 2vw, 26px);
+  --text-h4--line-height: 1.2;
+  --text-h4--font-weight: 400;
+
+  /* Interface — Instrument Sans */
+  --text-title: 20px;
+  --text-title--line-height: 1.3;
+  --text-title--font-weight: 600;
+
+  --text-lead: clamp(19px, 1.4vw, 21px);
+  --text-lead--line-height: 1.5;
+  --text-lead--font-weight: 400;
+
+  --text-body: clamp(17px, 1.2vw, 18px);
+  --text-body--line-height: 1.65;
+  --text-body--font-weight: 400;
+
+  --text-body-sm: 16px;
+  --text-body-sm--line-height: 1.6;
+  --text-body-sm--font-weight: 400;
+
+  --text-small: 15px;
+  --text-small--line-height: 1.5;
+  --text-small--font-weight: 400;
+
+  --text-caption: 13.5px;
+  --text-caption--line-height: 1.45;
+  --text-caption--font-weight: 400;
+
+  --text-overline: 13px;
+  --text-overline--line-height: 1.2;
+  --text-overline--letter-spacing: 0.14em;
+  --text-overline--font-weight: 600;
+
+  --text-stat: 34px;
+  --text-stat--line-height: 1;
+  --text-stat--letter-spacing: -0.01em;
+  --text-stat--font-weight: 400;
+
+  --text-step-num: 64px;
+  --text-step-num--line-height: 0.9;
+  --text-step-num--letter-spacing: -0.03em;
+  --text-step-num--font-weight: 400;
+
+  --text-quote: clamp(21px, 2vw, 26px);
+  --text-quote--line-height: 1.4;
+  --text-quote--font-weight: 400;
+
+  /* --- Espacement ------------------------------------------------------ */
+  /* Base 4 px : p-1 = 4px, p-2 = 8px, p-6 = 24px, p-32 = 128px. */
+  --spacing: 4px;
+
+  --spacing-gutter: clamp(20px, 4vw, 48px);
+  --spacing-section: clamp(72px, 9vw, 128px);
+  --spacing-section-sm: clamp(64px, 8vw, 112px);
+  --spacing-header: 76px;
+
+  /* --- Mesures --------------------------------------------------------- */
+  --container-measure: 66ch; /* longueur de ligne confortable */
+  --container-measure-narrow: 48ch;
+  --container-site: 1320px;
+
+  /* --- Rayons ---------------------------------------------------------- */
+  /* Presque carré. Boutons 4, cartes et champs 6, modale 8, feuille 12. */
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius: 4px; /* `rounded` nu — boutons */
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 999px;
+
+  /* --- Ombres ---------------------------------------------------------- */
+  /* Toujours teintées encre (42,37,34), jamais noires. */
+  --shadow-card: 0 2px 6px -2px rgb(42 37 34 / 0.12);
+  --shadow-menu: 0 24px 48px -24px rgb(42 37 34 / 0.25);
+  --shadow-modal: 0 40px 80px -24px rgb(42 37 34 / 0.5);
+  --shadow-bar-up: 0 -12px 32px -16px rgb(42 37 34 / 0.25);
+  --shadow-handle: 0 8px 24px -8px rgb(42 37 34 / 0.5);
+
+  /* --- Mouvement ------------------------------------------------------- */
+  --default-transition-duration: 200ms;
+  --duration-fast: 150ms;
+  --duration-slow: 350ms;
+  --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* --- Points de rupture ----------------------------------------------- */
+  /* On efface l'échelle par défaut de Tailwind pour n'avoir que la nôtre. */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 860px;
+  --breakpoint-lg: 1120px;
+  --breakpoint-xl: 1320px;
+
+  /* --- Divers ---------------------------------------------------------- */
+  --z-header: 60;
+  --z-drawer: 70;
+  --z-bar: 50;
+}
+
+/* Voile du hero : dégradé lisible par-dessus la photo, défini une seule fois.
+   Exposé comme variable CSS simple ; l'utilitaire `bg-hero-scrim` est déclaré
+   dans global.css (background-image n'est pas un espace de noms @theme fiable). */
+:root {
+  --gradient-hero-scrim: linear-gradient(
+    180deg,
+    rgb(42 37 34 / 0.35) 0%,
+    rgb(42 37 34 / 0) 30%,
+    rgb(42 37 34 / 0.75) 100%
+  );
+}
+
+/* --- Identité -------------------------------------------------------------
+   Le logo a des dimensions fixes, volontairement hors de l'échelle de 4 px :
+   elles viennent du dessin de la marque, pas de la grille de mise en page. */
+@theme {
+  --spacing-logo: 30px;
+  --text-logo: 24px;
+  --text-logo--line-height: 1;
+  --text-logo--font-weight: 500;
+  --text-logo-sub: 10.5px;
+  --text-logo-sub--line-height: 1;
+  --text-logo-sub--letter-spacing: 0.16em;
+  --text-logo-sub--font-weight: 600;
+}
