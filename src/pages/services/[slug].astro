@@ -1,0 +1,210 @@
+---
+/**
+ * Page d'un service.
+ *
+ * Les dix pages sont générées depuis les constantes du site, pas depuis
+ * Sanity : leur existence ne dépend pas du CMS. Sanity vient ensuite enrichir
+ * chaque page champ par champ, et ce qui n'a pas été saisi retombe sur le
+ * contenu par défaut.
+ */
+import type { GetStaticPaths } from 'astro';
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import Picture from '~/components/media/Picture.astro';
+import RichText from '~/components/blocks/RichText.astro';
+import FAQAccordion from '~/components/blocks/FAQAccordion.astro';
+import CTASection from '~/components/blocks/CTASection.astro';
+import ProjectCard from '~/components/blocks/ProjectCard.astro';
+import { SERVICES } from '~/lib/site';
+import { SERVICES_DEFAUT } from '~/content/servicesDefaut';
+import { serviceParSlug, toutesLesRealisations } from '~/lib/sanity/queries';
+import { imageValide, urlImage, altImage } from '~/lib/sanity/image';
+import { schemaFAQ, schemaService } from '~/lib/seo/jsonld';
+
+export const getStaticPaths = (() =>
+  SERVICES.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }))) satisfies GetStaticPaths;
+
+const { service } = Astro.props;
+const chemin = `/services/${service.slug}/`;
+
+const [depuisSanity, realisations] = await Promise.all([
+  serviceParSlug(service.slug),
+  toutesLesRealisations(),
+]);
+
+const defaut = SERVICES_DEFAUT[service.slug];
+
+/* Fusion champ par champ : une saisie partielle dans le Studio ne doit pas
+   faire disparaître le reste de la page. */
+const titre = depuisSanity?.titre ?? service.titre;
+const resume = depuisSanity?.resume ?? defaut?.resume ?? service.accroche;
+const prestations = depuisSanity?.prestations?.length
+  ? depuisSanity.prestations
+  : (defaut?.prestations ?? []);
+const faq = depuisSanity?.faq?.length ? depuisSanity.faq : (defaut?.faq ?? []);
+const intro = defaut?.intro ?? [];
+const heroImage = depuisSanity?.heroImage;
+const galerie = depuisSanity?.galerie ?? [];
+
+/* Réalisations où ce corps de métier est intervenu. */
+const realisationsLiees = realisations
+  .filter((projet) => projet.corpsDeMetierSlugs?.includes(service.slug))
+  .slice(0, 3);
+
+const filAriane = [
+  { libelle: 'Services', href: '/services/' },
+  { libelle: titre, href: chemin },
+];
+
+const ogImage = imageValide(heroImage)
+  ? { url: urlImage(heroImage, 1200, 630), alt: altImage(heroImage) }
+  : undefined;
+---
+
+<Page
+  titre={titre}
+  description={resume}
+  metaTitle={depuisSanity?.metaTitle}
+  metaDescription={depuisSanity?.metaDescription}
+  ogImage={ogImage}
+  filAriane={filAriane}
+  contexteWhatsApp={service.syntagme}
+  jsonLd={[
+    schemaService({ nom: titre, description: resume, chemin }),
+    schemaFAQ(faq),
+  ]}
+>
+  <!-- En-tête -->
+  <section class="bg-surface border-line pt-header border-b">
+    {/* Deux colonnes seulement s il y a une photo : sinon le titre se
+        retrouve tasse sur la moitie gauche avec un vide a droite. */}
+    <div
+      class:list={[
+        'wrap grid gap-10 py-16',
+        imageValide(heroImage) && 'lg:grid-cols-2 lg:items-center',
+      ]}
+    >
+      <div>
+        <Breadcrumbs elements={filAriane} />
+        <h1 class="font-display text-h1 mt-6">{titre}</h1>
+        <p class="text-ink-700 mt-6 max-w-measure text-lead">{resume}</p>
+        <a
+          href="/devis/"
+          class="bg-accent hover:bg-accent-hover text-on-accent rounded mt-8 inline-block px-6 py-4 text-body-sm font-semibold"
+        >
+          Demander un devis gratuit
+        </a>
+      </div>
+
+      {
+        imageValide(heroImage) && (
+          <div class="rounded-xs overflow-hidden">
+            <Picture
+              image={heroImage}
+              sizes="(min-width: 1120px) 50vw, 100vw"
+              ratio={4 / 3}
+              prioritaire={true}
+            />
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Présentation -->
+  <section class="section-y" aria-labelledby="titre-presentation">
+    <div class="wrap grid gap-12 lg:grid-cols-2">
+      <div>
+        <h2 id="titre-presentation" class="font-display text-h2 max-w-measure">
+          Ce que nous faisons, concrètement.
+        </h2>
+        <div class="mt-8 flex flex-col gap-6">
+          {intro.map((paragraphe) => (
+            <p class="text-ink-700 max-w-measure text-body">{paragraphe}</p>
+          ))}
+        </div>
+        <RichText contenu={depuisSanity?.contenu} class="mt-6" />
+      </div>
+
+      {
+        prestations.length > 0 && (
+          <div>
+            <h3 class="text-overline text-accent uppercase">La prestation comprend</h3>
+            <ul class="border-line mt-5 border-t">
+              {prestations.map((prestation) => (
+                <li class="border-line text-ink-700 border-b py-4 text-body-sm">{prestation}</li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Galerie -->
+  {
+    galerie.length > 0 && (
+      <section class="bg-surface border-line section-y-sm border-y" aria-labelledby="titre-galerie">
+        <div class="wrap">
+          <h2 id="titre-galerie" class="font-display text-h2">En images</h2>
+          <ul class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {galerie.map((image) => (
+              <li class="rounded-xs overflow-hidden">
+                <Picture
+                  image={image}
+                  sizes="(min-width: 1120px) 33vw, (min-width: 860px) 50vw, 100vw"
+                  ratio={4 / 3}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Réalisations liées -->
+  {
+    realisationsLiees.length > 0 && (
+      <section class="section-y" aria-labelledby="titre-chantiers">
+        <div class="wrap">
+          <p class="text-overline text-accent uppercase">Sur le terrain</p>
+          <h2 id="titre-chantiers" class="font-display text-h2 mt-3 max-w-measure">
+            Des chantiers où ce métier est intervenu.
+          </h2>
+          <div class="mt-12 grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+            {realisationsLiees.map((projet) => (
+              <ProjectCard projet={projet} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- FAQ -->
+  {
+    faq.length > 0 && (
+      <section class="bg-surface border-line section-y border-y" aria-labelledby="titre-faq">
+        <div class="wrap grid gap-10 lg:grid-cols-2">
+          <div>
+            <p class="text-overline text-accent uppercase">Questions fréquentes</p>
+            <h2 id="titre-faq" class="font-display text-h2 mt-3">
+              Ce qu’on nous demande sur ce poste.
+            </h2>
+          </div>
+          <FAQAccordion entrees={faq} />
+        </div>
+      </section>
+    )
+  }
+
+  <CTASection
+    titre={`Vous envisagez ${service.syntagme} ?`}
+    texte="Nous venons relever les lieux, puis vous recevez un devis détaillé poste par poste. La visite est gratuite et sans engagement."
+    contexteWhatsApp={service.syntagme}
+  />
+</Page>

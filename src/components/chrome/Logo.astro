@@ -1,0 +1,37 @@
+---
+/**
+ * Logo Bellco Rénovation.
+ *
+ * Monochrome, dessiné en `currentColor` : la même balise fonctionne sur fond
+ * crème (encre) et sur fond encre (crème), sans seconde version de fichier.
+ *
+ * TODO — le carré est un substitut. Remplacer par le vrai signe une fois le
+ * fichier SVG fourni ; conserver `fill="currentColor"` et aucun fond blanc.
+ */
+interface Props {
+  /** Passe à true dans le pied de page et le menu mobile. */
+  readonly compact?: boolean;
+  readonly class?: string;
+}
+const { compact = false, class: className = '' } = Astro.props;
+---
+
+<span class:list={['flex items-center gap-3', className]}>
+  <svg
+    class="size-logo shrink-0"
+    viewBox="0 0 30 30"
+    role="img"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <rect width="30" height="30" rx="3" fill="currentColor"></rect>
+  </svg>
+  <span class="flex flex-col">
+    <span class="font-display text-logo tracking-tight">Bellco</span>
+    {
+      !compact && (
+        <span class="text-logo-sub mt-1 uppercase opacity-85">Rénovation</span>
+      )
+    }
+  </span>
+</span>

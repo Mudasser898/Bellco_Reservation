@@ -1,0 +1,85 @@
+---
+/**
+ * Bandeau de réassurance.
+ *
+ * Deux natures d'information, volontairement distinguées :
+ * — les engagements, toujours affichés parce qu'ils décrivent la façon de
+ *   travailler et n'ont rien à vérifier ;
+ * — les chiffres (ancienneté, chantiers livrés, note Google), affichés
+ *   uniquement s'ils ont été saisis dans les réglages. Tant qu'ils sont vides,
+ *   ils n'apparaissent pas. Aucun chiffre n'est estimé.
+ */
+import type { Reglages } from '~/lib/sanity/types';
+
+interface Props {
+  readonly reglages?: Reglages;
+}
+const { reglages = {} } = Astro.props;
+
+const annee = new Date().getFullYear();
+
+const chiffres: { readonly valeur: string; readonly libelle: string; readonly lien?: string }[] = [];
+
+if (reglages.anneeCreation) {
+  chiffres.push({
+    valeur: String(annee - reglages.anneeCreation) + ' ans',
+    libelle: `d’expérience, depuis ${reglages.anneeCreation}`,
+  });
+}
+if (reglages.nombreChantiers) {
+  chiffres.push({
+    valeur: String(reglages.nombreChantiers),
+    libelle: 'chantiers livrés en Île-de-France',
+  });
+}
+if (reglages.noteGoogle && reglages.nombreAvisGoogle) {
+  chiffres.push({
+    valeur: reglages.noteGoogle.toLocaleString('fr-FR', { minimumFractionDigits: 1 }) + ' / 5',
+    libelle: `sur ${reglages.nombreAvisGoogle} avis Google`,
+    ...(reglages.urlAvisGoogle ? { lien: reglages.urlAvisGoogle } : {}),
+  });
+}
+
+const engagements = [
+  { titre: 'Garantie décennale', texte: 'Attestation jointe à chaque devis.' },
+  { titre: 'Devis détaillé', texte: 'Poste par poste, corps de métier par corps de métier.' },
+  { titre: 'Interlocuteur unique', texte: 'Un seul responsable, du premier plan à la réception.' },
+  { titre: 'Solde après réception', texte: 'Réglé une fois les réserves levées.' },
+];
+---
+
+<section class="bg-surface border-line border-y">
+  <div class="wrap py-12">
+    {
+      chiffres.length > 0 && (
+        <ul class="border-line mb-10 grid gap-8 border-b pb-10 sm:grid-cols-2 lg:grid-cols-3">
+          {chiffres.map((chiffre) => (
+            <li>
+              <p class="font-display text-stat">{chiffre.valeur}</p>
+              <p class="text-ink-700 mt-2 text-small">
+                {chiffre.lien ? (
+                  <a href={chiffre.lien} class="link-rule" rel="noopener" target="_blank">
+                    {chiffre.libelle}
+                  </a>
+                ) : (
+                  chiffre.libelle
+                )}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <ul class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        engagements.map((engagement) => (
+          <li>
+            <p class="text-title">{engagement.titre}</p>
+            <p class="text-ink-700 mt-1 text-small">{engagement.texte}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Bellco Rénovation — Design tokens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F1E9;color:#2A2522;font-family:'Instrument Sans',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+a{color:inherit;text-decoration:none}a:hover{color:#A8452A}
+</style>
+</helmet>
+
+<main style="max-width:1320px;margin:0 auto;padding:clamp(48px,6vw,96px) clamp(20px,4vw,48px)">
+  <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">Bellco Rénovation · Système de design</p>
+  <h1 style="margin:0 0 16px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(36px,4.6vw,64px);line-height:1.04;letter-spacing:-0.02em">Tokens</h1>
+  <p style="margin:0 0 56px;font-size:18px;line-height:1.65;color:#4A423D;max-width:60ch">Couleurs, typographie, espacements, rayons et ombres. La version Tailwind est dans <a href="tailwind.config.js" style="font-family:ui-monospace,Menlo,monospace;font-size:15px;border-bottom:1px solid #C9BDAB">tailwind.config.js</a>. Pages : <a href="Bellco - Accueil.dc.html" style="border-bottom:1px solid #C9BDAB">Accueil</a> · <a href="Bellco - Service.dc.html" style="border-bottom:1px solid #C9BDAB">Service</a> · <a href="Bellco - Realisation.dc.html" style="border-bottom:1px solid #C9BDAB">Réalisation</a>.</p>
+
+  <!-- COLOURS -->
+  <section data-screen-label="Couleurs" style="margin-bottom:80px">
+    <h2 style="margin:0 0 6px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:32px;line-height:1.1">Couleurs</h2>
+    <p style="margin:0 0 28px;font-size:15px;color:#6B625B;max-width:60ch">Un neutre chaud profond, un fond crème, un seul accent argile. Le ratio indiqué est le contraste du texte sur le fond de la carte.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px">
+      <sc-for list="{{ colors }}" as="c" hint-placeholder-count="12">
+        <div style="background:{{ c.hex }};color:{{ c.fg }};border:1px solid #DED4C4;border-radius:6px;padding:18px 16px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between">
+          <span style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;opacity:.85">{{ c.role }}</span>
+          <span><span style="display:block;font-family:ui-monospace,Menlo,monospace;font-size:13px;margin-bottom:4px">{{ c.name }}</span><span style="display:block;font-family:'Newsreader',Georgia,serif;font-size:22px">{{ c.hex }}</span><span style="display:block;font-size:12px;opacity:.8;margin-top:4px">{{ c.contrast }}</span></span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- TYPE -->
+  <section data-screen-label="Typographie" style="margin-bottom:80px">
+    <h2 style="margin:0 0 6px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:32px;line-height:1.1">Typographie</h2>
+    <p style="margin:0 0 28px;font-size:15px;color:#6B625B;max-width:64ch">Newsreader (titres, chiffres, citations — axe optique 6–72) et Instrument Sans (corps, interface). Toutes deux couvrent é è ê à ç î ô û œ. Corps 18 px / 1,65, mesure 60–75 caractères.</p>
+    <div style="border-top:1px solid #2A2522">
+      <sc-for list="{{ type }}" as="t" hint-placeholder-count="12">
+        <div style="display:grid;grid-template-columns:{{ typeCols }};gap:16px 32px;padding:22px 0;border-bottom:1px solid #DED4C4;align-items:baseline">
+          <div><span style="display:block;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#A8452A">{{ t.token }}</span><span style="display:block;font-size:13px;color:#6B625B;margin-top:4px">{{ t.face }}</span></div>
+          <div style="font-family:{{ t.family }};font-size:{{ t.size }};line-height:{{ t.lh }};font-weight:{{ t.weight }};letter-spacing:{{ t.ls }};font-style:{{ t.style }};text-transform:{{ t.tt }};overflow-wrap:anywhere">{{ t.sample }}</div>
+          <div style="font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#4A423D;line-height:1.6;white-space:nowrap">{{ t.spec }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- SPACING / RADII / SHADOWS -->
+  <section data-screen-label="Espacement, rayons, ombres" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:56px 48px">
+    <div>
+      <h2 style="margin:0 0 20px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:32px;line-height:1.1">Espacement</h2>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ spacing }}" as="s" hint-placeholder-count="12">
+          <div style="display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:center;font-family:ui-monospace,Menlo,monospace;font-size:13px"><span style="color:#A8452A">{{ s.name }}</span><span style="display:flex;align-items:center;gap:12px"><span style="display:block;height:14px;width:{{ s.px }};background:#2A2522;border-radius:2px;max-width:100%"></span><span style="color:#6B625B">{{ s.px }}</span></span></div>
+        </sc-for>
+        <p style="margin:12px 0 0;font-size:14px;color:#6B625B;line-height:1.6">Gouttière <code style="font-family:ui-monospace,Menlo,monospace">clamp(20px,4vw,48px)</code> · section <code style="font-family:ui-monospace,Menlo,monospace">clamp(72px,9vw,128px)</code> · en-tête 76 px · conteneur 1320 px.</p>
+      </div>
+    </div>
+    <div>
+      <h2 style="margin:0 0 20px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:32px;line-height:1.1">Rayons</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:16px">
+        <sc-for list="{{ radii }}" as="r" hint-placeholder-count="7">
+          <div style="display:flex;flex-direction:column;gap:8px;align-items:center;font-family:ui-monospace,Menlo,monospace;font-size:12.5px"><span style="width:64px;height:64px;border:2px solid #2A2522;background:#FFFDF9;border-radius:{{ r.val }};display:block"></span><span style="color:#A8452A">{{ r.name }}</span><span style="color:#6B625B">{{ r.val }}</span></div>
+        </sc-for>
+      </div>
+      <p style="margin:16px 0 0;font-size:14px;color:#6B625B;line-height:1.6">Boutons 4 px, cartes et champs 6 px, modale 8 px, feuille mobile 12 px, chips 999 px. Les photos restent à 4 px ou pleine largeur sans rayon.</p>
+      <h2 style="margin:48px 0 20px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:32px;line-height:1.1">Ombres</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:20px">
+        <sc-for list="{{ shadows }}" as="sh" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;gap:10px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px"><span style="height:80px;background:#FFFDF9;border-radius:6px;box-shadow:{{ sh.val }};display:block"></span><span style="color:#A8452A">{{ sh.name }}</span><span style="color:#6B625B;font-size:11.5px;line-height:1.5">{{ sh.val }}</span></div>
+        </sc-for>
+      </div>
+      <p style="margin:16px 0 0;font-size:14px;color:#6B625B;line-height:1.6">Toutes les ombres sont teintées de l'encre (42,37,34), jamais noires. Les cartes de contenu n'ont pas d'ombre : la hiérarchie vient des filets et des fonds.</p>
+    </div>
+  </section>
+
+  <!-- LOGO -->
+  <section data-screen-label="Logo" style="margin-top:80px;border-top:1px solid #DED4C4;padding-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px">
+    <div>
+      <h2 style="margin:0 0 12px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:32px;line-height:1.1">Logo</h2>
+      <p style="margin:0;font-size:16px;line-height:1.65;color:#4A423D;max-width:48ch">SVG transparent, deux versions monochromes : encre (#2A2522) sur fonds clairs, crème (#F6F1E9) sur le hero et le pied de page. Hauteur 30 px dans l'en-tête, aligné à gauche de la gouttière ; 30 px dans le pied de page avec l'adresse dessous. Jamais de fond blanc, jamais de couleur d'accent dans le logo.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:#F6F1E9;border:1px solid #DED4C4;border-radius:6px;padding:32px;display:flex;align-items:center;gap:12px;color:#2A2522"><span style="width:30px;height:30px;background:#2A2522;border-radius:3px;display:block"></span><span style="display:flex;flex-direction:column;line-height:1"><span style="font-family:'Newsreader',Georgia,serif;font-size:24px;font-weight:500">Bellco</span><span style="font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-top:3px">Rénovation</span></span></div>
+      <div style="background:#2A2522;border-radius:6px;padding:32px;display:flex;align-items:center;gap:12px;color:#F6F1E9"><span style="width:30px;height:30px;background:#F6F1E9;border-radius:3px;display:block"></span><span style="display:flex;flex-direction:column;line-height:1"><span style="font-family:'Newsreader',Georgia,serif;font-size:24px;font-weight:500">Bellco</span><span style="font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-top:3px">Rénovation</span></span></div>
+    </div>
+  </section>
+</main>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state={w:1280};
+  componentDidMount(){ this.onResize=()=>this.setState({w:window.innerWidth}); window.addEventListener('resize',this.onResize); this.onResize(); }
+  componentWillUnmount(){ window.removeEventListener('resize',this.onResize); }
+  renderVals(){
+    const colors=[
+      {name:'ink-900 / primary',role:'Texte, fonds sombres',hex:'#2A2522',fg:'#F6F1E9',contrast:'crème sur encre 13,9:1'},
+      {name:'ink-700',role:'Texte secondaire',hex:'#4A423D',fg:'#F6F1E9',contrast:'sur ground 9,1:1'},
+      {name:'ink-500',role:'Texte atténué',hex:'#6B625B',fg:'#F6F1E9',contrast:'sur ground 5,2:1'},
+      {name:'sand-50 / ground',role:'Fond de page',hex:'#F6F1E9',fg:'#2A2522',contrast:'encre 13,9:1'},
+      {name:'sand-100 / surface',role:'Fond de section',hex:'#EDE6DA',fg:'#2A2522',contrast:'encre 12,7:1'},
+      {name:'sand-200 / line',role:'Filets, bordures',hex:'#DED4C4',fg:'#2A2522',contrast:'décoratif'},
+      {name:'sand-300',role:'Bordure forte, texte sur encre',hex:'#C9BDAB',fg:'#2A2522',contrast:'sur encre 8,2:1'},
+      {name:'paper',role:'Cartes, champs',hex:'#FFFDF9',fg:'#2A2522',contrast:'encre 15,2:1'},
+      {name:'clay-600 / accent',role:'Accent, boutons',hex:'#A8452A',fg:'#FFFDF9',contrast:'blanc 5,9:1 · sur ground 5,2:1'},
+      {name:'clay-700 / accent-hover',role:'Accent survol',hex:'#8E3A22',fg:'#FFFDF9',contrast:'blanc 7,6:1'},
+      {name:'clay-300 / accent-on-dark',role:'Accent sur fond encre',hex:'#E0906F',fg:'#2A2522',contrast:'sur encre 6,4:1'},
+      {name:'clay-50',role:'Teinte accent',hex:'#F4E4DC',fg:'#2A2522',contrast:'encre 12,4:1'},
+    ];
+    const D="'Newsreader',Georgia,serif", Sn="'Instrument Sans',Helvetica,sans-serif";
+    const type=[
+      {token:'display',face:'Newsreader 400',family:D,size:'clamp(40px,5.6vw,76px)',lh:'1.02',weight:400,ls:'-0.02em',sample:'Votre rénovation, menée comme un vrai chantier.',spec:'76 / 40 px · lh 1.02 · −0.02em'},
+      {token:'h1',face:'Newsreader 400',family:D,size:'clamp(36px,4.6vw,64px)',lh:'1.04',weight:400,ls:'-0.02em',sample:'Rénovation de salle de bain',spec:'64 / 36 px · lh 1.04 · −0.02em'},
+      {token:'h2',face:'Newsreader 400',family:D,size:'clamp(32px,3.4vw,48px)',lh:'1.1',weight:400,ls:'-0.015em',sample:'Quatre étapes, aucune surprise.',spec:'48 / 32 px · lh 1.10 · −0.015em'},
+      {token:'h3',face:'Newsreader 400',family:D,size:'clamp(24px,2.6vw,36px)',lh:'1.15',weight:400,ls:'-0.015em',sample:'Ce que comprend une rénovation complète',spec:'36 / 24 px · lh 1.15'},
+      {token:'h4',face:'Newsreader 400',family:D,size:'clamp(22px,2vw,26px)',lh:'1.2',weight:400,ls:'0',sample:'Maison de ville, rénovation complète',spec:'26 / 22 px · lh 1.20'},
+      {token:'title',face:'Instrument Sans 600',family:Sn,size:'20px',lh:'1.3',weight:600,ls:'0',sample:'Étude, plans 2D/3D et devis détaillé',spec:'20 / 19 px · lh 1.30 · 600'},
+      {token:'lead',face:'Instrument Sans 400',family:Sn,size:'clamp(19px,1.4vw,21px)',lh:'1.5',weight:400,ls:'0',sample:'Devis détaillé par corps de métier, plans 2D/3D, un seul interlocuteur du début à la fin.',spec:'21 / 19 px · lh 1.50'},
+      {token:'body',face:'Instrument Sans 400',family:Sn,size:'clamp(17px,1.2vw,18px)',lh:'1.65',weight:400,ls:'0',sample:'Chaque poste apparaît dans le devis avec sa quantité, sa référence de matériau et son prix. Vous pouvez arbitrer ligne par ligne.',spec:'18 / 17 px · lh 1.65 · mesure 66ch'},
+      {token:'small',face:'Instrument Sans 400',family:Sn,size:'15px',lh:'1.5',weight:400,ls:'0',sample:'Avis publiés sur Google · Lire les 60 avis',spec:'15 / 14 px · lh 1.50'},
+      {token:'caption',face:'Instrument Sans 400',family:Sn,size:'13.5px',lh:'1.45',weight:400,ls:'0',sample:'Séjour, vue depuis l\u2019entrée',spec:'13.5 / 13 px · lh 1.45'},
+      {token:'overline',face:'Instrument Sans 600',family:Sn,size:'13px',lh:'1.2',weight:600,ls:'0.14em',tt:'uppercase',sample:'Notre méthode',spec:'13 / 12 px · +0.14em · majuscules'},
+      {token:'quote',face:'Newsreader 400 italic',family:D,size:'clamp(21px,2vw,26px)',lh:'1.4',weight:400,ls:'-0.01em',style:'italic',sample:'« Devis clair, planning tenu à la semaine près. »',spec:'26 / 21 px · lh 1.40 · italique'},
+      {token:'stat / step-num',face:'Newsreader 400',family:D,size:'64px',lh:'0.9',weight:400,ls:'-0.03em',sample:'01  300+',spec:'64 / 48 px · lh 0.9 · −0.03em'},
+    ].map(t=>({style:'normal',tt:'none',...t}));
+    const spacing=[1,2,3,4,5,6,8,10,12,16,20,24,32].map(n=>({name:'sp-'+n,px:n*4+'px'}));
+    const radii=[{name:'xs',val:'2px'},{name:'sm',val:'3px'},{name:'base',val:'4px'},{name:'md',val:'6px'},{name:'lg',val:'8px'},{name:'xl',val:'12px'},{name:'full',val:'999px'}];
+    const shadows=[{name:'card',val:'0 2px 6px -2px rgba(42,37,34,.12)'},{name:'menu',val:'0 24px 48px -24px rgba(42,37,34,.25)'},{name:'modal',val:'0 40px 80px -24px rgba(42,37,34,.5)'},{name:'bar-up',val:'0 -12px 32px -16px rgba(42,37,34,.25)'}];
+    return {colors,type,spacing,radii,shadows,typeCols:this.state.w<1120?'1fr':'180px minmax(0,1fr) 220px'};
+  }
+}
+</script>
+</body>
+</html>

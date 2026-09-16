@@ -1,0 +1,31 @@
+---
+/**
+ * Marque une information légale non encore fournie.
+ *
+ * Volontairement voyant : une mention légale incomplète expose l'entreprise,
+ * et un texte gris discret se ferait oublier. Le contenu reste lisible par les
+ * lecteurs d'écran, et la mention est explicite sur ce qui manque.
+ */
+interface Props {
+  /** Ce qu'il faut fournir, formulé pour M. Assim. */
+  readonly quoi: string;
+}
+const { quoi } = Astro.props;
+---
+
+<mark class="a-completer">
+  <span class="sr-only">Information manquante :</span>
+  À COMPLÉTER — {quoi}
+</mark>
+
+<style>
+  .a-completer {
+    background-color: var(--color-error-tint);
+    color: var(--color-error);
+    border: 1px dashed var(--color-error);
+    border-radius: var(--radius-xs);
+    padding: 2px calc(var(--spacing) * 2);
+    font-size: var(--text-caption);
+    font-weight: 600;
+  }
+</style>

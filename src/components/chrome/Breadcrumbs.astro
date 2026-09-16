@@ -1,0 +1,44 @@
+---
+/**
+ * Fil d'Ariane. L'accueil est toujours ajouté en tête ; la page courante est
+ * le dernier élément et n'est pas un lien.
+ */
+import type { ElementFilAriane } from '~/lib/seo/jsonld';
+
+interface Props {
+  readonly elements: readonly ElementFilAriane[];
+  readonly surFondSombre?: boolean;
+}
+const { elements, surFondSombre = false } = Astro.props;
+const complet: ElementFilAriane[] = [{ libelle: 'Accueil', href: '/' }, ...elements];
+---
+
+{
+  complet.length > 1 && (
+    <nav aria-label="Fil d’Ariane" class:list={[surFondSombre && 'text-sand-300']}>
+      <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-caption">
+        {complet.map((element, index) => {
+          const dernier = index === complet.length - 1;
+          return (
+            <li class="flex items-center gap-2">
+              {dernier ? (
+                <span aria-current="page" class={surFondSombre ? '' : 'text-ink-500'}>
+                  {element.libelle}
+                </span>
+              ) : (
+                <a href={element.href} class="link-rule">
+                  {element.libelle}
+                </a>
+              )}
+              {!dernier && (
+                <span aria-hidden="true" class={surFondSombre ? '' : 'text-ink-500'}>
+                  /
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  )
+}

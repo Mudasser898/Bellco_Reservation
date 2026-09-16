@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Bellco Rénovation — Entreprise de rénovation tous corps d'état, Saint-Denis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#F6F1E9;color:#2A2522;font-family:'Instrument Sans',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+a{color:inherit;text-decoration:none}a:hover{color:#A8452A}
+button{font-family:inherit}
+input,select,textarea{font-family:inherit}
+@keyframes bellcoFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<!-- HEADER -->
+<header data-screen-label="Header" style="position:fixed;top:0;left:0;right:0;z-index:60;color:{{ hdrFg }};background:{{ hdrBg }};border-bottom:1px solid {{ hdrLine }};backdrop-filter:{{ hdrBlur }};transition:background .35s ease,color .35s ease,border-color .35s ease" onMouseLeave="{{ closeMega }}">
+  <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,48px);height:76px;display:flex;align-items:center;justify-content:space-between;gap:32px">
+    <a href="#top" aria-label="Bellco Rénovation — accueil" style="display:flex;align-items:center;gap:12px;flex:none">
+      <span style="width:30px;height:30px;background:{{ logoMark }};display:block;border-radius:3px"></span>
+      <span style="display:flex;flex-direction:column;line-height:1">
+        <span style="font-family:'Newsreader',Georgia,serif;font-size:24px;font-weight:500;letter-spacing:-0.01em">Bellco</span>
+        <span style="font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-top:3px;opacity:.85">Rénovation</span>
+      </span>
+    </a>
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <nav style="display:flex;align-items:center;gap:36px;font-size:15.5px;font-weight:500">
+      <button onMouseEnter="{{ openMega }}" onClick="{{ toggleMega }}" style="background:none;border:0;padding:0;color:inherit;font:inherit;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;border-bottom:1px solid {{ megaUnderline }};padding-bottom:2px">Services <span style="font-size:10px;transform:translateY(1px)">▾</span></button>
+      <a href="#realisations" onMouseEnter="{{ closeMega }}" style-hover="color:#A8452A">Réalisations</a>
+      <a href="#methode" style-hover="color:#A8452A">Notre méthode</a>
+      <a href="#pourquoi" style-hover="color:#A8452A">L'entreprise</a>
+      <a href="#contact" style-hover="color:#A8452A">Contact</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:20px;flex:none">
+      <a href="tel:+33148000000" style="font-size:15.5px;font-weight:600;letter-spacing:0.01em;display:flex;align-items:center;gap:8px"><span style="width:6px;height:6px;border-radius:50%;background:#A8452A;display:inline-block"></span>01 48 00 00 00</a>
+      <button onClick="{{ openQuote }}" style="background:{{ hdrBtnBg }};color:{{ hdrBtnFg }};border:1px solid {{ hdrBtnBorder }};border-radius:4px;padding:11px 18px;font-size:14.5px;font-weight:600;cursor:pointer;transition:all .3s" style-hover="background:#A8452A;color:#FFFDF9;border-color:#A8452A">Demander un devis</button>
+    </div>
+    </sc-if>
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ toggleMobileNav }}" aria-label="Menu" style="background:none;border:0;padding:8px;color:inherit;cursor:pointer;display:flex;flex-direction:column;gap:5px"><span style="width:24px;height:2px;background:currentColor;display:block"></span><span style="width:24px;height:2px;background:currentColor;display:block"></span><span style="width:16px;height:2px;background:currentColor;display:block"></span></button>
+    </sc-if>
+  </div>
+
+  <!-- MEGA MENU -->
+  <sc-if value="{{ megaOpen }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Mega-menu Services" style="position:absolute;top:76px;left:0;right:0;background:#FFFDF9;color:#2A2522;border-top:1px solid #DED4C4;border-bottom:1px solid #DED4C4;box-shadow:0 24px 48px -24px rgba(42,37,34,.25);animation:bellcoFade .22s ease">
+    <div style="max-width:1320px;margin:0 auto;padding:32px clamp(20px,4vw,48px) 36px;display:grid;grid-template-columns:260px 1fr;gap:48px">
+      <div style="border-right:1px solid #DED4C4;padding-right:40px">
+        <p style="margin:0 0 10px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#6B625B">Tous corps d'état</p>
+        <h3 style="margin:0 0 14px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:28px;line-height:1.15;letter-spacing:-0.01em">Un seul interlocuteur, du premier plan à la dernière finition.</h3>
+        <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#4A423D">Devis détaillé par corps de métier, plans 2D/3D, garantie décennale.</p>
+        <a href="Bellco - Service.dc.html" style="font-size:15px;font-weight:600;color:#A8452A;display:inline-flex;align-items:center;gap:8px">Voir tous les services <span>→</span></a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px 24px">
+        <sc-for list="{{ services }}" as="s" hint-placeholder-count="8">
+          <a href="Bellco - Service.dc.html" style="display:block" style-hover="color:#A8452A">
+            <div style="aspect-ratio:4/3;background:repeating-linear-gradient(135deg,#DED4C4 0 8px,#E9E1D4 8px 16px);border-radius:4px;position:relative;overflow:hidden;margin-bottom:10px">
+              <span style="position:absolute;left:8px;bottom:6px;font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#6B625B">photo · {{ s.slug }}</span>
+            </div>
+            <span style="font-size:15px;font-weight:600;display:block">{{ s.name }}</span>
+            <span style="font-size:13px;color:#6B625B">{{ s.short }}</span>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+</header>
+
+<!-- MOBILE NAV DRAWER -->
+<sc-if value="{{ mobileNavOpen }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Menu mobile" style="position:fixed;inset:0;z-index:70;background:#2A2522;color:#F6F1E9;padding:100px 28px 120px;display:flex;flex-direction:column;gap:6px;overflow:auto;animation:bellcoFade .25s ease">
+  <button onClick="{{ toggleMobileNav }}" aria-label="Fermer" style="position:absolute;top:22px;right:20px;background:none;border:1px solid #6B625B;color:inherit;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer">×</button>
+  <a href="Bellco - Service.dc.html" style="font-family:'Newsreader',Georgia,serif;font-size:36px;padding:10px 0;border-bottom:1px solid #4A423D">Services</a>
+  <a href="#realisations" onClick="{{ toggleMobileNav }}" style="font-family:'Newsreader',Georgia,serif;font-size:36px;padding:10px 0;border-bottom:1px solid #4A423D">Réalisations</a>
+  <a href="#methode" onClick="{{ toggleMobileNav }}" style="font-family:'Newsreader',Georgia,serif;font-size:36px;padding:10px 0;border-bottom:1px solid #4A423D">Notre méthode</a>
+  <a href="#pourquoi" onClick="{{ toggleMobileNav }}" style="font-family:'Newsreader',Georgia,serif;font-size:36px;padding:10px 0;border-bottom:1px solid #4A423D">L'entreprise</a>
+  <a href="#contact" onClick="{{ toggleMobileNav }}" style="font-family:'Newsreader',Georgia,serif;font-size:36px;padding:10px 0">Contact</a>
+  <p style="margin:28px 0 0;font-size:14px;color:#C9BDAB;line-height:1.6">235 avenue du Président Wilson<br>93210 Saint-Denis</p>
+</div>
+</sc-if>
+
+<!-- HERO -->
+<section id="top" data-screen-label="01 Hero" style="position:relative;min-height:min(100svh,880px);display:flex;align-items:flex-end;color:#F6F1E9;background:repeating-linear-gradient(135deg,#4A423D 0 14px,#564C46 14px 28px);overflow:hidden">
+  <span style="position:absolute;top:96px;right:clamp(20px,4vw,48px);font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#C9BDAB;opacity:.8">photo plein cadre · séjour rénové, lumière naturelle, Saint-Denis</span>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,37,34,.35) 0%,rgba(42,37,34,0) 30%,rgba(42,37,34,.75) 100%)"></div>
+  <div style="position:relative;max-width:1320px;width:100%;margin:0 auto;padding:160px clamp(20px,4vw,48px) clamp(56px,7vw,96px);display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px;align-items:end">
+    <div>
+      <p style="margin:0 0 20px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#E0906F">Rénovation tous corps d'état · Saint-Denis &amp; Île-de-France</p>
+      <h1 style="margin:0 0 24px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(40px,5.6vw,76px);line-height:1.02;letter-spacing:-0.02em;max-width:14ch">Votre rénovation, menée comme un vrai chantier.</h1>
+      <p style="margin:0 0 36px;font-size:clamp(17px,1.4vw,21px);line-height:1.5;max-width:52ch;color:#EDE6DA">Devis détaillé par corps de métier, plans 2D/3D, un seul interlocuteur du début à la fin — et la garantie décennale sur l'ensemble des travaux.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px">
+        <button onClick="{{ openQuote }}" style="background:#A8452A;color:#FFFDF9;border:1px solid #A8452A;border-radius:4px;padding:17px 30px;font-size:16px;font-weight:600;cursor:pointer;transition:background .2s" style-hover="background:#8E3A22;border-color:#8E3A22">Demander un devis</button>
+        <a href="#realisations" style="border:1px solid rgba(246,241,233,.55);color:#F6F1E9;border-radius:4px;padding:17px 30px;font-size:16px;font-weight:600;display:inline-flex;align-items:center;gap:10px;transition:all .2s" style-hover="background:#F6F1E9;color:#2A2522">Voir nos réalisations <span>→</span></a>
+      </div>
+    </div>
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <div style="justify-self:end;text-align:right;border-right:2px solid #E0906F;padding-right:20px">
+      <p style="margin:0 0 4px;font-size:13px;color:#C9BDAB">Parlez directement à M. Assim</p>
+      <a href="tel:+33148000000" style="font-family:'Newsreader',Georgia,serif;font-size:30px;font-weight:400;letter-spacing:0.01em">01 48 00 00 00</a>
+      <p style="margin:6px 0 0;font-size:13px;color:#C9BDAB">Lun – Sam · 8h – 19h</p>
+    </div>
+    </sc-if>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<section data-screen-label="02 Confiance" style="border-bottom:1px solid #DED4C4;background:#F6F1E9">
+  <div style="max-width:1320px;margin:0 auto;padding:28px clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px 40px">
+    <sc-for list="{{ trust }}" as="t" hint-placeholder-count="4">
+      <div style="display:flex;align-items:baseline;gap:14px;padding-left:16px;border-left:1px solid #C9BDAB">
+        <span style="font-family:'Newsreader',Georgia,serif;font-size:34px;line-height:1;font-weight:400;letter-spacing:-0.01em">{{ t.value }}</span>
+        <span style="font-size:14px;line-height:1.35;color:#6B625B;max-width:16ch">{{ t.label }}</span>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" data-screen-label="03 Services" style="max-width:1320px;margin:0 auto;padding:clamp(72px,9vw,128px) clamp(20px,4vw,48px)">
+  <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:24px;align-items:end;margin-bottom:clamp(40px,5vw,64px)">
+    <div style="grid-column:{{ colHeadL }}">
+      <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">Nos services</p>
+      <h2 style="margin:0;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(32px,3.4vw,48px);line-height:1.1;letter-spacing:-0.015em">Tous les corps d'état, coordonnés par une seule équipe.</h2>
+    </div>
+    <p style="grid-column:{{ colHeadR }};margin:0;font-size:18px;line-height:1.65;color:#4A423D;max-width:46ch">Du studio à la maison entière, nous prenons en charge la conception, les démarches et l'exécution — sans sous-traitance en cascade ni chantier laissé à moitié.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:24px">
+    <sc-for list="{{ services }}" as="s" hint-placeholder-count="8">
+      <a href="Bellco - Service.dc.html" style="grid-column:{{ s.span }};display:flex;flex-direction:column;gap:14px;color:inherit" style-hover="color:#A8452A">
+        <div style="aspect-ratio:{{ s.ratio }};background:repeating-linear-gradient(135deg,#DED4C4 0 10px,#E9E1D4 10px 20px);border-radius:4px;position:relative;overflow:hidden">
+          <span style="position:absolute;left:12px;bottom:10px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6B625B">photo · {{ s.slug }}</span>
+          <span style="position:absolute;top:12px;left:12px;font-size:12px;font-weight:600;color:#4A423D;background:rgba(246,241,233,.85);padding:4px 8px;border-radius:2px">{{ s.num }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-top:1px solid #DED4C4;padding-top:12px">
+          <div>
+            <h3 style="margin:0 0 4px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:24px;line-height:1.2">{{ s.name }}</h3>
+            <p style="margin:0;font-size:15px;color:#6B625B;line-height:1.5">{{ s.short }}</p>
+          </div>
+          <span style="font-size:18px;color:#A8452A;flex:none">→</span>
+        </div>
+      </a>
+    </sc-for>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="methode" data-screen-label="04 Méthode" style="background:#2A2522;color:#F6F1E9">
+  <div style="max-width:1320px;margin:0 auto;padding:clamp(72px,9vw,128px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(12,1fr);gap:48px 24px">
+    <div style="grid-column:{{ colProcL }}">
+      <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#E0906F">Notre méthode</p>
+      <h2 style="margin:0 0 20px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(32px,3.4vw,48px);line-height:1.1;letter-spacing:-0.015em">Quatre étapes, aucune surprise.</h2>
+      <p style="margin:0;font-size:18px;line-height:1.65;color:#C9BDAB;max-width:40ch">Ce qui inquiète nos clients, ce n'est pas le prix : c'est le flou. Chaque étape est écrite, chiffrée et suivie par la même personne.</p>
+    </div>
+    <ol style="grid-column:{{ colProcR }};list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 40px">
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+        <li style="border-top:1px solid #4A423D;padding:28px 0 36px">
+          <span style="display:block;font-family:'Newsreader',Georgia,serif;font-size:64px;line-height:.9;color:#E0906F;font-weight:400;margin-bottom:18px;letter-spacing:-0.03em">{{ st.n }}</span>
+          <h3 style="margin:0 0 10px;font-size:20px;font-weight:600;line-height:1.3">{{ st.title }}</h3>
+          <p style="margin:0;font-size:16px;line-height:1.6;color:#C9BDAB">{{ st.body }}</p>
+        </li>
+      </sc-for>
+    </ol>
+  </div>
+</section>
+
+<!-- FEATURED PROJECTS -->
+<section id="realisations" data-screen-label="05 Réalisations" style="max-width:1320px;margin:0 auto;padding:clamp(72px,9vw,128px) clamp(20px,4vw,48px)">
+  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px;margin-bottom:clamp(40px,5vw,64px)">
+    <div>
+      <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">Réalisations</p>
+      <h2 style="margin:0;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(32px,3.4vw,48px);line-height:1.1;letter-spacing:-0.015em">Des chantiers livrés, pas des images d'agence.</h2>
+    </div>
+    <a href="Bellco - Realisation.dc.html" style="font-size:16px;font-weight:600;color:#A8452A;display:inline-flex;gap:8px;align-items:center;text-decoration:underline;text-underline-offset:4px">Toutes les réalisations <span>→</span></a>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:24px;align-items:start">
+    <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
+      <a href="Bellco - Realisation.dc.html" style="grid-column:{{ p.span }};margin-top:{{ p.offset }};display:block" style-hover="color:#A8452A">
+        <div style="aspect-ratio:{{ p.ratio }};background:repeating-linear-gradient(135deg,#DED4C4 0 10px,#E9E1D4 10px 20px);border-radius:4px;position:relative;overflow:hidden;margin-bottom:16px">
+          <span style="position:absolute;left:12px;bottom:10px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6B625B">photo · {{ p.slug }}</span>
+        </div>
+        <h3 style="margin:0 0 8px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:26px;line-height:1.2">{{ p.title }}</h3>
+        <dl style="margin:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:#6B625B">
+          <div style="display:flex;gap:6px"><dt style="margin:0">Commune</dt><dd style="margin:0;color:#2A2522;font-weight:500">{{ p.commune }}</dd></div>
+          <div style="display:flex;gap:6px"><dt style="margin:0">Surface</dt><dd style="margin:0;color:#2A2522;font-weight:500">{{ p.surface }}</dd></div>
+          <div style="display:flex;gap:6px"><dt style="margin:0">Durée</dt><dd style="margin:0;color:#2A2522;font-weight:500">{{ p.duration }}</dd></div>
+        </dl>
+      </a>
+    </sc-for>
+  </div>
+</section>
+
+<!-- WHY BELLCO -->
+<section id="pourquoi" data-screen-label="06 Pourquoi Bellco" style="background:#EDE6DA;border-top:1px solid #DED4C4;border-bottom:1px solid #DED4C4">
+  <div style="max-width:1320px;margin:0 auto;padding:clamp(72px,9vw,128px) clamp(20px,4vw,48px)">
+    <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:24px;margin-bottom:clamp(40px,5vw,64px)">
+      <div style="grid-column:{{ colHeadL }}">
+        <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">Pourquoi Bellco</p>
+        <h2 style="margin:0;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(32px,3.4vw,48px);line-height:1.1;letter-spacing:-0.015em">Une entreprise, pas un homme et une camionnette.</h2>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:#DED4C4;border:1px solid #DED4C4">
+      <sc-for list="{{ values }}" as="v" hint-placeholder-count="6">
+        <div style="background:#F6F1E9;padding:32px 28px 36px">
+          <span style="font-family:'Newsreader',Georgia,serif;font-size:15px;color:#A8452A;display:block;margin-bottom:22px;letter-spacing:0.02em">{{ v.n }}</span>
+          <h3 style="margin:0 0 10px;font-size:20px;font-weight:600;line-height:1.3">{{ v.title }}</h3>
+          <p style="margin:0;font-size:16px;line-height:1.6;color:#4A423D">{{ v.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section data-screen-label="07 Avis" style="max-width:1320px;margin:0 auto;padding:clamp(72px,9vw,128px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(12,1fr);gap:48px 24px">
+  <div style="grid-column:{{ colProcL }}">
+    <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">Ils nous ont confié leur chantier</p>
+    <h2 style="margin:0 0 18px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(32px,3.4vw,48px);line-height:1.1;letter-spacing:-0.015em">Ce que disent nos clients.</h2>
+    <p style="margin:0;font-size:15px;color:#6B625B;line-height:1.6">Avis publiés sur Google · <a href="#" style="text-decoration:underline;text-underline-offset:3px">Lire les 60 avis</a></p>
+  </div>
+  <div style="grid-column:{{ colProcR }};display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px">
+    <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+      <figure style="margin:0;border-top:2px solid #2A2522;padding-top:22px;display:flex;flex-direction:column;gap:18px">
+        <blockquote style="margin:0;font-family:'Newsreader',Georgia,serif;font-size:21px;line-height:1.4;font-style:italic;color:#2A2522">« {{ r.text }} »</blockquote>
+        <figcaption style="font-size:14px;color:#6B625B;margin-top:auto"><strong style="color:#2A2522;font-weight:600">{{ r.name }}</strong> · {{ r.commune }} · {{ r.job }}</figcaption>
+      </figure>
+    </sc-for>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" data-screen-label="08 FAQ" style="border-top:1px solid #DED4C4">
+  <div style="max-width:1320px;margin:0 auto;padding:clamp(72px,9vw,128px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(12,1fr);gap:48px 24px">
+    <div style="grid-column:{{ colProcL }}">
+      <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">Questions fréquentes</p>
+      <h2 style="margin:0 0 18px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(32px,3.4vw,48px);line-height:1.1;letter-spacing:-0.015em">Avant de nous appeler.</h2>
+      <p style="margin:0;font-size:16px;line-height:1.6;color:#4A423D;max-width:36ch">Une question qui n'est pas ici ? <a href="tel:+33148000000" style="color:#A8452A;font-weight:600">Appelez-nous</a>, M. Assim vous répond directement.</p>
+    </div>
+    <div style="grid-column:{{ colProcR }};border-top:1px solid #DED4C4">
+      <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="6">
+        <div style="border-bottom:1px solid #DED4C4">
+          <button onClick="{{ f.toggle }}" aria-expanded="{{ f.open }}" style="width:100%;text-align:left;background:none;border:0;padding:22px 0;display:flex;justify-content:space-between;align-items:center;gap:24px;cursor:pointer;color:inherit;font-size:19px;font-weight:500;line-height:1.35" style-hover="color:#A8452A">
+            <span>{{ f.q }}</span>
+            <span style="font-family:'Newsreader',Georgia,serif;font-size:28px;line-height:1;color:#A8452A;flex:none;width:28px;text-align:center">{{ f.icon }}</span>
+          </button>
+          <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:0;padding:0 48px 26px 0;font-size:17px;line-height:1.65;color:#4A423D;max-width:62ch;animation:bellcoFade .25s ease">{{ f.a }}</p>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA + CONTACT -->
+<section id="contact" data-screen-label="09 Contact" style="background:#2A2522;color:#F6F1E9">
+  <div style="max-width:1320px;margin:0 auto;padding:clamp(72px,9vw,128px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(12,1fr);gap:48px 24px;align-items:start">
+    <div style="grid-column:{{ colCtaL }}">
+      <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#E0906F">Visite conseil gratuite</p>
+      <h2 style="margin:0 0 22px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(36px,4.2vw,60px);line-height:1.05;letter-spacing:-0.02em;max-width:16ch">Parlons de votre projet, chez vous, sans engagement.</h2>
+      <p style="margin:0 0 36px;font-size:18px;line-height:1.65;color:#C9BDAB;max-width:46ch">Un premier rendez-vous sur place, un relevé précis, puis un devis écrit poste par poste sous 10 jours. Vous décidez ensuite.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px">
+        <button onClick="{{ openQuote }}" style="background:#A8452A;color:#FFFDF9;border:1px solid #A8452A;border-radius:4px;padding:17px 30px;font-size:16px;font-weight:600;cursor:pointer" style-hover="background:#8E3A22">Demander un devis</button>
+        <a href="https://wa.me/33600000000" style="border:1px solid #6B625B;color:#F6F1E9;border-radius:4px;padding:17px 30px;font-size:16px;font-weight:600;display:inline-flex;align-items:center" style-hover="background:#F6F1E9;color:#2A2522">Écrire sur WhatsApp</a>
+      </div>
+    </div>
+    <div style="grid-column:{{ colCtaR }};display:grid;gap:28px;border-left:1px solid #4A423D;padding-left:32px;font-size:16px;line-height:1.6">
+      <div><p style="margin:0 0 4px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#C9BDAB">Téléphone</p><a href="tel:+33148000000" style="font-family:'Newsreader',Georgia,serif;font-size:28px">01 48 00 00 00</a></div>
+      <div><p style="margin:0 0 4px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#C9BDAB">Adresse</p><p style="margin:0">235 avenue du Président Wilson<br>93210 Saint-Denis</p></div>
+      <div><p style="margin:0 0 4px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#C9BDAB">Zone d'intervention</p><p style="margin:0">Saint-Denis, Seine-Saint-Denis, Paris et toute l'Île-de-France</p></div>
+      <div><p style="margin:0 0 4px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#C9BDAB">Horaires</p><p style="margin:0">Lundi – Samedi, 8h – 19h</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer data-screen-label="Footer" style="background:#2A2522;color:#C9BDAB;border-top:1px solid #4A423D">
+  <div style="max-width:1320px;margin:0 auto;padding:56px clamp(20px,4vw,48px) 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px 32px;font-size:15px;line-height:1.7">
+    <div style="grid-column:span 1;min-width:240px">
+      <div style="display:flex;align-items:center;gap:12px;color:#F6F1E9;margin-bottom:16px">
+        <span style="width:30px;height:30px;background:#F6F1E9;display:block;border-radius:3px"></span>
+        <span style="display:flex;flex-direction:column;line-height:1"><span style="font-family:'Newsreader',Georgia,serif;font-size:24px;font-weight:500">Bellco</span><span style="font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-top:3px">Rénovation</span></span>
+      </div>
+      <p style="margin:0;max-width:30ch">Entreprise de rénovation tous corps d'état. Garantie décennale, devis détaillé, interlocuteur unique.</p>
+    </div>
+    <div>
+      <p style="margin:0 0 12px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#F6F1E9">Services</p>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px">
+        <sc-for list="{{ services }}" as="s" hint-placeholder-count="8"><li><a href="Bellco - Service.dc.html" style-hover="color:#F6F1E9">{{ s.name }}</a></li></sc-for>
+      </ul>
+    </div>
+    <div>
+      <p style="margin:0 0 12px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#F6F1E9">Entreprise</p>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px">
+        <li><a href="#realisations" style-hover="color:#F6F1E9">Réalisations</a></li>
+        <li><a href="#methode" style-hover="color:#F6F1E9">Notre méthode</a></li>
+        <li><a href="#pourquoi" style-hover="color:#F6F1E9">Garantie décennale</a></li>
+        <li><a href="#faq" style-hover="color:#F6F1E9">Questions fréquentes</a></li>
+        <li><a href="#" style-hover="color:#F6F1E9">Avis Google</a></li>
+      </ul>
+    </div>
+    <div>
+      <p style="margin:0 0 12px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#F6F1E9">Contact</p>
+      <p style="margin:0 0 8px">235 avenue du Président Wilson<br>93210 Saint-Denis</p>
+      <a href="tel:+33148000000" style="color:#F6F1E9;font-weight:600">01 48 00 00 00</a><br>
+      <a href="mailto:contact@bellco-renovation.fr" style-hover="color:#F6F1E9">contact@bellco-renovation.fr</a>
+    </div>
+  </div>
+  <div style="border-top:1px solid #4A423D">
+    <div style="max-width:1320px;margin:0 auto;padding:20px clamp(20px,4vw,48px) {{ footPad }};display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:13px">
+      <span>© 2026 Bellco Rénovation · SIRET 000 000 000 00000 · Assurance décennale : attestation sur demande</span>
+      <span style="display:flex;gap:20px"><a href="#" style-hover="color:#F6F1E9">Mentions légales</a><a href="#" style-hover="color:#F6F1E9">Confidentialité</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- MOBILE BOTTOM BAR -->
+<sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Barre mobile" style="position:fixed;left:0;right:0;bottom:0;z-index:55;background:#FFFDF9;border-top:1px solid #DED4C4;display:grid;grid-template-columns:1fr 1fr 1.4fr;box-shadow:0 -12px 32px -16px rgba(42,37,34,.25);padding-bottom:env(safe-area-inset-bottom)">
+  <a href="tel:+33148000000" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:60px;font-size:12px;font-weight:600;color:#2A2522"><span style="font-size:15px">☏</span>Appeler</a>
+  <a href="https://wa.me/33600000000" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:60px;font-size:12px;font-weight:600;color:#2A2522;border-left:1px solid #DED4C4;border-right:1px solid #DED4C4"><span style="font-size:15px">✆</span>WhatsApp</a>
+  <button onClick="{{ openQuote }}" style="background:#A8452A;color:#FFFDF9;border:0;font-size:15px;font-weight:600;cursor:pointer">Demander un devis</button>
+</div>
+</sc-if>
+
+<!-- QUOTE FORM MODAL -->
+<sc-if value="{{ quoteOpen }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Formulaire devis" style="position:fixed;inset:0;z-index:80;background:rgba(42,37,34,.6);display:flex;align-items:flex-end;justify-content:center;padding:{{ modalPad }}" onClick="{{ closeQuote }}">
+  <div role="dialog" aria-label="Demande de devis" onClick="{{ stop }}" style="background:#F6F1E9;color:#2A2522;width:100%;max-width:760px;max-height:100%;overflow-y:auto;overflow-x:hidden;border-radius:{{ modalRadius }};box-shadow:0 40px 80px -24px rgba(42,37,34,.5);animation:bellcoFade .3s ease">
+    <div style="padding:28px clamp(20px,4vw,44px) 0;display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
+      <div>
+        <p style="margin:0 0 6px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">Demande de devis · Étape {{ stepNum }} sur 6</p>
+        <h2 style="margin:0;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(26px,3vw,34px);line-height:1.15">{{ stepTitle }}</h2>
+      </div>
+      <button onClick="{{ closeQuote }}" aria-label="Fermer" style="background:none;border:1px solid #C9BDAB;color:inherit;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;flex:none">×</button>
+    </div>
+    <!-- progress -->
+    <ol style="list-style:none;margin:22px 0 0;padding:0 clamp(20px,4vw,44px);display:grid;grid-template-columns:repeat(6,1fr);gap:6px">
+      <sc-for list="{{ stepsUI }}" as="p" hint-placeholder-count="6">
+        <li style="display:flex;flex-direction:column;gap:8px"><span style="height:3px;background:{{ p.bar }};display:block;border-radius:2px;transition:background .3s"></span><span style="font-size:11.5px;color:{{ p.fg }};font-weight:500;line-height:1.2">{{ p.label }}</span></li>
+      </sc-for>
+    </ol>
+    <div style="padding:32px clamp(20px,4vw,44px) 36px;min-height:300px">
+      <sc-if value="{{ isStep0 }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+          <sc-for list="{{ typeOpts }}" as="o" hint-placeholder-count="4">
+            <button onClick="{{ o.pick }}" style="text-align:left;background:{{ o.bg }};border:1px solid {{ o.border }};border-radius:6px;padding:22px 18px;cursor:pointer;color:inherit;display:flex;flex-direction:column;gap:6px;transition:all .15s" style-hover="border-color:#2A2522"><span style="font-family:'Newsreader',Georgia,serif;font-size:22px;line-height:1.1">{{ o.label }}</span><span style="font-size:13.5px;color:#6B625B">{{ o.hint }}</span></button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ false }}">
+        <label style="display:block;max-width:360px">
+          <span style="display:block;font-size:15px;font-weight:500;margin-bottom:10px">Surface approximative à rénover</span>
+          <span style="display:flex;align-items:center;border:1px solid #C9BDAB;border-radius:6px;background:#FFFDF9;overflow:hidden">
+            <input type="number" inputmode="numeric" placeholder="ex. 65" value="{{ form.surface }}" onChange="{{ setSurface }}" style="flex:1;border:0;background:none;padding:16px 18px;font-size:22px;font-family:'Newsreader',Georgia,serif;outline:none;min-width:0;color:inherit">
+            <span style="padding:0 18px;font-size:16px;color:#6B625B;border-left:1px solid #DED4C4;align-self:stretch;display:flex;align-items:center">m²</span>
+          </span>
+          <span style="display:block;margin-top:10px;font-size:14px;color:#6B625B">Une estimation suffit — nous mesurerons sur place.</span>
+        </label>
+      </sc-if>
+      <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
+        <p style="margin:0 0 14px;font-size:15px;color:#6B625B">Plusieurs choix possibles.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <sc-for list="{{ workOpts }}" as="o" hint-placeholder-count="9">
+            <button onClick="{{ o.pick }}" style="background:{{ o.bg }};color:{{ o.fg }};border:1px solid {{ o.border }};border-radius:999px;padding:12px 18px;font-size:15px;font-weight:500;cursor:pointer;transition:all .15s" style-hover="border-color:#2A2522">{{ o.label }}</button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+          <sc-for list="{{ budgetOpts }}" as="o" hint-placeholder-count="5">
+            <button onClick="{{ o.pick }}" style="text-align:left;background:{{ o.bg }};border:1px solid {{ o.border }};border-radius:6px;padding:20px 18px;cursor:pointer;color:inherit;font-family:'Newsreader',Georgia,serif;font-size:21px;transition:all .15s" style-hover="border-color:#2A2522">{{ o.label }}</button>
+          </sc-for>
+        </div>
+        <p style="margin:18px 0 0;font-size:14px;color:#6B625B;max-width:56ch">Cette fourchette nous aide à proposer des solutions réalistes. Le devis détaillé reste gratuit et sans engagement.</p>
+      </sc-if>
+      <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+          <sc-for list="{{ delayOpts }}" as="o" hint-placeholder-count="4">
+            <button onClick="{{ o.pick }}" style="text-align:left;background:{{ o.bg }};border:1px solid {{ o.border }};border-radius:6px;padding:20px 18px;cursor:pointer;color:inherit;font-family:'Newsreader',Georgia,serif;font-size:21px;transition:all .15s" style-hover="border-color:#2A2522">{{ o.label }}</button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isStep5 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:500">Nom et prénom<input type="text" autocomplete="name" placeholder="Marie Dupont" style="border:1px solid #C9BDAB;border-radius:6px;background:#FFFDF9;padding:14px 16px;font-size:16px;outline:none;color:inherit"></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:500">Téléphone<input type="tel" autocomplete="tel" placeholder="06 00 00 00 00" style="border:1px solid #C9BDAB;border-radius:6px;background:#FFFDF9;padding:14px 16px;font-size:16px;outline:none;color:inherit"></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:500">E-mail<input type="email" autocomplete="email" placeholder="marie@exemple.fr" style="border:1px solid #C9BDAB;border-radius:6px;background:#FFFDF9;padding:14px 16px;font-size:16px;outline:none;color:inherit"></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:500">Commune du bien<input type="text" placeholder="Saint-Denis" style="border:1px solid #C9BDAB;border-radius:6px;background:#FFFDF9;padding:14px 16px;font-size:16px;outline:none;color:inherit"></label>
+        </div>
+        <p style="margin:18px 0 0;font-size:13.5px;color:#6B625B;line-height:1.55;max-width:60ch">Vos coordonnées servent uniquement à vous recontacter pour ce projet. Réponse sous 24h ouvrées.</p>
+      </sc-if>
+      <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:16px 0">
+          <p style="margin:0 0 12px;font-family:'Newsreader',Georgia,serif;font-size:30px;line-height:1.15">Merci, votre demande est bien reçue.</p>
+          <p style="margin:0;font-size:17px;line-height:1.65;color:#4A423D;max-width:52ch">M. Assim vous rappelle sous 24h ouvrées pour fixer la visite conseil. Récapitulatif : {{ summary }}.</p>
+        </div>
+      </sc-if>
+    </div>
+    <div style="padding:18px clamp(20px,4vw,44px) 28px;border-top:1px solid #DED4C4;display:flex;justify-content:space-between;align-items:center;gap:16px;background:#F6F1E9;position:sticky;bottom:0">
+      <button onClick="{{ prevStep }}" style="background:none;border:0;padding:12px 0;font-size:15px;font-weight:600;color:{{ prevFg }};cursor:pointer">← Retour</button>
+      <button onClick="{{ nextStep }}" style="background:{{ nextBg }};color:#FFFDF9;border:0;border-radius:4px;padding:15px 26px;font-size:15.5px;font-weight:600;cursor:pointer;transition:background .2s">{{ nextLabel }}</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;headerOverHero&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;clair&quot;,&quot;sombre&quot;],&quot;default&quot;:&quot;clair&quot;,&quot;tsType&quot;:&quot;'clair'|'sombre'&quot;,&quot;section&quot;:&quot;En-tête&quot;}}">
+class Component extends DCLogic {
+  state = { scrolled:false, mega:false, mobileNav:false, w:1280, quote:false, step:0, faq:0,
+    form:{ type:null, surface:'', works:[], budget:null, delay:null } };
+  componentDidMount(){
+    this.onScroll=()=>{const s=window.scrollY>40; if(s!==this.state.scrolled) this.setState({scrolled:s});};
+    this.onResize=()=>this.setState({w:window.innerWidth});
+    window.addEventListener('scroll',this.onScroll,{passive:true});
+    window.addEventListener('resize',this.onResize);
+    this.onResize();
+    if(location.hash==='#devis') this.setState({quote:true});
+  }
+  componentWillUnmount(){ window.removeEventListener('scroll',this.onScroll); window.removeEventListener('resize',this.onResize); }
+  setForm(patch){ this.setState(s=>({form:{...s.form,...patch}})); }
+  renderVals(){
+    const {scrolled,mega,mobileNav,w,quote,step,faq,form}=this.state;
+    const isMobile=w<1120, isDesktop=!isMobile;
+    const light=!scrolled && !mega && !mobileNav;
+    const inkOverHero=(this.props.headerOverHero ?? 'clair')==='sombre';
+    const heroFg = inkOverHero ? '#2A2522' : '#F6F1E9';
+    const S=(a,b)=>isMobile?a:b;
+
+    const services=[
+      {name:"Rénovation d'appartement",short:"Complète ou partielle, en site occupé ou vide",slug:'appartement',span:'span 5',ratio:'4/3'},
+      {name:"Maisons & villas",short:"Extension, redistribution, rénovation énergétique",slug:'maison',span:'span 7',ratio:'16/10'},
+      {name:"Studios & petites surfaces",short:"Optimisation, rangements sur mesure",slug:'studio',span:'span 3',ratio:'3/4'},
+      {name:"Salles de bain",short:"Douche à l'italienne, PMR, plomberie neuve",slug:'salle-de-bain',span:'span 3',ratio:'3/4'},
+      {name:"Cuisines",short:"Ouverture, réseaux, pose et finitions",slug:'cuisine',span:'span 3',ratio:'3/4'},
+      {name:"Carrelage & parquet",short:"Pose, ponçage, vitrification",slug:'sols',span:'span 3',ratio:'3/4'},
+      {name:"Électricité & plomberie",short:"Mise aux normes, tableau, réseaux",slug:'reseaux',span:'span 7',ratio:'16/10'},
+      {name:"Peinture & menuiserie",short:"Enduits, peintures, portes, placards",slug:'finitions',span:'span 5',ratio:'4/3'},
+    ].map((s,i)=>({...s,num:String(i+1).padStart(2,'0'),span:isMobile?'span 12':s.span,ratio:isMobile?'4/3':s.ratio}));
+
+    const trust=[
+      {value:'10 ans',label:'de garantie décennale sur tous nos chantiers'},
+      {value:'2009',label:"entreprise fondée à Saint-Denis"},
+      {value:'300+',label:'chantiers livrés en Île-de-France'},
+      {value:'4,8 / 5',label:'note Google sur 60 avis'},
+    ];
+    const steps=[
+      {n:'01',title:'Visite conseil gratuite',body:"Nous venons chez vous, écoutons le projet et relevons les lieux. Sans engagement."},
+      {n:'02',title:'Étude, plans 2D/3D et devis détaillé',body:"Vous recevez des plans pour vous projeter et un devis poste par poste, corps de métier par corps de métier."},
+      {n:'03',title:'Réalisation avec interlocuteur unique',body:"Un seul responsable de chantier vous tient informé, arbitre et coordonne toutes les équipes."},
+      {n:'04',title:'Réception et garantie décennale',body:"Procès-verbal de réception, levée des réserves et garantie de 10 ans sur le gros œuvre et l'étanchéité."},
+    ];
+    const projects=[
+      {title:'Appartement haussmannien traversant',commune:'Paris 10e',surface:'82 m²',duration:'11 semaines',slug:'paris-10',span:'span 7',ratio:'4/3',offset:'0'},
+      {title:'Maison de ville, rénovation complète',commune:'Saint-Denis',surface:'126 m²',duration:'4 mois',slug:'saint-denis',span:'span 5',ratio:'3/4',offset:'80px'},
+      {title:'Studio investisseur, clé en main',commune:'Montreuil',surface:'24 m²',duration:'4 semaines',slug:'montreuil',span:'span 4',ratio:'1/1',offset:'0'},
+    ].map(p=>({...p,span:isMobile?'span 12':p.span,offset:isMobile?'0':p.offset}));
+    const values=[
+      {n:'i.',title:'Qualité d\u2019exécution',body:"Des artisans salariés ou partenaires de longue date, des matériaux choisis avec vous, une réception formelle."},
+      {n:'ii.',title:'Biens d\u2019habitation',body:"Appartements, maisons, studios : notre cœur de métier depuis quinze ans, en site occupé comme vide."},
+      {n:'iii.',title:'Locaux commerciaux',body:"Boutiques, cabinets, bureaux : interventions planifiées pour limiter la fermeture."},
+      {n:'iv.',title:'Suivi de projet',body:"Un interlocuteur unique, un planning écrit, un point d'avancement chaque semaine."},
+      {n:'v.',title:'Champs d\u2019intervention',body:"Saint-Denis, la Seine-Saint-Denis, Paris et l'ensemble de l'Île-de-France."},
+      {n:'vi.',title:'Satisfaction client',body:"Nous ne facturons le solde qu'après levée des réserves. Nos avis Google sont publics."},
+    ];
+    const reviews=[
+      {text:"Devis clair, planning tenu à la semaine près. On savait toujours qui appeler.",name:'Nadia',commune:'Saint-Denis',job:'Rénovation d\u2019appartement'},
+      {text:"Les plans 3D nous ont évité deux erreurs coûteuses avant même le début des travaux.",name:'Julien',commune:'Paris 18e',job:'Cuisine ouverte'},
+      {text:"Salle de bain refaite en trois semaines, chantier propre tous les soirs. Sérieux.",name:'Catherine',commune:'Aubervilliers',job:'Salle de bain'},
+    ];
+    const faqData=[
+      {q:'Le devis est-il vraiment gratuit et détaillé ?',a:"Oui. Après la visite conseil, vous recevez un devis écrit, poste par poste et corps de métier par corps de métier, avec les quantités et les références des matériaux. Aucun forfait opaque."},
+      {q:'Que couvre la garantie décennale ?',a:"Pendant dix ans après réception, les dommages compromettant la solidité de l'ouvrage ou le rendant impropre à sa destination (étanchéité, structure, réseaux encastrés). L'attestation d'assurance est jointe à chaque devis."},
+      {q:'Comment sont gérés les délais et les imprévus ?',a:"Le planning est écrit dans le devis. En cas d'imprévu (découverte à l'ouverture d'une cloison, par exemple), vous êtes prévenu le jour même avec un avenant chiffré avant toute poursuite."},
+      {q:'Comment se déroule le paiement ?',a:"Un acompte à la signature, des situations intermédiaires selon l'avancement réel, et le solde uniquement après levée des réserves. Jamais de paiement en avance de phase."},
+      {q:'Gérez-vous les démarches en copropriété ou en mairie ?',a:"Nous préparons les dossiers pour le syndic (autorisation de travaux, planning, assurances) et les déclarations préalables si nécessaire."},
+      {q:'Intervenez-vous en dehors de Saint-Denis ?',a:"Oui : Seine-Saint-Denis, Paris et toute l'Île-de-France. Au-delà de 40 km, nous le précisons dans le devis."},
+    ];
+    const faqs=faqData.map((f,i)=>({...f,open:faq===i,icon:faq===i?'−':'+',toggle:()=>this.setState({faq:faq===i?-1:i})}));
+
+    // quote form
+    const labels=['Type de bien','Surface','Travaux','Budget','Délai','Coordonnées'];
+    const titles=['Quel type de bien souhaitez-vous rénover ?','Quelle surface est concernée ?','Quels travaux envisagez-vous ?','Quelle enveloppe avez-vous en tête ?','Quand souhaitez-vous démarrer ?','Comment vous recontacter ?','Demande envoyée'];
+    const stepsUI=labels.map((l,i)=>({label:l,bar:i<step?'#2A2522':i===step?'#A8452A':'#DED4C4',fg:i<=step?'#2A2522':'#6B625B'}));
+    const opt=(list,key,multi)=>list.map(o=>{const sel=multi?form[key].includes(o.v):form[key]===o.v;return{...o,bg:sel?'#2A2522':'#FFFDF9',fg:sel?'#F6F1E9':'#2A2522',border:sel?'#2A2522':'#C9BDAB',pick:()=>this.setForm({[key]:multi?(sel?form[key].filter(x=>x!==o.v):[...form[key],o.v]):o.v})};});
+    const typeOpts=opt([{v:'Appartement',label:'Appartement',hint:'Copropriété, site occupé ou vide'},{v:'Maison',label:'Maison / villa',hint:'Avec ou sans extension'},{v:'Studio',label:'Studio',hint:'Petite surface, investisseur'},{v:'Local',label:'Local commercial',hint:'Boutique, bureau, cabinet'}],'type');
+    const workOpts=opt(['Rénovation complète','Salle de bain','Cuisine','Carrelage','Parquet','Électricité','Plomberie','Peinture','Menuiserie'].map(v=>({v,label:v})),'works',true);
+    const budgetOpts=opt(['15 – 30 k€','30 – 60 k€','60 – 100 k€','100 – 150 k€','Plus de 150 k€'].map(v=>({v,label:v})),'budget');
+    const delayOpts=opt(['Dès que possible','Dans 1 à 3 mois','Dans 3 à 6 mois','Plus tard, je me renseigne'].map(v=>({v,label:v})),'delay');
+    const canNext=[!!form.type,form.surface!=='',form.works.length>0,!!form.budget,!!form.delay,true,true][step];
+    const summary=[form.type,form.surface?form.surface+' m²':null,form.works.join(', '),form.budget,form.delay].filter(Boolean).join(' · ');
+
+    return {
+      isMobile,isDesktop,megaOpen:mega&&isDesktop,mobileNavOpen:mobileNav,quoteOpen:quote,
+      hdrFg: light?heroFg:'#2A2522',
+      hdrBg: light?'transparent':'rgba(246,241,233,.92)',
+      hdrLine: light?(inkOverHero?'rgba(42,37,34,.15)':'rgba(246,241,233,.18)'):'#DED4C4',
+      hdrBlur: light?'none':'blur(12px)',
+      logoMark: light?heroFg:'#2A2522',
+      megaUnderline: mega?'#A8452A':'transparent',
+      hdrBtnBg: light?'transparent':'#2A2522', hdrBtnFg: light?heroFg:'#F6F1E9', hdrBtnBorder: light?(inkOverHero?'#2A2522':'rgba(246,241,233,.55)'):'#2A2522',
+      openMega:()=>this.setState({mega:true}), closeMega:()=>this.setState({mega:false}), toggleMega:()=>this.setState(s=>({mega:!s.mega})),
+      toggleMobileNav:()=>this.setState(s=>({mobileNav:!s.mobileNav})),
+      openQuote:()=>this.setState({quote:true,mobileNav:false,mega:false}), closeQuote:()=>this.setState({quote:false}), stop:e=>e.stopPropagation(),
+      services,trust,steps,projects,values,reviews,faqs,
+      colHeadL:S('span 12','1 / span 6'), colHeadR:S('span 12','8 / span 5'),
+      colProcL:S('span 12','1 / span 4'), colProcR:S('span 12','6 / span 7'),
+      colCtaL:S('span 12','1 / span 7'), colCtaR:S('span 12','9 / span 4'),
+      footPad: isMobile?'96px':'20px',
+      modalPad: isMobile?'0':'40px', modalRadius: isMobile?'12px 12px 0 0':'8px',
+      stepNum: Math.min(step+1,6), stepTitle: titles[step], stepsUI,
+      isStep0:step===0,isStep1:step===1,isStep2:step===2,isStep3:step===3,isStep4:step===4,isStep5:step===5,isDone:step===6,
+      form, typeOpts, workOpts, budgetOpts, delayOpts, summary,
+      setSurface:e=>this.setForm({surface:e.target.value}),
+      prevFg: step>0&&step<6?'#2A2522':'transparent',
+      prevStep:()=>{ if(step>0&&step<6) this.setState({step:step-1}); },
+      nextBg: canNext?'#A8452A':'#C9BDAB',
+      nextLabel: step===5?'Envoyer ma demande':step===6?'Fermer':'Continuer →',
+      nextStep:()=>{ if(step===6) return this.setState({quote:false,step:0}); if(canNext) this.setState({step:step+1}); },
+    };
+  }
+}
+</script>
+</body>
+</html>

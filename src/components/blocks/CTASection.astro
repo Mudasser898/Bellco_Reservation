@@ -1,0 +1,42 @@
+---
+/**
+ * Bloc d'appel à l'action, réutilisé en bas des pages de contenu.
+ */
+import { ENTREPRISE, lienWhatsApp } from '~/lib/site';
+
+interface Props {
+  readonly titre: string;
+  readonly texte: string;
+  readonly contexteWhatsApp?: string | undefined;
+}
+const { titre, texte, contexteWhatsApp } = Astro.props;
+---
+
+<section class="bg-primary text-on-primary on-ink">
+  <div class="wrap section-y-sm">
+    <h2 class="font-display text-h2 max-w-measure">{titre}</h2>
+    <p class="text-sand-300 mt-5 max-w-measure text-body">{texte}</p>
+
+    <div class="mt-9 flex flex-wrap items-center gap-4">
+      <a
+        href="/devis/"
+        class="bg-accent hover:bg-accent-hover text-on-accent rounded px-6 py-4 text-body-sm font-semibold"
+      >
+        Demander un devis gratuit
+      </a>
+      <a
+        href={lienWhatsApp(contexteWhatsApp)}
+        class="border-sand-300 text-on-primary hover:bg-on-primary hover:text-primary rounded border px-6 py-4 text-body-sm font-semibold"
+        rel="noopener"
+      >
+        Écrire sur WhatsApp
+      </a>
+      <p class="text-sand-300 text-small">
+        ou appelez le
+        <a href={`tel:${ENTREPRISE.telephoneE164}`} class="text-on-primary font-semibold">
+          {ENTREPRISE.telephoneAffiche}
+        </a>
+      </p>
+    </div>
+  </div>
+</section>

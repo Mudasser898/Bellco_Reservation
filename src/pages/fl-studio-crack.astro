@@ -1,0 +1,27 @@
+---
+/**
+ * Adresse de spam injectée lors de la compromission de l'ancien site.
+ *
+ * Rendue à la demande pour pouvoir répondre 410 Gone : un fichier statique
+ * serait forcément servi en 200, et ni Vercel ni Cloudflare ne savent produire
+ * un 410 depuis leur configuration de redirections.
+ *
+ * 410 plutôt que 404 : le moteur comprend que la suppression est définitive et
+ * retire l'adresse de son index bien plus vite.
+ */
+export const prerender = false;
+
+import Page from '~/layouts/Page.astro';
+import PageSupprimee from '~/components/blocks/PageSupprimee.astro';
+
+Astro.response.status = 410;
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+---
+
+<Page
+  titre="Page supprimée"
+  description="Cette adresse ne correspond à aucun contenu de Bellco Rénovation."
+  noindex={true}
+>
+  <PageSupprimee />
+</Page>

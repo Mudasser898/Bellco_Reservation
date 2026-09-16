@@ -1,0 +1,51 @@
+---
+/**
+ * Image issue de Sanity, servie en AVIF/WebP par le CDN.
+ *
+ * Les dimensions sont lues dans l'identifiant d'asset : les attributs
+ * width/height posés sur le <img> réservent la place exacte, donc aucun
+ * décalage de mise en page quand la photo arrive.
+ *
+ * Pourquoi pas `astro:assets` ici : les photos vivent sur le CDN Sanity, qui
+ * fait déjà le redimensionnement et la négociation de format. Les passer par
+ * le pipeline d'Astro obligerait à télécharger chaque original au build pour
+ * refaire le même travail. `astro:assets` reste utilisé pour les images
+ * locales (logo, illustrations livrées avec le site).
+ */
+import { altImage, dimensionsSource, srcSetImage, urlImage } from '~/lib/sanity/image';
+import type { ImageAvecAlt } from '~/lib/sanity/types';
+
+interface Props {
+  readonly image: ImageAvecAlt;
+  /**
+   * Largeur d'affichage selon la fenêtre, pour que le navigateur choisisse la
+   * bonne variante. Exemple : "(min-width: 860px) 50vw, 100vw".
+   */
+  readonly sizes: string;
+  /** Rapport largeur/hauteur imposé. Omis, le cadrage d'origine est conservé. */
+  readonly ratio?: number | undefined;
+  /** `true` uniquement pour l'image du premier écran (LCP). */
+  readonly prioritaire?: boolean;
+  readonly class?: string;
+}
+
+const { image, sizes, ratio, prioritaire = false, class: className } = Astro.props;
+
+const intrinseque = dimensionsSource(image);
+const largeur = intrinseque?.largeur ?? 1600;
+const hauteur = ratio ? Math.round(largeur / ratio) : (intrinseque?.hauteur ?? 1200);
+const alt = altImage(image);
+---
+
+<img
+  src={urlImage(image, 1080, ratio ? Math.round(1080 / ratio) : undefined)}
+  srcset={srcSetImage(image, ratio)}
+  sizes={sizes}
+  width={largeur}
+  height={hauteur}
+  alt={alt}
+  loading={prioritaire ? 'eager' : 'lazy'}
+  decoding={prioritaire ? 'sync' : 'async'}
+  fetchpriority={prioritaire ? 'high' : 'auto'}
+  class:list={['block h-full w-full object-cover', className]}
+/>

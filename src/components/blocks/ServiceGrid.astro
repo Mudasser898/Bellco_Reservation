@@ -1,0 +1,57 @@
+---
+/**
+ * Grille des prestations.
+ *
+ * La liste vient des constantes du site, pas de Sanity : ces dix pages
+ * existent en dur dans le plan du site et doivent s'afficher même si le CMS
+ * est injoignable. Sanity enrichit chaque page, il ne décide pas de son
+ * existence.
+ */
+import { SERVICES } from '~/lib/site';
+
+interface Props {
+  /** Nombre maximum de services affichés. Par défaut, tous. */
+  readonly limite?: number;
+}
+const { limite } = Astro.props;
+const services = limite ? SERVICES.slice(0, limite) : SERVICES;
+---
+
+<ul class="grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+  {
+    services.map((service, index) => (
+      <li>
+        <a href={`/services/${service.slug}/`} class="carte-service group block">
+          <span class="text-ink-500 font-mono text-caption">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <h3 class="font-display text-h4 mt-2">{service.titre}</h3>
+          <p class="text-ink-700 mt-2 text-small">{service.accroche}</p>
+          <span class="text-accent mt-4 inline-flex items-center gap-2 text-small font-semibold">
+            En savoir plus
+            <span class="fleche" aria-hidden="true">
+              &rarr;
+            </span>
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .carte-service {
+    border-top: 1px solid var(--color-line);
+    padding-top: calc(var(--spacing) * 5);
+    transition: border-color var(--duration-fast) var(--ease-out-soft);
+  }
+  .carte-service:hover {
+    border-top-color: var(--color-accent);
+  }
+  .fleche {
+    transition: transform var(--duration-fast) var(--ease-out-soft);
+  }
+  .carte-service:hover .fleche {
+    transform: translateX(4px);
+  }
+</style>

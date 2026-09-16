@@ -1,0 +1,72 @@
+---
+/**
+ * Carte de réalisation, pour l'accueil et le portfolio.
+ *
+ * Le lien porte le titre du chantier ; la commune et la surface sont annoncées
+ * dans le même lien pour qu'une liste de liens lue hors contexte reste
+ * compréhensible.
+ */
+import Picture from '~/components/media/Picture.astro';
+import { imageValide } from '~/lib/sanity/image';
+import type { ProjetResume } from '~/lib/sanity/types';
+
+interface Props {
+  readonly projet: ProjetResume;
+  readonly ratio?: number;
+  readonly sizes?: string;
+  /** Niveau de titre, pour respecter la hiérarchie de la page hôte. */
+  readonly niveauTitre?: 2 | 3;
+}
+const {
+  projet,
+  ratio = 4 / 3,
+  sizes = '(min-width: 1120px) 33vw, (min-width: 860px) 50vw, 100vw',
+  niveauTitre = 3,
+} = Astro.props;
+
+const Titre = `h${niveauTitre}` as 'h2' | 'h3';
+const details = [
+  projet.commune?.nom,
+  projet.surface ? `${projet.surface} m²` : null,
+  projet.duree,
+].filter(Boolean);
+---
+
+<article>
+  <a href={`/realisations/${projet.slug}/`} class="carte-projet group block">
+    <div class="bg-surface rounded-xs relative overflow-hidden" style={`aspect-ratio:${ratio}`}>
+      {
+        imageValide(projet.imageApres) ? (
+          <Picture image={projet.imageApres} sizes={sizes} ratio={ratio} class="carte-image" />
+        ) : (
+          <span class="text-ink-500 absolute inset-0 flex items-center justify-center text-caption">
+            Photo à venir
+          </span>
+        )
+      }
+    </div>
+
+    <Titre class="font-display text-h4 mt-4">{projet.titre}</Titre>
+    {
+      details.length > 0 && (
+        <p class="text-ink-700 mt-1 text-small">{details.join(' · ')}</p>
+      )
+    }
+  </a>
+</article>
+
+<style>
+  .carte-image {
+    transition: transform var(--duration-slow) var(--ease-out-soft);
+  }
+  .carte-projet:hover .carte-image {
+    transform: scale(1.03);
+  }
+  /* Le zoom au survol est un agrément : on le retire si l'utilisateur a
+     demandé moins de mouvement. */
+  @media (prefers-reduced-motion: reduce) {
+    .carte-projet:hover .carte-image {
+      transform: none;
+    }
+  }
+</style>

@@ -1,0 +1,126 @@
+---
+/**
+ * Article de blog.
+ *
+ * Généré depuis Sanity : sans document, pas de page.
+ */
+import type { GetStaticPaths } from 'astro';
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import Picture from '~/components/media/Picture.astro';
+import RichText from '~/components/blocks/RichText.astro';
+import CTASection from '~/components/blocks/CTASection.astro';
+import { articleParSlug, tousLesArticles } from '~/lib/sanity/queries';
+import { altImage, imageValide, urlImage } from '~/lib/sanity/image';
+import { schemaArticle } from '~/lib/seo/jsonld';
+
+export const getStaticPaths = (async () => {
+  const articles = await tousLesArticles();
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: {
+      slug: article.slug,
+      autres: articles.filter((a) => a.slug !== article.slug).slice(0, 3),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { slug, autres } = Astro.props;
+const article = await articleParSlug(slug);
+if (!article) return Astro.rewrite('/404');
+
+const chemin = `/blog/${article.slug}/`;
+const filAriane = [
+  { libelle: 'Blog', href: '/blog/' },
+  { libelle: article.titre, href: chemin },
+];
+
+const dateFr = (iso: string) =>
+  new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const ogImage = imageValide(article.image)
+  ? { url: urlImage(article.image, 1200, 630), alt: altImage(article.image) }
+  : undefined;
+---
+
+<Page
+  titre={article.titre}
+  description={article.extrait}
+  metaTitle={article.metaTitle}
+  metaDescription={article.metaDescription}
+  ogImage={ogImage}
+  typeOg="article"
+  filAriane={filAriane}
+  jsonLd={[
+    schemaArticle({
+      titre: article.titre,
+      description: article.extrait,
+      chemin,
+      datePublication: article.datePublication,
+      auteur: article.auteur,
+      imageUrl: ogImage?.url,
+    }),
+  ]}
+>
+  <article>
+    <header class="bg-surface border-line pt-header border-b">
+      <div class="wrap py-16">
+        <Breadcrumbs elements={filAriane} />
+        <p class="text-ink-500 mt-6 text-caption">
+          <time datetime={article.datePublication}>{dateFr(article.datePublication)}</time>
+          {article.auteur && <span> · {article.auteur}</span>}
+        </p>
+        <h1 class="font-display text-h1 mt-3 max-w-measure">{article.titre}</h1>
+        <p class="text-ink-700 mt-6 max-w-measure text-lead">{article.extrait}</p>
+      </div>
+    </header>
+
+    {
+      imageValide(article.image) && (
+        <div class="wrap mt-12">
+          <figure class="rounded-xs overflow-hidden">
+            <Picture
+              image={article.image}
+              sizes="(min-width: 1120px) 66vw, 100vw"
+              ratio={16 / 9}
+              prioritaire={true}
+            />
+          </figure>
+        </div>
+      )
+    }
+
+    <div class="section-y-sm">
+      <div class="wrap">
+        <RichText contenu={article.contenu} />
+      </div>
+    </div>
+  </article>
+
+  {
+    autres.length > 0 && (
+      <section class="bg-surface border-line section-y-sm border-y" aria-labelledby="titre-autres">
+        <div class="wrap">
+          <h2 id="titre-autres" class="font-display text-h2">À lire aussi</h2>
+          <ul class="mt-10 grid gap-x-8 gap-y-10 md:grid-cols-3">
+            {autres.map((autre) => (
+              <li>
+                <a href={`/blog/${autre.slug}/`} class="block">
+                  <p class="text-ink-500 text-caption">
+                    <time datetime={autre.datePublication}>{dateFr(autre.datePublication)}</time>
+                  </p>
+                  <h3 class="font-display text-h4 mt-2">{autre.titre}</h3>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <CTASection
+    titre="Un projet de rénovation ?"
+    texte="La visite conseil est gratuite et sans engagement. Nous relevons les lieux, puis vous recevez un devis détaillé poste par poste."
+  />
+</Page>

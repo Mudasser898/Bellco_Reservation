@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Appartement haussmannien traversant, Paris 10e — Réalisation Bellco Rénovation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#F6F1E9;color:#2A2522;font-family:'Instrument Sans',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+a{color:inherit;text-decoration:none}a:hover{color:#A8452A}
+button{font-family:inherit}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;margin:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:56px;height:56px;border-radius:50%;background:transparent;cursor:ew-resize}
+input[type=range]::-moz-range-thumb{width:56px;height:56px;border-radius:50%;background:transparent;border:0;cursor:ew-resize}
+</style>
+</helmet>
+
+<header data-screen-label="Header" style="position:fixed;top:0;left:0;right:0;z-index:60;background:rgba(246,241,233,.94);backdrop-filter:blur(12px);border-bottom:1px solid #DED4C4">
+  <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,48px);height:76px;display:flex;align-items:center;justify-content:space-between;gap:32px">
+    <a href="Bellco - Accueil.dc.html" style="display:flex;align-items:center;gap:12px;flex:none">
+      <span style="width:30px;height:30px;background:#2A2522;display:block;border-radius:3px"></span>
+      <span style="display:flex;flex-direction:column;line-height:1"><span style="font-family:'Newsreader',Georgia,serif;font-size:24px;font-weight:500">Bellco</span><span style="font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-top:3px">Rénovation</span></span>
+    </a>
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <nav style="display:flex;align-items:center;gap:36px;font-size:15.5px;font-weight:500">
+      <a href="Bellco - Accueil.dc.html#services">Services</a>
+      <a href="Bellco - Accueil.dc.html#realisations" style="border-bottom:1px solid #A8452A;padding-bottom:2px">Réalisations</a>
+      <a href="Bellco - Accueil.dc.html#methode">Notre méthode</a>
+      <a href="Bellco - Accueil.dc.html#pourquoi">L'entreprise</a>
+      <a href="Bellco - Accueil.dc.html#contact">Contact</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:20px">
+      <a href="tel:+33148000000" style="font-size:15.5px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:6px;height:6px;border-radius:50%;background:#A8452A;display:inline-block"></span>01 48 00 00 00</a>
+      <a href="Bellco - Accueil.dc.html#devis" style="background:#2A2522;color:#F6F1E9;border:1px solid #2A2522;border-radius:4px;padding:11px 18px;font-size:14.5px;font-weight:600" style-hover="background:#A8452A;border-color:#A8452A;color:#FFFDF9">Demander un devis</a>
+    </div>
+    </sc-if>
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+      <a href="Bellco - Accueil.dc.html" aria-label="Menu" style="padding:8px;display:flex;flex-direction:column;gap:5px"><span style="width:24px;height:2px;background:currentColor;display:block"></span><span style="width:24px;height:2px;background:currentColor;display:block"></span><span style="width:16px;height:2px;background:currentColor;display:block"></span></a>
+    </sc-if>
+  </div>
+</header>
+
+<!-- TITLE -->
+<section data-screen-label="Titre" style="max-width:1320px;margin:0 auto;padding:calc(76px + clamp(40px,5vw,72px)) clamp(20px,4vw,48px) clamp(32px,4vw,48px);display:grid;grid-template-columns:repeat(12,1fr);gap:24px;align-items:end">
+  <div style="grid-column:{{ titleL }}">
+    <nav aria-label="Fil d'Ariane" style="font-size:13.5px;color:#6B625B;display:flex;gap:8px;margin-bottom:24px"><a href="Bellco - Accueil.dc.html">Accueil</a><span>/</span><a href="Bellco - Accueil.dc.html#realisations">Réalisations</a><span>/</span><span style="color:#2A2522">Paris 10e</span></nav>
+    <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">Étude de cas · Rénovation complète</p>
+    <h1 style="margin:0;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(36px,4.6vw,64px);line-height:1.04;letter-spacing:-0.02em;max-width:18ch">Appartement haussmannien traversant, remis à plat en onze semaines.</h1>
+  </div>
+  <p style="grid-column:{{ titleR }};margin:0;font-size:18px;line-height:1.65;color:#4A423D;max-width:42ch">Un trois-pièces de 1890 aux réseaux d'origine, transformé pour une famille de quatre : cuisine ouverte, seconde salle d'eau, électricité et plomberie neuves, parquets poncés et vitrifiés.</p>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section data-screen-label="Avant / Après" style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,48px)">
+  <div style="position:relative;aspect-ratio:{{ baRatio }};border-radius:6px;overflow:hidden;user-select:none;background:repeating-linear-gradient(135deg,#DED4C4 0 12px,#E9E1D4 12px 24px)">
+    <span style="position:absolute;right:16px;bottom:14px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6B625B">photo APRÈS · séjour, même cadrage</span>
+    <span style="position:absolute;right:16px;top:14px;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;background:#F6F1E9;color:#2A2522;padding:6px 10px;border-radius:2px">Après</span>
+    <div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg,#8C8079 0 12px,#9A8E86 12px 24px);clip-path:inset(0 {{ clipRight }} 0 0)">
+      <span style="position:absolute;left:16px;bottom:14px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#EDE6DA">photo AVANT · séjour, même cadrage</span>
+      <span style="position:absolute;left:16px;top:14px;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;background:#2A2522;color:#F6F1E9;padding:6px 10px;border-radius:2px">Avant</span>
+    </div>
+    <div style="position:absolute;top:0;bottom:0;left:{{ pos }}%;width:2px;background:#F6F1E9;transform:translateX(-1px);pointer-events:none"></div>
+    <div style="position:absolute;top:50%;left:{{ pos }}%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:#F6F1E9;color:#2A2522;display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;box-shadow:0 8px 24px -8px rgba(42,37,34,.5);pointer-events:none"><span>◀</span><span>▶</span></div>
+    <input type="range" min="0" max="100" value="{{ pos }}" onChange="{{ setPos }}" onInput="{{ setPos }}" aria-label="Comparer avant et après" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0">
+  </div>
+  <p style="margin:12px 0 0;font-size:13.5px;color:#6B625B;display:flex;justify-content:space-between;gap:16px"><span>Faites glisser pour comparer</span><span>Séjour, vue depuis l'entrée</span></p>
+</section>
+
+<!-- METADATA ROW -->
+<section data-screen-label="Fiche chantier" style="max-width:1320px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(20px,4vw,48px)">
+  <dl style="margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:24px 32px;border-top:1px solid #2A2522;border-bottom:1px solid #DED4C4;padding:28px 0">
+    <sc-for list="{{ meta }}" as="m" hint-placeholder-count="5">
+      <div><dt style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#6B625B;margin-bottom:8px">{{ m.k }}</dt><dd style="margin:0;font-family:'Newsreader',Georgia,serif;font-size:{{ m.size }};line-height:1.25">{{ m.v }}</dd></div>
+    </sc-for>
+  </dl>
+</section>
+
+<!-- STORY -->
+<section data-screen-label="Récit" style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,48px) clamp(64px,8vw,112px);display:grid;grid-template-columns:repeat(12,1fr);gap:48px 24px">
+  <div style="grid-column:{{ storyL }}">
+    <p style="margin:0 0 14px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#A8452A">Le projet</p>
+    <h2 style="margin:0 0 24px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(28px,2.8vw,40px);line-height:1.12;letter-spacing:-0.015em">Ouvrir sans fragiliser, moderniser sans effacer.</h2>
+    <p style="margin:0 0 22px;font-size:18px;line-height:1.65;max-width:64ch">Les propriétaires voulaient une cuisine ouverte sur le séjour et une seconde salle d'eau pour les enfants, tout en conservant moulures, cheminées et parquets point de Hongrie. Le diagnostic a révélé un mur porteur entre cuisine et séjour : nous avons fait valider par un bureau d'études une ouverture de 2,40 m avec pose d'un IPN, dossier transmis au syndic avant démarrage.</p>
+    <p style="margin:0 0 22px;font-size:18px;line-height:1.65;max-width:64ch">Les réseaux électriques et de plomberie, d'origine, ont été intégralement remplacés. Le tableau a été refait aux normes avec circuits dédiés, les évacuations de la nouvelle salle d'eau raccordées à la colonne existante après validation des pentes.</p>
+    <p style="margin:0;font-size:18px;line-height:1.65;max-width:64ch">Les parquets ont été poncés, les lames manquantes remplacées par du chêne ancien, puis vitrifiés mat. Les moulures ont été restaurées au plâtre et l'ensemble repeint dans une blanc cassé unique pour laisser la lumière traversante faire le travail.</p>
+  </div>
+  <aside style="grid-column:{{ storyR }};display:flex;flex-direction:column;gap:24px">
+    <div style="background:#EDE6DA;padding:26px 28px;border-radius:6px">
+      <p style="margin:0 0 14px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#6B625B">Planning tenu</p>
+      <ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:15px">
+        <sc-for list="{{ timeline }}" as="t" hint-placeholder-count="5"><li style="display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #DED4C4;padding-bottom:10px"><span>{{ t.label }}</span><span style="color:#6B625B;flex:none">{{ t.when }}</span></li></sc-for>
+      </ol>
+    </div>
+    <a href="Bellco - Service.dc.html" style="display:flex;justify-content:space-between;align-items:center;gap:16px;border:1px solid #DED4C4;padding:20px 24px;border-radius:6px;background:#FFFDF9" style-hover="border-color:#A8452A">
+      <span><span style="display:block;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#6B625B;margin-bottom:4px">Service associé</span><span style="font-family:'Newsreader',Georgia,serif;font-size:22px">Rénovation d'appartement</span></span><span style="color:#A8452A;font-size:20px">→</span>
+    </a>
+  </aside>
+</section>
+
+<!-- GALLERY -->
+<section data-screen-label="Galerie" style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,48px) clamp(64px,8vw,112px)">
+  <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:16px">
+    <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="5">
+      <figure style="margin:0;grid-column:{{ g.span }};aspect-ratio:{{ g.ratio }};background:repeating-linear-gradient(135deg,#DED4C4 0 12px,#E9E1D4 12px 24px);position:relative;border-radius:4px;overflow:hidden">
+        <figcaption style="position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:#4A423D"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6B625B">photo · {{ g.slug }}</span><span style="font-weight:600">{{ g.caption }}</span></figcaption>
+      </figure>
+    </sc-for>
+  </div>
+</section>
+
+<!-- CLIENT QUOTE -->
+<section data-screen-label="Témoignage" style="background:#2A2522;color:#F6F1E9">
+  <div style="max-width:1320px;margin:0 auto;padding:clamp(64px,8vw,112px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(12,1fr);gap:24px">
+    <figure style="grid-column:{{ quoteCol }};margin:0">
+      <blockquote style="margin:0 0 28px;font-family:'Newsreader',Georgia,serif;font-style:italic;font-weight:400;font-size:clamp(26px,3vw,40px);line-height:1.3;letter-spacing:-0.01em">« On redoutait le chantier avec deux enfants. Le planning a été respecté à la semaine près, et nous avions un seul numéro à appeler. Les plans 3D nous ont permis de trancher sur la cuisine sans regret. »</blockquote>
+      <figcaption style="font-size:15px;color:#C9BDAB"><strong style="color:#F6F1E9;font-weight:600">Claire et Thomas</strong> · Paris 10e · Avis Google, mars 2026</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- NEXT + CTA -->
+<section data-screen-label="Suivant / CTA" style="max-width:1320px;margin:0 auto;padding:clamp(64px,8vw,112px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(12,1fr);gap:40px 24px;align-items:center">
+  <div style="grid-column:{{ ctaL }}">
+    <h2 style="margin:0 0 16px;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(32px,3.6vw,52px);line-height:1.06;letter-spacing:-0.02em;max-width:18ch">Un projet comparable ? Commençons par une visite conseil.</h2>
+    <p style="margin:0;font-size:18px;line-height:1.65;color:#4A423D;max-width:48ch">Gratuite, sans engagement, suivie d'un devis détaillé par corps de métier et de plans 2D/3D.</p>
+  </div>
+  <div style="grid-column:{{ ctaR }};display:flex;flex-direction:column;gap:12px">
+    <a href="Bellco - Accueil.dc.html#devis" style="background:#A8452A;color:#FFFDF9;border-radius:4px;padding:18px 28px;font-size:16px;font-weight:600;display:flex;justify-content:space-between" style-hover="background:#8E3A22;color:#FFFDF9">Demander un devis <span>→</span></a>
+    <a href="Bellco - Accueil.dc.html#realisations" style="border:1px solid #2A2522;border-radius:4px;padding:18px 28px;font-size:16px;font-weight:600;display:flex;justify-content:space-between" style-hover="background:#2A2522;color:#F6F1E9">Réalisation suivante <span>Maison de ville, Saint-Denis →</span></a>
+  </div>
+</section>
+
+<footer data-screen-label="Footer" style="background:#2A2522;color:#C9BDAB">
+  <div style="max-width:1320px;margin:0 auto;padding:56px clamp(20px,4vw,48px) 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px 32px;font-size:15px;line-height:1.7">
+    <div style="min-width:240px">
+      <div style="display:flex;align-items:center;gap:12px;color:#F6F1E9;margin-bottom:16px"><span style="width:30px;height:30px;background:#F6F1E9;display:block;border-radius:3px"></span><span style="display:flex;flex-direction:column;line-height:1"><span style="font-family:'Newsreader',Georgia,serif;font-size:24px;font-weight:500">Bellco</span><span style="font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-top:3px">Rénovation</span></span></div>
+      <p style="margin:0;max-width:30ch">Entreprise de rénovation tous corps d'état. Garantie décennale, devis détaillé, interlocuteur unique.</p>
+    </div>
+    <div><p style="margin:0 0 12px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#F6F1E9">Services</p><ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px"><li><a href="Bellco - Service.dc.html">Rénovation d'appartement</a></li><li><a href="Bellco - Service.dc.html">Maisons &amp; villas</a></li><li><a href="Bellco - Service.dc.html">Studios</a></li><li><a href="Bellco - Service.dc.html">Salles de bain</a></li><li><a href="Bellco - Service.dc.html">Cuisines</a></li><li><a href="Bellco - Service.dc.html">Carrelage &amp; parquet</a></li><li><a href="Bellco - Service.dc.html">Électricité &amp; plomberie</a></li><li><a href="Bellco - Service.dc.html">Peinture &amp; menuiserie</a></li></ul></div>
+    <div><p style="margin:0 0 12px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#F6F1E9">Entreprise</p><ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px"><li><a href="Bellco - Accueil.dc.html#realisations">Réalisations</a></li><li><a href="Bellco - Accueil.dc.html#methode">Notre méthode</a></li><li><a href="Bellco - Accueil.dc.html#pourquoi">Garantie décennale</a></li><li><a href="Bellco - Accueil.dc.html#faq">Questions fréquentes</a></li></ul></div>
+    <div><p style="margin:0 0 12px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#F6F1E9">Contact</p><p style="margin:0 0 8px">235 avenue du Président Wilson<br>93210 Saint-Denis</p><a href="tel:+33148000000" style="color:#F6F1E9;font-weight:600">01 48 00 00 00</a><br><a href="mailto:contact@bellco-renovation.fr">contact@bellco-renovation.fr</a></div>
+  </div>
+  <div style="border-top:1px solid #4A423D"><div style="max-width:1320px;margin:0 auto;padding:20px clamp(20px,4vw,48px) {{ footPad }};display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:13px"><span>© 2026 Bellco Rénovation · SIRET 000 000 000 00000</span><span style="display:flex;gap:20px"><a href="#">Mentions légales</a><a href="#">Confidentialité</a></span></div></div>
+</footer>
+
+<sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Barre mobile" style="position:fixed;left:0;right:0;bottom:0;z-index:55;background:#FFFDF9;border-top:1px solid #DED4C4;display:grid;grid-template-columns:1fr 1fr 1.4fr;box-shadow:0 -12px 32px -16px rgba(42,37,34,.25);padding-bottom:env(safe-area-inset-bottom)">
+  <a href="tel:+33148000000" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:60px;font-size:12px;font-weight:600"><span style="font-size:15px">☏</span>Appeler</a>
+  <a href="https://wa.me/33600000000" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:60px;font-size:12px;font-weight:600;border-left:1px solid #DED4C4;border-right:1px solid #DED4C4"><span style="font-size:15px">✆</span>WhatsApp</a>
+  <a href="Bellco - Accueil.dc.html#devis" style="background:#A8452A;color:#FFFDF9;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center">Demander un devis</a>
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { w:1280, pos:50 };
+  componentDidMount(){ this.onResize=()=>this.setState({w:window.innerWidth}); window.addEventListener('resize',this.onResize); this.onResize(); }
+  componentWillUnmount(){ window.removeEventListener('resize',this.onResize); }
+  renderVals(){
+    const {w,pos}=this.state; const isMobile=w<1120, S=(a,b)=>isMobile?a:b;
+    const meta=[{k:'Type de bien',v:'Appartement haussmannien'},{k:'Commune',v:'Paris 10e'},{k:'Surface',v:'82 m²'},{k:'Durée du chantier',v:'11 semaines'},{k:'Corps de métier',v:'Maçonnerie, électricité, plomberie, carrelage, parquet, peinture, menuiserie',small:true}]
+      .map(m=>({...m,size:m.small?'18px':'26px'}));
+    const timeline=[{label:'Visite conseil et relevé',when:'Sem. 0'},{label:'Plans 3D, devis signé, dossier syndic',when:'Sem. 3'},{label:'Démolition, IPN, réseaux',when:'Sem. 5 – 9'},{label:'Revêtements, cuisine, peinture',when:'Sem. 10 – 14'},{label:'Réception, levée des réserves',when:'Sem. 15'}];
+    const gallery=[{slug:'cuisine-ouverte',caption:'Cuisine ouverte, IPN habillé',span:'span 7',ratio:'4/3'},{slug:'salle-eau',caption:'Seconde salle d\u2019eau',span:'span 5',ratio:'4/5'},{slug:'parquet',caption:'Point de Hongrie vitrifié mat',span:'span 4',ratio:'1/1'},{slug:'moulures',caption:'Moulures restaurées',span:'span 4',ratio:'1/1'},{slug:'plan-3d',caption:'Plan 3D présenté au devis',span:'span 4',ratio:'1/1'}]
+      .map(g=>({...g,span:isMobile?'span 12':g.span,ratio:isMobile?'4/3':g.ratio}));
+    return { isMobile,isDesktop:!isMobile,pos,clipRight:(100-pos)+'%',setPos:e=>this.setState({pos:Number(e.target.value)}),
+      meta,timeline,gallery, baRatio:S('4/5','21/10'),
+      titleL:S('span 12','1 / span 8'), titleR:S('span 12','9 / span 4'),
+      storyL:S('span 12','1 / span 7'), storyR:S('span 12','9 / span 4'),
+      quoteCol:S('span 12','2 / span 9'), ctaL:S('span 12','1 / span 7'), ctaR:S('span 12','9 / span 4'),
+      footPad:S('96px','20px') };
+  }
+}
+</script>
+</body>
+</html>

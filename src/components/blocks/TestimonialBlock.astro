@@ -1,0 +1,49 @@
+---
+/**
+ * Témoignages clients.
+ *
+ * Affiché uniquement si Sanity en contient : pas de faux avis, pas de bloc
+ * vide. Chaque citation est un <figure> complet — <blockquote> pour les mots
+ * du client, <figcaption> pour son attribution. Le prénom n'est pas un titre :
+ * il n'a rien à faire dans le plan du document.
+ *
+ * La note est rendue en étoiles décoratives, doublées d'un texte lisible par
+ * les lecteurs d'écran.
+ */
+import type { Temoignage } from '~/lib/sanity/types';
+
+interface Props {
+  readonly temoignages: readonly Temoignage[];
+}
+const { temoignages } = Astro.props;
+---
+
+{
+  temoignages.length > 0 && (
+    <ul class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {temoignages.map((temoignage) => (
+        <li class="bg-paper border-line rounded-md border p-6">
+          <figure>
+            <p class="text-accent text-small" aria-hidden="true">
+              {'★'.repeat(temoignage.note)}
+              <span class="text-line-strong">{'★'.repeat(5 - temoignage.note)}</span>
+            </p>
+            <p class="sr-only">Note : {temoignage.note} sur 5.</p>
+
+            <blockquote class="font-display text-quote mt-4 italic">
+              <p>«&nbsp;{temoignage.texte}&nbsp;»</p>
+            </blockquote>
+
+            <figcaption class="text-ink-700 mt-4 text-small">
+              <span class="text-title">{temoignage.nom}</span>
+              {temoignage.commune && <span> — {temoignage.commune}</span>}
+              {temoignage.typeDeProjet && (
+                <span class="text-ink-500 mt-1 block text-caption">{temoignage.typeDeProjet}</span>
+              )}
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  )
+}

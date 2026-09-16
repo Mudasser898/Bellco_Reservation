@@ -1,0 +1,56 @@
+---
+/**
+ * Enveloppe typographique des pages légales : mesure de ligne contrainte et
+ * hiérarchie de titres homogène, sans répéter les classes sur chaque bloc.
+ */
+---
+
+<div class="texte-legal">
+  <slot />
+</div>
+
+<style is:global>
+  .texte-legal > * + * {
+    margin-top: calc(var(--spacing) * 5);
+  }
+  .texte-legal h2 {
+    max-width: var(--container-measure);
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: 1.15;
+    margin-top: calc(var(--spacing) * 12);
+  }
+  .texte-legal h3 {
+    max-width: var(--container-measure);
+    font-family: var(--font-display);
+    font-size: var(--text-h4);
+    margin-top: calc(var(--spacing) * 8);
+  }
+  .texte-legal p,
+  .texte-legal li {
+    max-width: var(--container-measure);
+    font-size: var(--text-body);
+    color: var(--color-ink-700);
+  }
+  .texte-legal ul {
+    list-style: disc;
+    padding-left: calc(var(--spacing) * 5);
+  }
+  .texte-legal li + li {
+    margin-top: calc(var(--spacing) * 2);
+  }
+  .texte-legal dl {
+    max-width: var(--container-measure);
+    border-top: 1px solid var(--color-line);
+  }
+  .texte-legal dt {
+    font-size: var(--text-caption);
+    color: var(--color-ink-500);
+    padding-top: calc(var(--spacing) * 3);
+  }
+  .texte-legal dd {
+    font-size: var(--text-body-sm);
+    padding-bottom: calc(var(--spacing) * 3);
+    border-bottom: 1px solid var(--color-line);
+  }
+</style>

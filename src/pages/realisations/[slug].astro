@@ -1,0 +1,231 @@
+---
+/**
+ * Fiche d'une réalisation.
+ *
+ * Générée depuis Sanity : sans document, pas de page — contrairement aux
+ * services, dont l'existence est décidée par le plan du site.
+ */
+import type { GetStaticPaths } from 'astro';
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import Picture from '~/components/media/Picture.astro';
+import RichText from '~/components/blocks/RichText.astro';
+import ProjectCard from '~/components/blocks/ProjectCard.astro';
+import CTASection from '~/components/blocks/CTASection.astro';
+import BeforeAfterSlider from '~/components/islands/BeforeAfterSlider';
+import { realisationParSlug, toutesLesRealisations } from '~/lib/sanity/queries';
+import { altImage, imageValide, srcSetImage, urlImage } from '~/lib/sanity/image';
+import { schemaImageObject } from '~/lib/seo/jsonld';
+import { TYPES_DE_BIEN } from '~/lib/site';
+
+export const getStaticPaths = (async () => {
+  const projets = await toutesLesRealisations();
+  return projets.map((projet) => ({
+    params: { slug: projet.slug },
+    props: { slug: projet.slug, autres: projets.filter((p) => p.slug !== projet.slug).slice(0, 3) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { slug, autres } = Astro.props;
+const projet = await realisationParSlug(slug);
+if (!projet) return Astro.rewrite('/404');
+
+const chemin = `/realisations/${projet.slug}/`;
+const filAriane = [
+  { libelle: 'Réalisations', href: '/realisations/' },
+  { libelle: projet.titre, href: chemin },
+];
+
+const comparaisonPossible = imageValide(projet.imageAvant) && imageValide(projet.imageApres);
+
+const fiche = [
+  { libelle: 'Type de bien', valeur: TYPES_DE_BIEN[projet.typeDeBien] as string | undefined },
+  { libelle: 'Commune', valeur: projet.commune?.nom },
+  { libelle: 'Surface', valeur: projet.surface ? `${projet.surface} m²` : undefined },
+  { libelle: 'Durée', valeur: projet.duree },
+  { libelle: 'Budget', valeur: projet.budgetRange },
+].filter((l): l is { libelle: string; valeur: string } => Boolean(l.valeur));
+
+const ogImage = imageValide(projet.imageApres)
+  ? { url: urlImage(projet.imageApres, 1200, 630), alt: altImage(projet.imageApres) }
+  : undefined;
+
+const jsonLd = imageValide(projet.imageApres)
+  ? [
+      schemaImageObject({
+        url: urlImage(projet.imageApres, 1600),
+        description: altImage(projet.imageApres),
+      }),
+    ]
+  : [];
+
+const descriptionMeta = [
+  TYPES_DE_BIEN[projet.typeDeBien],
+  projet.commune ? `à ${projet.commune.nom}` : null,
+  projet.surface ? `${projet.surface} m²` : null,
+].filter(Boolean).join(', ') + '. Chantier de rénovation livré par Bellco Rénovation.';
+---
+
+<Page
+  titre={projet.titre}
+  description={descriptionMeta}
+  metaTitle={projet.metaTitle}
+  metaDescription={projet.metaDescription}
+  ogImage={ogImage}
+  filAriane={filAriane}
+  jsonLd={jsonLd}
+>
+  <section class="bg-surface border-line pt-header border-b">
+    <div class="wrap py-16">
+      <Breadcrumbs elements={filAriane} />
+      <h1 class="font-display text-h1 mt-6 max-w-measure">{projet.titre}</h1>
+    </div>
+  </section>
+
+  {
+    comparaisonPossible && (
+      <section class="section-y-sm" aria-labelledby="titre-comparaison">
+        <div class="wrap">
+          <h2 id="titre-comparaison" class="font-display text-h2">Avant, après</h2>
+          <div class="mt-8">
+            <BeforeAfterSlider
+              client:visible
+              avant={{
+                src: urlImage(projet.imageAvant!, 1080),
+                srcSet: srcSetImage(projet.imageAvant!, 4 / 3),
+                alt: altImage(projet.imageAvant!),
+              }}
+              apres={{
+                src: urlImage(projet.imageApres!, 1080),
+                srcSet: srcSetImage(projet.imageApres!, 4 / 3),
+                alt: altImage(projet.imageApres!),
+              }}
+            />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Fiche chantier et récit -->
+  <section class="section-y-sm" aria-labelledby="titre-fiche">
+    <div class="wrap grid gap-12 lg:grid-cols-2">
+      <div>
+        <h2 id="titre-fiche" class="font-display text-h2">Le chantier</h2>
+        <dl class="border-line mt-8 border-t">
+          {
+            fiche.map((ligne) => (
+              <div class="border-line flex justify-between gap-6 border-b py-4">
+                <dt class="text-ink-500 text-small">{ligne.libelle}</dt>
+                <dd class="text-body-sm font-semibold">{ligne.valeur}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        {
+          projet.corpsDeMetier && projet.corpsDeMetier.length > 0 && (
+            <div class="mt-8">
+              <p class="text-overline text-ink-500 uppercase">Corps de métier</p>
+              <ul class="mt-3 flex flex-wrap gap-2">
+                {projet.corpsDeMetier.map((metier) => (
+                  <li>
+                    <a href={`/services/${metier.slug}/`} class="puce-metier">
+                      {metier.titre}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+      </div>
+
+      <div>
+        <RichText contenu={projet.description} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Galerie -->
+  {
+    projet.galerie && projet.galerie.length > 0 && (
+      <section class="bg-surface border-line section-y-sm border-y" aria-labelledby="titre-galerie">
+        <div class="wrap">
+          <h2 id="titre-galerie" class="font-display text-h2">En images</h2>
+          <ul class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {projet.galerie.map((image) => (
+              <li>
+                <figure class="rounded-xs overflow-hidden">
+                  <Picture
+                    image={image}
+                    sizes="(min-width: 1120px) 33vw, (min-width: 860px) 50vw, 100vw"
+                    ratio={4 / 3}
+                  />
+                </figure>
+                {image.legende && <p class="text-ink-500 mt-2 text-caption">{image.legende}</p>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Citation client -->
+  {
+    projet.citationClient?.texte && (
+      <section class="section-y-sm" aria-label="Avis du client">
+        <div class="wrap">
+          <figure class="max-w-measure">
+            <blockquote class="font-display text-quote italic">
+              <p>«&nbsp;{projet.citationClient.texte}&nbsp;»</p>
+            </blockquote>
+            <figcaption class="text-ink-700 mt-4 text-small">
+              {projet.citationClient.nom}
+              {projet.citationClient.commune && <span> — {projet.citationClient.commune}</span>}
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Autres chantiers -->
+  {
+    autres.length > 0 && (
+      <section class="bg-surface border-line section-y-sm border-y" aria-labelledby="titre-autres">
+        <div class="wrap">
+          <h2 id="titre-autres" class="font-display text-h2">D’autres chantiers</h2>
+          <div class="mt-10 grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+            {autres.map((autre) => (
+              <ProjectCard projet={autre} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CTASection
+    titre="Un projet comparable ?"
+    texte="Décrivez-nous les travaux : nous venons relever les lieux et vous remettons un devis détaillé poste par poste."
+  />
+</Page>
+
+<style>
+  .puce-metier {
+    display: inline-block;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-full);
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+    font-size: var(--text-small);
+    transition:
+      border-color var(--duration-fast) var(--ease-out-soft),
+      color var(--duration-fast) var(--ease-out-soft);
+  }
+  .puce-metier:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+</style>

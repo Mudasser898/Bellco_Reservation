@@ -1,0 +1,11 @@
+# Bellco Rénovation
+# Le Studio est l'interface d'administration : elle n'a rien à faire dans un
+# index de moteur de recherche. L'en-tête X-Robots-Tag de public/_headers
+# double cette règle, car robots.txt n'empêche pas l'indexation d'une URL
+# découverte par un lien externe — il n'empêche que l'exploration.
+
+User-agent: *
+Allow: /
+Disallow: /studio/
+
+Sitemap: https://bellcorenovation.com/sitemap-index.xml

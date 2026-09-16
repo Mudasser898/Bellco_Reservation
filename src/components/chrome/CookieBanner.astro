@@ -1,0 +1,131 @@
+---
+/**
+ * Bandeau de consentement.
+ *
+ * Règles CNIL respectées ici :
+ * — refuser doit être aussi simple qu'accepter : les deux boutons ont le même
+ *   poids visuel et le même nombre de clics ;
+ * — aucun traceur ne se déclenche avant un consentement explicite. Le bandeau
+ *   ne dépose rien lui-même : il n'écrit qu'une préférence dans localStorage,
+ *   ce qui relève du fonctionnement du site et non du traçage ;
+ * — l'absence de réponse vaut refus.
+ *
+ * Aucune mesure d'audience n'est installée pour l'instant. Le point de
+ * branchement est `activerMesureAudience()` : tant qu'il est vide, le site ne
+ * charge strictement aucun script tiers.
+ */
+---
+
+<section
+  id="bandeau-cookies"
+  class="bandeau-cookies"
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="cookies-titre"
+  aria-describedby="cookies-texte"
+  hidden
+>
+  <div class="wrap flex flex-col gap-4 py-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+    <div class="max-w-measure">
+      <p id="cookies-titre" class="text-title">Cookies</p>
+      <p id="cookies-texte" class="text-ink-700 mt-1 text-small">
+        Nous n’utilisons aucun traceur sans votre accord. Vous pouvez accepter la
+        mesure d’audience, qui nous aide à améliorer le site, ou la refuser : le site
+        fonctionne exactement de la même façon.
+        <a href="/politique-de-confidentialite/" class="link-rule">En savoir plus</a>.
+      </p>
+    </div>
+
+    <div class="flex flex-none flex-wrap gap-3">
+      <button type="button" id="cookies-refuser" class="bouton-cookies">Tout refuser</button>
+      <button type="button" id="cookies-accepter" class="bouton-cookies">Tout accepter</button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bandeau-cookies {
+    position: fixed;
+    inset-inline: 0;
+    /* Au-dessus de la barre d'action mobile, sans la masquer. */
+    bottom: 0;
+    z-index: var(--z-drawer);
+    background-color: var(--color-paper);
+    border-top: 1px solid var(--color-line-strong);
+    box-shadow: var(--shadow-bar-up);
+  }
+
+  /* Les deux boutons sont strictement identiques : refuser n'est pas relégué. */
+  .bouton-cookies {
+    border: 1px solid var(--color-primary);
+    background-color: transparent;
+    color: var(--color-primary);
+    border-radius: var(--radius);
+    padding: calc(var(--spacing) * 3) calc(var(--spacing) * 5);
+    font-size: var(--text-small);
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-out-soft),
+      color var(--duration-fast) var(--ease-out-soft);
+  }
+  .bouton-cookies:hover {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+</style>
+
+<script>
+  /* Consentement aux traceurs. Aucun script tiers n'est chargé tant que
+     l'utilisateur n'a pas explicitement accepté. */
+  const CLE = 'bellco-consentement';
+  type Consentement = 'accepte' | 'refuse';
+
+  const bandeau = document.getElementById('bandeau-cookies');
+  const boutonAccepter = document.getElementById('cookies-accepter');
+  const boutonRefuser = document.getElementById('cookies-refuser');
+
+  /**
+   * Point de branchement de la mesure d'audience.
+   *
+   * N'est appelé qu'après un consentement explicite. Pour ajouter une mesure
+   * respectueuse de la vie privée (Plausible, Matomo…), insérez ici la création
+   * de la balise <script> — et nulle part ailleurs.
+   */
+  function activerMesureAudience(): void {
+    // Volontairement vide : aucun traceur n'est installé à ce jour.
+  }
+
+  function lireConsentement(): Consentement | null {
+    try {
+      const valeur = localStorage.getItem(CLE);
+      return valeur === 'accepte' || valeur === 'refuse' ? valeur : null;
+    } catch {
+      // Navigation privée ou stockage bloqué : on retombe sur « pas de réponse ».
+      return null;
+    }
+  }
+
+  function enregistrer(choix: Consentement): void {
+    try {
+      localStorage.setItem(CLE, choix);
+    } catch {
+      /* Le choix ne survivra pas à la session : ce n'est pas bloquant. */
+    }
+    if (bandeau) bandeau.hidden = true;
+    if (choix === 'accepte') activerMesureAudience();
+  }
+
+  if (bandeau && boutonAccepter && boutonRefuser) {
+    const dejaRepondu = lireConsentement();
+
+    if (dejaRepondu === null) {
+      bandeau.hidden = false;
+    } else if (dejaRepondu === 'accepte') {
+      activerMesureAudience();
+    }
+
+    boutonAccepter.addEventListener('click', () => enregistrer('accepte'));
+    boutonRefuser.addEventListener('click', () => enregistrer('refuse'));
+  }
+</script>

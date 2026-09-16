@@ -1,0 +1,125 @@
+---
+/**
+ * Contact.
+ */
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import ContactForm from '~/components/islands/ContactForm';
+import { reglages as chargerReglages } from '~/lib/sanity/queries';
+import { ENTREPRISE, HORAIRES, JOUR_FERME, lienWhatsApp } from '~/lib/site';
+
+const r = await chargerReglages();
+const cleTurnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const filAriane = [{ libelle: 'Contact', href: '/contact/' }];
+
+const telephone = r.telephone ?? ENTREPRISE.telephoneAffiche;
+const telLien = r.telephoneInternational ?? ENTREPRISE.telephoneE164;
+const email = r.email ?? ENTREPRISE.email;
+const rue = r.adresseRue ?? ENTREPRISE.adresse.rue;
+const codePostal = r.adresseCodePostal ?? ENTREPRISE.adresse.codePostal;
+const ville = r.adresseVille ?? ENTREPRISE.adresse.ville;
+
+const horaires = r.horaires?.length
+  ? r.horaires.map((h) => ({
+      libelle: h.libelle ?? '',
+      plage: [h.ouverture, h.fermeture].filter(Boolean).join(' – '),
+    }))
+  : HORAIRES.map((h) => ({ libelle: h.libelle, plage: `${h.ouverture} – ${h.fermeture}` }));
+---
+
+<Page
+  titre="Nous contacter"
+  description="Contactez Bellco Rénovation à Saint-Denis : téléphone, e-mail, WhatsApp ou formulaire. Nous répondons sous 48 heures ouvrées."
+  filAriane={filAriane}
+>
+  {
+    cleTurnstile && (
+      <script
+        is:inline
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        async
+        defer
+        slot="head"
+      />
+    )
+  }
+
+  <section class="bg-surface border-line pt-header border-b">
+    <div class="wrap py-16">
+      <Breadcrumbs elements={filAriane} />
+      <p class="text-overline text-accent mt-6 uppercase">Contact</p>
+      <h1 class="font-display text-h1 mt-3 max-w-measure">Écrivez-nous, appelez-nous.</h1>
+      <p class="text-ink-700 mt-6 max-w-measure text-lead">
+        Pour une demande de devis, le
+        <a href="/devis/" class="link-rule">formulaire dédié</a> va plus vite : il nous
+        donne d’emblée ce qu’il faut pour préparer la visite. Pour tout le reste, c’est ici.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-y">
+    <div class="wrap grid gap-12 lg:grid-cols-2">
+      <div>
+        <h2 class="font-display text-h2">Nous écrire</h2>
+        <div class="mt-8">
+          <ContactForm client:load cleTurnstile={cleTurnstile} />
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-10">
+        <div>
+          <h2 class="font-display text-h3">Directement</h2>
+          <ul class="mt-5 flex flex-col gap-4 text-body-sm">
+            <li>
+              <span class="text-ink-500 block text-caption">Téléphone</span>
+              <a href={`tel:${telLien}`} class="font-semibold">{telephone}</a>
+            </li>
+            <li>
+              <span class="text-ink-500 block text-caption">WhatsApp</span>
+              <a href={lienWhatsApp()} class="link-rule" rel="noopener">Démarrer une conversation</a>
+            </li>
+            <li>
+              <span class="text-ink-500 block text-caption">E-mail</span>
+              <a href={`mailto:${email}`} class="link-rule">{email}</a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="font-display text-h3">Atelier</h2>
+          <address class="text-ink-700 mt-5 text-body-sm not-italic">
+            {rue}<br />
+            {codePostal}&nbsp;{ville}
+          </address>
+          <p class="text-ink-500 mt-3 text-caption">
+            Nous recevons sur rendez-vous : appelez avant de passer, nous sommes souvent
+            sur les chantiers.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="font-display text-h3">Horaires</h2>
+          <ul class="mt-5 flex flex-col gap-2 text-body-sm">
+            {
+              horaires.map((h) => (
+                <li class="border-line flex justify-between gap-6 border-b pb-2">
+                  <span class="text-ink-700">{h.libelle}</span>
+                  <span class="font-semibold">{h.plage}</span>
+                </li>
+              ))
+            }
+            <li class="text-ink-500 text-caption">{JOUR_FERME}</li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="font-display text-h3">Zones d’intervention</h2>
+          <p class="text-ink-700 mt-4 text-body-sm">
+            Saint-Denis, la Seine-Saint-Denis, Paris et l’Île-de-France.
+            <a href="/zones-intervention/" class="link-rule">Voir le détail</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Page>

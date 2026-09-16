@@ -1,0 +1,179 @@
+---
+/**
+ * Accueil.
+ *
+ * Les prestations, la méthode et la FAQ sont du contenu de marque, écrit dans
+ * le code : ces blocs doivent s'afficher même si Sanity est injoignable. Les
+ * réalisations, les témoignages et les chiffres viennent du CMS et
+ * disparaissent proprement tant qu'ils ne sont pas saisis.
+ */
+import Page from '~/layouts/Page.astro';
+import Hero from '~/components/blocks/Hero.astro';
+import TrustStrip from '~/components/blocks/TrustStrip.astro';
+import ServiceGrid from '~/components/blocks/ServiceGrid.astro';
+import ProcessTimeline from '~/components/blocks/ProcessTimeline.astro';
+import ProjectCard from '~/components/blocks/ProjectCard.astro';
+import TestimonialBlock from '~/components/blocks/TestimonialBlock.astro';
+import FAQAccordion from '~/components/blocks/FAQAccordion.astro';
+import CTASection from '~/components/blocks/CTASection.astro';
+import {
+  realisationsMisesEnAvant,
+  reglages as chargerReglages,
+  tousLesTemoignages,
+} from '~/lib/sanity/queries';
+import { schemaFAQ } from '~/lib/seo/jsonld';
+
+const [reglages, realisations, temoignages] = await Promise.all([
+  chargerReglages(),
+  realisationsMisesEnAvant(3),
+  tousLesTemoignages(3),
+]);
+
+const faq = [
+  {
+    question: 'Le devis est-il gratuit et détaillé ?',
+    reponse:
+      'Oui. Après la visite conseil, vous recevez un devis écrit, poste par poste et corps de métier par corps de métier, avec les quantités et les références des matériaux retenus. Vous pouvez arbitrer ligne par ligne, sans forfait opaque.',
+  },
+  {
+    question: 'Que couvre la garantie décennale ?',
+    reponse:
+      'Pendant dix ans après la réception du chantier, elle couvre les dommages qui compromettent la solidité de l’ouvrage ou le rendent impropre à son usage : étanchéité, structure, réseaux encastrés. L’attestation d’assurance est jointe à chaque devis.',
+  },
+  {
+    question: 'Comment sont gérés les délais et les imprévus ?',
+    reponse:
+      'Le planning figure dans le devis. En cas d’imprévu — une découverte à l’ouverture d’une cloison, par exemple — vous êtes prévenu le jour même, et un avenant chiffré vous est soumis avant toute poursuite des travaux.',
+  },
+  {
+    question: 'Comment se déroule le paiement ?',
+    reponse:
+      'Un acompte à la signature, des situations intermédiaires calées sur l’avancement réel, et le solde uniquement après la levée des réserves. Nous ne demandons jamais de paiement en avance de phase.',
+  },
+  {
+    question: 'Gérez-vous les démarches en copropriété ou en mairie ?',
+    reponse:
+      'Nous préparons les dossiers destinés au syndic — autorisation de travaux, planning, attestations d’assurance — ainsi que les déclarations préalables lorsque la nature des travaux l’exige.',
+  },
+  {
+    question: 'Intervenez-vous en dehors de Saint-Denis ?',
+    reponse:
+      'Oui : en Seine-Saint-Denis, à Paris et dans toute l’Île-de-France. Au-delà de quarante kilomètres, le déplacement est précisé et chiffré dans le devis.',
+  },
+];
+---
+
+<Page
+  titre="Entreprise de rénovation à Saint-Denis"
+  description="Rénovation d’appartement, de maison et de salle de bain à Saint-Denis, Paris et en Île-de-France. Devis détaillé par corps de métier, interlocuteur unique, garantie décennale."
+  surHero={true}
+  jsonLd={[schemaFAQ(faq)]}
+>
+  <Hero
+    surtitre="Entreprise de rénovation · Saint-Denis"
+    titre="Votre rénovation, menée comme un vrai chantier."
+    accroche="Devis détaillé par corps de métier, plans pour vous projeter, et un seul interlocuteur du premier relevé à la levée des réserves."
+  />
+
+  <TrustStrip reglages={reglages} />
+
+  <!-- Services -->
+  <section class="section-y" aria-labelledby="titre-services">
+    <div class="wrap">
+      <p class="text-overline text-accent uppercase">Nos prestations</p>
+      <h2 id="titre-services" class="font-display text-h2 mt-3 max-w-measure">
+        Tous corps d’état, sous une seule responsabilité.
+      </h2>
+      <p class="text-ink-700 mt-5 max-w-measure text-body">
+        Nous intervenons sur l’ensemble d’une rénovation, de la dépose à la
+        finition. Vous n’avez qu’un contrat, qu’un planning et qu’un
+        interlocuteur — pas dix artisans à coordonner vous-même.
+      </p>
+      <div class="mt-12">
+        <ServiceGrid />
+      </div>
+    </div>
+  </section>
+
+  <!-- Méthode -->
+  <section class="bg-surface border-line section-y border-y" aria-labelledby="titre-methode">
+    <div class="wrap">
+      <p class="text-overline text-accent uppercase">Notre méthode</p>
+      <h2 id="titre-methode" class="font-display text-h2 mt-3 max-w-measure">
+        Quatre étapes, aucune surprise.
+      </h2>
+      <div class="mt-12">
+        <ProcessTimeline />
+      </div>
+    </div>
+  </section>
+
+  <!-- Réalisations -->
+  {
+    realisations.length > 0 && (
+      <section class="section-y" aria-labelledby="titre-realisations">
+        <div class="wrap">
+          <p class="text-overline text-accent uppercase">Réalisations</p>
+          <h2 id="titre-realisations" class="font-display text-h2 mt-3 max-w-measure">
+            Des chantiers livrés, pas des images de synthèse.
+          </h2>
+          <div class="mt-12 grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+            {realisations.map((projet) => (
+              <ProjectCard projet={projet} />
+            ))}
+          </div>
+          <a
+            href="/realisations/"
+            class="text-accent hover:text-accent-hover mt-10 inline-flex items-center gap-2 text-body-sm font-semibold"
+          >
+            Voir toutes les réalisations
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Témoignages -->
+  {
+    temoignages.length > 0 && (
+      <section class="bg-surface border-line section-y border-y" aria-labelledby="titre-avis">
+        <div class="wrap">
+          <p class="text-overline text-accent uppercase">Ce qu’en disent nos clients</p>
+          <h2 id="titre-avis" class="font-display text-h2 mt-3 max-w-measure">
+            Des chantiers jugés sur pièce.
+          </h2>
+          <div class="mt-12">
+            <TestimonialBlock temoignages={temoignages} />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- FAQ -->
+  <section class="section-y" aria-labelledby="titre-faq">
+    <div class="grille-faq wrap grid gap-10">
+      <div>
+        <p class="text-overline text-accent uppercase">Questions fréquentes</p>
+        <h2 id="titre-faq" class="font-display text-h2 mt-3">Ce qu’on nous demande le plus.</h2>
+      </div>
+      <FAQAccordion entrees={faq} />
+    </div>
+  </section>
+
+  <CTASection
+    titre="Parlons de votre projet."
+    texte="Décrivez-nous les travaux en quelques minutes : nous revenons vers vous avec une date de visite et, après le relevé, un devis détaillé."
+  />
+</Page>
+
+<style>
+  /* Tailwind v4 n expose pas grid-template-columns au thème : on le pose ici
+     plutôt que d écrire une valeur arbitraire dans le markup. */
+  @media (width >= 1120px) {
+    .grille-faq {
+      grid-template-columns: 1fr 1.6fr;
+    }
+  }
+</style>

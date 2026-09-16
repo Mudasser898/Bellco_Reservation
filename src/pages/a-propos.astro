@@ -1,0 +1,151 @@
+---
+/**
+ * À propos.
+ *
+ * Décrit une façon de travailler, pas un palmarès. Aucun chiffre n'est avancé
+ * ici : ceux qui sont vérifiables vivent dans les réglages Sanity et
+ * s'affichent dans le bandeau de réassurance, une fois renseignés.
+ */
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import ProcessTimeline from '~/components/blocks/ProcessTimeline.astro';
+import TrustStrip from '~/components/blocks/TrustStrip.astro';
+import CTASection from '~/components/blocks/CTASection.astro';
+import { reglages as chargerReglages } from '~/lib/sanity/queries';
+import { ENTREPRISE } from '~/lib/site';
+
+const r = await chargerReglages();
+const filAriane = [{ libelle: 'À propos', href: '/a-propos/' }];
+
+const engagements = [
+  {
+    titre: 'Un devis qu’on peut discuter ligne par ligne',
+    texte:
+      'Chaque poste apparaît avec sa quantité, sa référence de matériau et son prix. Vous pouvez retirer un poste, en reporter un autre, comparer une gamme de carrelage à une autre. Un forfait global ne permet aucun de ces arbitrages — c’est précisément pourquoi nous n’en faisons pas.',
+  },
+  {
+    titre: 'Un seul interlocuteur, du relevé à la réception',
+    texte:
+      'La même personne fait le relevé, rédige le devis, coordonne les équipes et vous rend le chantier. Vous n’avez jamais à réexpliquer votre projet, et personne ne peut renvoyer la responsabilité d’un retard à quelqu’un d’autre.',
+  },
+  {
+    titre: 'Les imprévus annoncés le jour même',
+    texte:
+      'Ouvrir une cloison révèle parfois une canalisation en plomb ou un support dégradé. Quand cela arrive, vous êtes prévenu dans la journée, avec un avenant chiffré, avant que quoi que ce soit ne se poursuive. Une mauvaise nouvelle donnée tôt coûte toujours moins cher qu’une facture surprise.',
+  },
+  {
+    titre: 'Le solde après la levée des réserves',
+    texte:
+      'Acompte à la signature, situations intermédiaires calées sur l’avancement réel, solde une fois les réserves levées. Nous ne demandons jamais de paiement en avance de phase.',
+  },
+];
+---
+
+<Page
+  titre="À propos de Bellco Rénovation"
+  description="Entreprise de rénovation tous corps d’état installée à Saint-Denis. Devis détaillé poste par poste, interlocuteur unique et garantie décennale."
+  filAriane={filAriane}
+>
+  <section class="bg-surface border-line pt-header border-b">
+    <div class="wrap py-16">
+      <Breadcrumbs elements={filAriane} />
+      <p class="text-overline text-accent mt-6 uppercase">L’entreprise</p>
+      <h1 class="font-display text-h1 mt-3 max-w-measure">
+        Une entreprise de rénovation, pas un intermédiaire.
+      </h1>
+      <p class="text-ink-700 mt-6 max-w-measure text-lead">
+        {r.nomEntreprise ?? ENTREPRISE.nom} est installée à Saint-Denis. Nous prenons en
+        charge l’ensemble d’une rénovation — dépose, réseaux, sols, finitions — sous un
+        seul contrat et un seul planning.
+      </p>
+    </div>
+  </section>
+
+  <TrustStrip reglages={r} />
+
+  <section class="section-y" aria-labelledby="titre-methode-travail">
+    <div class="wrap grid gap-12 lg:grid-cols-2">
+      <div>
+        <h2 id="titre-methode-travail" class="font-display text-h2 max-w-measure">
+          Ce à quoi vous pouvez nous tenir
+        </h2>
+        <p class="text-ink-700 mt-6 max-w-measure text-body">
+          Un chantier de rénovation se juge moins sur la photo finale que sur la façon
+          dont les inévitables imprévus ont été traités. Voici les quatre règles que
+          nous nous imposons, et sur lesquelles vous pouvez nous reprendre.
+        </p>
+      </div>
+
+      <ol class="flex flex-col gap-8">
+        {
+          engagements.map((engagement, i) => (
+            <li class="border-line border-t pt-5">
+              <p class="font-mono text-ink-500 text-caption">
+                {String(i + 1).padStart(2, '0')}
+              </p>
+              <h3 class="font-display text-h4 mt-2">{engagement.titre}</h3>
+              <p class="text-ink-700 mt-2 max-w-measure text-body-sm">{engagement.texte}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="bg-surface border-line section-y border-y" aria-labelledby="titre-deroule">
+    <div class="wrap">
+      <p class="text-overline text-accent uppercase">Notre méthode</p>
+      <h2 id="titre-deroule" class="font-display text-h2 mt-3 max-w-measure">
+        Le déroulé, du premier appel à la garantie.
+      </h2>
+      <div class="mt-12">
+        <ProcessTimeline />
+      </div>
+    </div>
+  </section>
+
+  <section class="section-y" aria-labelledby="titre-couverture">
+    <div class="wrap grid gap-12 lg:grid-cols-2">
+      <div>
+        <h2 id="titre-couverture" class="font-display text-h2 max-w-measure">
+          Assurance et garanties
+        </h2>
+        <p class="text-ink-700 mt-6 max-w-measure text-body">
+          Nos travaux sont couverts par une assurance de responsabilité décennale, comme
+          l’exige l’article L. 241-1 du code des assurances. L’attestation est jointe à
+          chaque devis — vous n’avez pas à la demander.
+        </p>
+        <p class="text-ink-700 mt-4 max-w-measure text-body">
+          Pendant dix ans après la réception, cette garantie couvre les dommages qui
+          compromettent la solidité de l’ouvrage ou le rendent impropre à son usage :
+          étanchéité, structure, réseaux encastrés.
+        </p>
+        <p class="text-ink-500 mt-4 max-w-measure text-small">
+          Les références de notre contrat figurent dans les
+          <a href="/mentions-legales/" class="link-rule">mentions légales</a>.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="font-display text-h2 max-w-measure">Où nous intervenons</h2>
+        <p class="text-ink-700 mt-6 max-w-measure text-body">
+          Saint-Denis et la Seine-Saint-Denis d’abord, Paris et l’Île-de-France ensuite.
+          Au-delà de quarante kilomètres, le déplacement est précisé et chiffré dans le
+          devis, jamais ajouté en cours de route.
+        </p>
+        <a
+          href="/zones-intervention/"
+          class="text-accent hover:text-accent-hover mt-6 inline-flex items-center gap-2 text-body-sm font-semibold"
+        >
+          Voir les zones d’intervention
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    titre="Un projet en tête ?"
+    texte="Décrivez-nous les travaux. Nous venons relever les lieux, gratuitement et sans engagement, puis vous recevez un devis détaillé."
+  />
+</Page>
