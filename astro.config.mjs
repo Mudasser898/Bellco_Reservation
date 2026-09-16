@@ -11,6 +11,32 @@ import tailwindcss from '@tailwindcss/vite';
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '');
 
 /**
+ * Identifiant de repli quand Sanity n'est pas configuré.
+ *
+ * @sanity/client refuse un projectId vide et fait échouer tout le build. Or
+ * l'essentiel du site — les dix pages de service, les quatre pages de commune,
+ * les pages légales, les formulaires — est écrit en dur et n'a aucun besoin du
+ * CMS. Faire échouer la construction pour autant reviendrait à bloquer une
+ * mise en ligne parfaitement valide.
+ *
+ * On passe donc un identifiant factice, et les requêtes retombent sur leurs
+ * valeurs de repli : réalisations, articles et témoignages sont simplement
+ * absents. src/lib/sanity/client.ts reconnaît ce même identifiant et le
+ * signale dans les journaux de build.
+ */
+const SANITY_NON_CONFIGURE = 'ffffffff';
+const sanityProjectId = env.PUBLIC_SANITY_PROJECT_ID || SANITY_NON_CONFIGURE;
+
+if (sanityProjectId === SANITY_NON_CONFIGURE) {
+  console.warn(
+    '\n[sanity] PUBLIC_SANITY_PROJECT_ID absent — le site est construit sans contenu\n' +
+      '         de CMS. Les pages de service, de commune et les pages légales sont\n' +
+      '         complètes ; les réalisations, articles et témoignages seront vides.\n',
+  );
+}
+
+
+/**
  * Cible de déploiement.
  *
  * Le site tourne pour l'instant sur Vercel, et pourra basculer sur Cloudflare
@@ -69,7 +95,7 @@ export default defineConfig({
   integrations: [
     react(),
     sanity({
-      projectId: env.PUBLIC_SANITY_PROJECT_ID ?? '',
+      projectId: sanityProjectId,
       dataset: env.PUBLIC_SANITY_DATASET ?? 'production',
       apiVersion: '2026-01-01',
       // CDN en production uniquement : le build lit la donnée fraîche.

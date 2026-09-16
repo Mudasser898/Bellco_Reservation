@@ -11,7 +11,14 @@ export { sanityClient };
  * laisser croire que tout va bien.
  */
 const identifiant = import.meta.env.PUBLIC_SANITY_PROJECT_ID;
-export const sanityConfigure = Boolean(identifiant) && identifiant !== 'aaaaaaaa';
+/**
+ * Identifiant factice posé par astro.config.mjs quand la variable
+ * d'environnement est absente. Les deux valeurs doivent rester alignées.
+ */
+const SANITY_NON_CONFIGURE = 'ffffffff';
+
+export const sanityConfigure =
+  Boolean(identifiant) && identifiant !== SANITY_NON_CONFIGURE && identifiant !== 'aaaaaaaa';
 
 let avertissementEmis = false;
 
