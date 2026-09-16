@@ -1,0 +1,23 @@
+---
+/**
+ * Image insérée dans un texte riche Sanity.
+ */
+import Picture from './Picture.astro';
+import { imageValide } from '~/lib/sanity/image';
+import type { Props as PortableTextProps } from 'astro-portabletext/types';
+import type { ImageAvecAlt } from '~/lib/sanity/types';
+
+type Props = PortableTextProps<ImageAvecAlt>;
+const { node } = Astro.props as Props;
+---
+
+{
+  imageValide(node) && (
+    <figure class="my-10">
+      <Picture image={node} sizes="(min-width: 860px) 66vw, 100vw" class="rounded-xs" />
+      {node.legende && (
+        <figcaption class="text-ink-500 mt-3 text-caption">{node.legende}</figcaption>
+      )}
+    </figure>
+  )
+}

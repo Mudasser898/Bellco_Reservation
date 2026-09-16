@@ -1,0 +1,57 @@
+---
+/**
+ * Page d'accueil des services.
+ */
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import ServiceGrid from '~/components/blocks/ServiceGrid.astro';
+import ProcessTimeline from '~/components/blocks/ProcessTimeline.astro';
+import CTASection from '~/components/blocks/CTASection.astro';
+
+const filAriane = [{ libelle: 'Services', href: '/services/' }];
+---
+
+<Page
+  titre="Nos services de rénovation"
+  description="Rénovation d’appartement, de maison, de salle de bain et de cuisine, carrelage, parquet, électricité, peinture et plomberie à Saint-Denis et en Île-de-France."
+  filAriane={filAriane}
+>
+  <section class="bg-surface border-line pt-header border-b">
+    <div class="wrap py-16">
+      <Breadcrumbs elements={filAriane} />
+      <p class="text-overline text-accent mt-6 uppercase">Nos prestations</p>
+      <h1 class="font-display text-h1 mt-3 max-w-measure">
+        Tous corps d’état, sous une seule responsabilité.
+      </h1>
+      <p class="text-ink-700 mt-6 max-w-measure text-lead">
+        Dix métiers, un seul contrat et un seul planning. Vous n’avez pas à
+        coordonner des artisans indépendants ni à arbitrer entre eux quand un
+        poste prend du retard — c’est notre travail.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-y" aria-labelledby="titre-liste">
+    <div class="wrap">
+      <h2 id="titre-liste" class="sr-only">Liste des services</h2>
+      <ServiceGrid />
+    </div>
+  </section>
+
+  <section class="bg-surface border-line section-y border-y" aria-labelledby="titre-methode">
+    <div class="wrap">
+      <p class="text-overline text-accent uppercase">Notre méthode</p>
+      <h2 id="titre-methode" class="font-display text-h2 mt-3 max-w-measure">
+        Le même déroulé, quel que soit le métier.
+      </h2>
+      <div class="mt-12">
+        <ProcessTimeline />
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    titre="Un projet, plusieurs métiers ?"
+    texte="Décrivez-nous l’ensemble des travaux : nous chiffrons chaque corps de métier séparément dans un devis unique, et vous gardez un seul interlocuteur."
+  />
+</Page>

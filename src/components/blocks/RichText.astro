@@ -1,0 +1,100 @@
+---
+/**
+ * Texte riche Sanity, rendu au build — aucun JavaScript côté client.
+ *
+ * La mise en forme vient d'ici et non du CMS : l'éditeur choisit la structure
+ * (paragraphe, titre de section, liste, citation), le système de design décide
+ * de l'apparence. C'est ce qui garantit qu'un article rédigé dans six mois
+ * ressemblera encore au reste du site.
+ */
+import { PortableText } from 'astro-portabletext';
+import RichTextLien from './RichTextLien.astro';
+import RichTextImage from '~/components/media/RichTextImage.astro';
+import type { BlocContenu } from '~/lib/sanity/types';
+
+interface Props {
+  readonly contenu: BlocContenu | undefined;
+  readonly class?: string;
+}
+const { contenu, class: className } = Astro.props;
+---
+
+{
+  contenu && contenu.length > 0 && (
+    <div class:list={['texte-riche', className]}>
+      <PortableText
+        value={contenu as never}
+        components={{
+          type: { imageAvecAlt: RichTextImage },
+          mark: { lien: RichTextLien },
+        }}
+      />
+    </div>
+  )
+}
+
+<style is:global>
+  /* Styles du texte riche. `is:global` est nécessaire : le balisage est
+     produit par la bibliothèque, il ne porte donc pas l'attribut de portée
+     d'Astro. La classe .texte-riche en limite la portée. */
+  .texte-riche > * + * {
+    margin-top: calc(var(--spacing) * 6);
+  }
+
+  .texte-riche p {
+    max-width: var(--container-measure);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    color: var(--color-ink-700);
+  }
+
+  .texte-riche h2 {
+    max-width: var(--container-measure);
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: 1.15;
+    margin-top: calc(var(--spacing) * 12);
+    color: var(--color-ink-900);
+  }
+
+  .texte-riche h3 {
+    max-width: var(--container-measure);
+    font-family: var(--font-display);
+    font-size: var(--text-h4);
+    line-height: 1.2;
+    margin-top: calc(var(--spacing) * 10);
+    color: var(--color-ink-900);
+  }
+
+  .texte-riche ul,
+  .texte-riche ol {
+    max-width: var(--container-measure);
+    padding-left: calc(var(--spacing) * 5);
+    font-size: var(--text-body);
+    color: var(--color-ink-700);
+  }
+  .texte-riche ul {
+    list-style: disc;
+  }
+  .texte-riche ol {
+    list-style: decimal;
+  }
+  .texte-riche li + li {
+    margin-top: calc(var(--spacing) * 2);
+  }
+
+  .texte-riche blockquote {
+    max-width: var(--container-measure);
+    border-left: 2px solid var(--color-accent);
+    padding-left: calc(var(--spacing) * 5);
+    font-family: var(--font-display);
+    font-size: var(--text-quote);
+    font-style: italic;
+    color: var(--color-ink-900);
+  }
+
+  .texte-riche strong {
+    font-weight: 600;
+    color: var(--color-ink-900);
+  }
+</style>

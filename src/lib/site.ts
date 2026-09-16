@@ -86,6 +86,12 @@ export type Service = {
   readonly titre: string;
   /** Une ligne, affichée sous le titre dans le méga-menu et les cartes. */
   readonly accroche: string;
+  /**
+   * Groupe nominal avec son article, à glisser dans une phrase.
+   * Le titre ne peut pas servir à cela : « un projet de électricité » ou
+   * « un devis pour parquet : pose, ponçage » ne sont pas du français.
+   */
+  readonly syntagme: string;
 };
 
 /** Ordre d’affichage volontaire : les prestations les plus demandées d’abord. */
@@ -94,51 +100,61 @@ export const SERVICES: readonly Service[] = [
     slug: 'renovation-appartement',
     titre: "Rénovation d’appartement",
     accroche: 'Complète ou partielle, en site occupé comme vide',
+    syntagme: 'une rénovation d’appartement',
   },
   {
     slug: 'renovation-maison-villa',
     titre: 'Rénovation de maison et villa',
     accroche: 'Redistribution, extension, rénovation énergétique',
+    syntagme: 'une rénovation de maison',
   },
   {
     slug: 'renovation-studio',
     titre: 'Rénovation de studio',
     accroche: 'Optimisation des volumes et rangements sur mesure',
+    syntagme: 'une rénovation de studio',
   },
   {
     slug: 'renovation-salle-de-bain',
     titre: 'Rénovation de salle de bain',
     accroche: "Douche à l’italienne, adaptation PMR, plomberie neuve",
+    syntagme: 'une rénovation de salle de bain',
   },
   {
     slug: 'renovation-cuisine',
     titre: 'Rénovation de cuisine',
     accroche: 'Ouverture sur le séjour, réseaux, pose et finitions',
+    syntagme: 'une rénovation de cuisine',
   },
   {
     slug: 'pose-carrelage',
     titre: 'Pose de carrelage',
     accroche: 'Sols et murs, grands formats, chape et ragréage',
+    syntagme: 'une pose de carrelage',
   },
   {
     slug: 'parquet',
     titre: 'Parquet : pose, ponçage, vitrification',
     accroche: 'Massif, contrecollé, remise à neuf de parquets anciens',
+    syntagme: 'des travaux de parquet',
   },
   {
     slug: 'electricite',
     titre: 'Électricité',
     accroche: 'Mise aux normes NF C 15-100, tableau, réseaux',
+    syntagme: 'des travaux d’électricité',
   },
   {
     slug: 'peinture',
     titre: 'Peinture',
     accroche: 'Préparation des supports, enduits, finitions soignées',
+    syntagme: 'des travaux de peinture',
   },
   {
     slug: 'plomberie',
     titre: 'Plomberie',
     accroche: 'Alimentation, évacuation, sanitaires, chauffe-eau',
+    syntagme: 'des travaux de plomberie',
   },
 ] as const;
 

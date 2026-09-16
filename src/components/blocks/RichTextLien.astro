@@ -1,0 +1,26 @@
+---
+/**
+ * Rendu de l'annotation « lien » du texte riche Sanity.
+ *
+ * Les liens sortants reçoivent rel="noopener" et une mention lisible par les
+ * lecteurs d'écran, pour que l'ouverture dans un nouvel onglet ne soit pas
+ * une surprise.
+ */
+import type { Props as PortableTextProps } from 'astro-portabletext/types';
+
+type Props = PortableTextProps<{ _type: 'lien'; href?: string }>;
+const { node } = Astro.props as Props;
+
+const href = node.href ?? '#';
+const externe = /^https?:\/\//.test(href) && !href.includes('bellcorenovation.com');
+---
+
+<a
+  href={href}
+  class="link-rule text-accent"
+  rel={externe ? 'noopener noreferrer' : undefined}
+  target={externe ? '_blank' : undefined}
+>
+  <slot />
+  {externe && <span class="sr-only"> (nouvelle fenêtre)</span>}
+</a>
