@@ -1,0 +1,166 @@
+---
+/**
+ * Politique de confidentialité — RGPD.
+ *
+ * Couvre les deux traitements réellement en place : le formulaire de devis et
+ * le formulaire de contact. On ne décrit aucun traitement qui n'existe pas —
+ * une politique qui mentionne des cookies analytiques absents est fausse.
+ */
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import TexteLegal from '~/components/blocks/TexteLegal.astro';
+import ACompleter from '~/components/blocks/ACompleter.astro';
+import { reglages as chargerReglages } from '~/lib/sanity/queries';
+import { ENTREPRISE } from '~/lib/site';
+
+const r = await chargerReglages();
+const filAriane = [
+  { libelle: 'Politique de confidentialité', href: '/politique-de-confidentialite/' },
+];
+const nom = r.nomEntreprise ?? ENTREPRISE.nom;
+const email = r.email ?? ENTREPRISE.email;
+const adresse = `${r.adresseRue ?? ENTREPRISE.adresse.rue}, ${r.adresseCodePostal ?? ENTREPRISE.adresse.codePostal} ${r.adresseVille ?? ENTREPRISE.adresse.ville}`;
+---
+
+<Page
+  titre="Politique de confidentialité"
+  description="Comment Bellco Rénovation traite les informations transmises par les formulaires de devis et de contact : finalité, base légale, durée de conservation et vos droits."
+  filAriane={filAriane}
+>
+  <section class="bg-surface border-line pt-header border-b">
+    <div class="wrap py-16">
+      <Breadcrumbs elements={filAriane} />
+      <h1 class="font-display text-h1 mt-6">Politique de confidentialité</h1>
+      <p class="text-ink-700 mt-6 max-w-measure text-lead">
+        Ce site collecte le strict nécessaire pour répondre à vos demandes. Cette page
+        dit quoi, pourquoi, combien de temps, et comment reprendre la main.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-y">
+    <div class="wrap">
+      <TexteLegal>
+        <h2>Responsable du traitement</h2>
+        <p>
+          {nom}, {adresse}. Contact :
+          <a href={`mailto:${email}`} class="link-rule">{email}</a>.
+        </p>
+        <p>
+          {r.siret
+            ? `SIRET ${r.siret}.`
+            : null}
+          {!r.siret && <ACompleter quoi="numéro SIRET, à reprendre des mentions légales" />}
+        </p>
+
+        <h2>Ce que nous collectons, et pourquoi</h2>
+
+        <h3>Formulaire de demande de devis</h3>
+        <p>
+          Pour établir un devis, nous avons besoin de savoir quoi chiffrer et comment
+          vous joindre. Sont collectés : le type de bien, la surface, les postes de
+          travaux, l’enveloppe envisagée, le délai souhaité, le code postal du chantier,
+          votre nom, votre adresse e-mail, votre téléphone, et le message libre que vous
+          rédigez.
+        </p>
+        <ul>
+          <li><strong>Finalité :</strong> répondre à votre demande et préparer la visite.</li>
+          <li>
+            <strong>Base légale :</strong> mesures précontractuelles prises à votre
+            demande (article 6.1.b du RGPD), et votre consentement explicite recueilli
+            par la case à cocher du formulaire.
+          </li>
+          <li><strong>Destinataire :</strong> l’équipe de {nom}, personne d’autre.</li>
+        </ul>
+
+        <h3>Formulaire de contact</h3>
+        <p>
+          Nom, adresse e-mail, téléphone si vous le renseignez, et votre message. Même
+          finalité : vous répondre.
+        </p>
+
+        <h2>Sous-traitants</h2>
+        <p>
+          Nous faisons appel à trois prestataires, chacun pour une tâche précise :
+        </p>
+        <ul>
+          <li>
+            <strong>Cloudflare</strong> — hébergement du site et protection anti-robot
+            des formulaires (Turnstile). Turnstile analyse le comportement du navigateur
+            pour distinguer un humain d’un automate ; il ne dépose pas de cookie
+            publicitaire et ne sert pas au suivi.
+          </li>
+          <li>
+            <strong>Resend</strong> — acheminement des messages de formulaire vers notre
+            boîte e-mail.
+          </li>
+          <li>
+            <strong>Sanity</strong> — hébergement des contenus du site (textes et
+            photographies). Aucune donnée vous concernant n’y est stockée.
+          </li>
+        </ul>
+        <p>
+          Certains de ces prestataires peuvent traiter des données hors de l’Union
+          européenne ; ils s’appuient alors sur les clauses contractuelles types de la
+          Commission européenne.
+        </p>
+
+        <h2>Durée de conservation</h2>
+        <ul>
+          <li>
+            Demande n’ayant pas donné lieu à un devis : <strong>3 ans</strong> à compter
+            du dernier contact, durée recommandée par la CNIL en prospection.
+          </li>
+          <li>
+            Demande ayant donné lieu à un devis ou à un chantier : <strong>10 ans</strong>,
+            durée de la garantie décennale, à laquelle ces éléments peuvent se rattacher.
+          </li>
+        </ul>
+
+        <h2>Cookies et mesure d’audience</h2>
+        <p>
+          Ce site ne dépose <strong>aucun cookie publicitaire</strong> et
+          <strong>aucun traceur tiers</strong>. Le bandeau affiché à votre première
+          visite enregistre uniquement votre choix, dans le stockage local de votre
+          navigateur, afin de ne pas vous reposer la question.
+        </p>
+        <p>
+          Aucune mesure d’audience n’est active à ce jour. Si nous en installons une,
+          elle ne se déclenchera qu’après un consentement explicite de votre part, et
+          cette page sera mise à jour avant.
+        </p>
+
+        <h2>Vos droits</h2>
+        <p>
+          Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation
+          et d’opposition, ainsi que d’un droit à la portabilité de vos données. Vous
+          pouvez retirer votre consentement à tout moment.
+        </p>
+        <p>
+          Pour les exercer, écrivez à
+          <a href={`mailto:${email}`} class="link-rule">{email}</a> ou par courrier à
+          l’adresse ci-dessus. Nous répondons sous un mois.
+        </p>
+        <p>
+          Si notre réponse ne vous satisfait pas, vous pouvez saisir la Commission
+          nationale de l’informatique et des libertés (CNIL), 3 place de Fontenoy,
+          TSA 80715, 75334 Paris Cedex 07, ou déposer une plainte sur
+          <a href="https://www.cnil.fr" class="link-rule" rel="noopener" target="_blank">cnil.fr</a>.
+        </p>
+
+        <h2>Sécurité</h2>
+        <p>
+          Le site est servi exclusivement en HTTPS. Les messages de formulaire transitent
+          chiffrés jusqu’à notre boîte e-mail, et ne sont pas stockés dans une base de
+          données sur ce site.
+        </p>
+
+        <h2>Modification de cette politique</h2>
+        <p>
+          Toute évolution des traitements décrits ici sera répercutée sur cette page.
+          Dernière mise à jour : septembre 2026.
+        </p>
+      </TexteLegal>
+    </div>
+  </section>
+</Page>

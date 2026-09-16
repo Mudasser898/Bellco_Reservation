@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
-import { schemaDevis, LIBELLES, type DonneesDevis } from '~/lib/schemas/devis';
+import { schemaContact, type DonneesContact } from '~/lib/schemas/contact';
 import {
   echapper,
   envoyerCourriel,
@@ -10,36 +10,20 @@ import {
   verifierTurnstile,
 } from '~/lib/courriel';
 
-/**
- * Réception d'une demande de devis.
- *
- * Route rendue à la demande ; tout le reste du site est statique.
- * Trois barrières, la moins coûteuse d'abord : validation Zod, vérification
- * Turnstile, puis envoi. Les causes d'échec détaillées partent dans les
- * journaux, pas dans la réponse.
- */
+/** Réception d'un message de contact. Mêmes barrières que la demande de devis. */
 export const prerender = false;
 
-/** Compose l'e-mail envoyé à l'entreprise. */
-function corpsEmail(d: DonneesDevis): { sujet: string; html: string; texte: string } {
+function corpsEmail(d: DonneesContact): { sujet: string; html: string; texte: string } {
   const lignes: [string, string][] = [
-    ['Type de bien', LIBELLES.typeDeBien[d.typeDeBien]],
-    ['Surface', `${d.surface} m²`],
-    ['Travaux', d.travaux.map((t) => LIBELLES.travaux[t]).join(', ')],
-    ['Budget', LIBELLES.budget[d.budget]],
-    ['Délai', LIBELLES.delai[d.delai]],
-    ['Code postal', d.codePostal],
     ['Nom', d.nom],
     ['E-mail', d.email],
-    ['Téléphone', d.telephone],
+    ['Téléphone', d.telephone && d.telephone !== '' ? d.telephone : 'non communiqué'],
+    ['Objet', d.sujet],
   ];
-  if (d.message) lignes.push(['Précisions', d.message]);
-
   const horodatage = new Date().toLocaleString('fr-FR');
-  const sujet = `Demande de devis — ${LIBELLES.typeDeBien[d.typeDeBien]} ${d.surface} m² (${d.codePostal})`;
 
   const html = [
-    '<h2 style="font-family:Georgia,serif">Nouvelle demande de devis</h2>',
+    '<h2 style="font-family:Georgia,serif">Nouveau message de contact</h2>',
     '<table style="border-collapse:collapse;font-family:system-ui,sans-serif;font-size:15px">',
     ...lignes.map(
       ([cle, valeur]) =>
@@ -47,18 +31,22 @@ function corpsEmail(d: DonneesDevis): { sujet: string; html: string; texte: stri
         `<td style="padding:6px 0"><strong>${echapper(valeur)}</strong></td></tr>`,
     ),
     '</table>',
+    // Le message libre peut contenir des retours à la ligne : on les conserve.
+    `<p style="font-family:system-ui,sans-serif;font-size:15px;white-space:pre-wrap">${echapper(d.message)}</p>`,
     `<p style="font-family:system-ui,sans-serif;font-size:13px;color:#6b625b">Consentement RGPD accepté le ${horodatage}.</p>`,
   ].join('');
 
   const texte = [
-    'Nouvelle demande de devis',
+    'Nouveau message de contact',
     '',
     ...lignes.map(([cle, valeur]) => `${cle} : ${valeur}`),
+    '',
+    d.message,
     '',
     `Consentement RGPD accepté le ${horodatage}.`,
   ].join('\n');
 
-  return { sujet, html, texte };
+  return { sujet: `Contact — ${d.sujet}`, html, texte };
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -69,7 +57,7 @@ export const POST: APIRoute = async ({ request }) => {
     return reponseJson({ ok: false, message: 'Requête illisible.' }, 400);
   }
 
-  const resultat = schemaDevis.safeParse(brut);
+  const resultat = schemaContact.safeParse(brut);
   if (!resultat.success) {
     return reponseJson(
       {
@@ -100,6 +88,5 @@ export const POST: APIRoute = async ({ request }) => {
   return reponseJson({ ok: true }, 200);
 };
 
-/** Toute autre méthode est refusée explicitement. */
 export const ALL: APIRoute = () =>
   reponseJson({ ok: false, message: 'Méthode non autorisée.' }, 405);

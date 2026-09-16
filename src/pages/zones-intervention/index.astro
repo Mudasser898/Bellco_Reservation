@@ -1,0 +1,91 @@
+---
+/**
+ * Zones d'intervention — page mère des communes.
+ */
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import CTASection from '~/components/blocks/CTASection.astro';
+import { COMMUNES } from '~/lib/site';
+import { COMMUNES_DEFAUT } from '~/content/communesDefaut';
+
+const filAriane = [{ libelle: 'Zones d’intervention', href: '/zones-intervention/' }];
+---
+
+<Page
+  titre="Zones d’intervention"
+  description="Bellco Rénovation intervient à Saint-Denis, Aubervilliers, Saint-Ouen-sur-Seine, Paris et dans toute l’Île-de-France. Visite conseil gratuite sur l’ensemble du secteur."
+  filAriane={filAriane}
+>
+  <section class="bg-surface border-line pt-header border-b">
+    <div class="wrap py-16">
+      <Breadcrumbs elements={filAriane} />
+      <p class="text-overline text-accent mt-6 uppercase">Où nous intervenons</p>
+      <h1 class="font-display text-h1 mt-3 max-w-measure">
+        Saint-Denis, la Seine-Saint-Denis, Paris.
+      </h1>
+      <p class="text-ink-700 mt-6 max-w-measure text-lead">
+        Notre atelier est à Saint-Denis. Nous rayonnons sur la Seine-Saint-Denis, Paris
+        et l’ensemble de l’Île-de-France. Au-delà de quarante kilomètres, le déplacement
+        est précisé et chiffré dans le devis — jamais ajouté en cours de route.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-y" aria-labelledby="titre-communes">
+    <div class="wrap">
+      <h2 id="titre-communes" class="font-display text-h2 max-w-measure">
+        Les communes que nous connaissons le mieux
+      </h2>
+
+      <ul class="mt-12 grid gap-x-8 gap-y-12 md:grid-cols-2">
+        {
+          COMMUNES.map((commune) => {
+            const contenu = COMMUNES_DEFAUT[commune.slug];
+            return (
+              <li class="border-line border-t pt-6">
+                <h3 class="font-display text-h3">
+                  <a href={`/zones-intervention/${commune.slug}/`} class="lien-commune">
+                    {commune.nom}
+                  </a>
+                </h3>
+                <p class="text-ink-500 mt-1 text-caption">{commune.codePostal}</p>
+                {contenu && (
+                  <p class="text-ink-700 mt-4 max-w-measure text-body-sm">{contenu.accroche}</p>
+                )}
+                <a
+                  href={`/zones-intervention/${commune.slug}/`}
+                  class="text-accent hover:text-accent-hover mt-4 inline-flex items-center gap-2 text-small font-semibold"
+                >
+                  Nos interventions à {commune.nom}
+                  <span aria-hidden="true">&rarr;</span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+
+      <p class="text-ink-700 mt-12 max-w-measure text-body">
+        Votre commune n’est pas listée ? Nous intervenons largement au-delà.
+        <a href="/devis/" class="link-rule">Décrivez-nous votre projet</a>, nous vous
+        dirons immédiatement si nous nous déplaçons chez vous.
+      </p>
+    </div>
+  </section>
+
+  <CTASection
+    titre="Un projet dans le secteur ?"
+    texte="La visite conseil est gratuite et sans engagement sur l’ensemble de notre zone d’intervention."
+  />
+</Page>
+
+<style>
+  .lien-commune {
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--duration-fast) var(--ease-out-soft);
+  }
+  .lien-commune:hover {
+    border-bottom-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+</style>

@@ -1,0 +1,156 @@
+---
+/**
+ * Page d'une commune.
+ *
+ * Les quatre pages existent par le plan du site, pas par le CMS : leur contenu
+ * par défaut est écrit commune par commune. Sanity peut ensuite enrichir
+ * chaque page, et lui rattacher des réalisations.
+ */
+import type { GetStaticPaths } from 'astro';
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import RichText from '~/components/blocks/RichText.astro';
+import ProjectCard from '~/components/blocks/ProjectCard.astro';
+import ServiceGrid from '~/components/blocks/ServiceGrid.astro';
+import CTASection from '~/components/blocks/CTASection.astro';
+import { COMMUNES } from '~/lib/site';
+import { COMMUNES_DEFAUT } from '~/content/communesDefaut';
+import { communeParSlug, realisationsParCommune } from '~/lib/sanity/queries';
+import { schemaService } from '~/lib/seo/jsonld';
+
+export const getStaticPaths = (() =>
+  COMMUNES.map((commune) => ({
+    params: { commune: commune.slug },
+    props: { commune },
+  }))) satisfies GetStaticPaths;
+
+const { commune } = Astro.props;
+const chemin = `/zones-intervention/${commune.slug}/`;
+
+const [depuisSanity, realisations] = await Promise.all([
+  communeParSlug(commune.slug),
+  realisationsParCommune(commune.slug),
+]);
+
+const defaut = COMMUNES_DEFAUT[commune.slug];
+const nom = depuisSanity?.nom ?? commune.nom;
+const codePostal = depuisSanity?.codePostal ?? commune.codePostal;
+
+const description =
+  depuisSanity?.metaDescription ??
+  `Entreprise de rénovation à ${nom} (${codePostal}) : appartements, maisons, salles de bain et cuisines. Devis détaillé et visite conseil gratuite.`;
+
+const filAriane = [
+  { libelle: 'Zones d’intervention', href: '/zones-intervention/' },
+  { libelle: nom, href: chemin },
+];
+---
+
+<Page
+  titre={`Rénovation à ${nom}`}
+  description={description}
+  metaTitle={depuisSanity?.metaTitle}
+  metaDescription={depuisSanity?.metaDescription}
+  filAriane={filAriane}
+  contexteWhatsApp={`une rénovation à ${nom}`}
+  jsonLd={[
+    schemaService({
+      nom: `Rénovation à ${nom}`,
+      description,
+      chemin,
+    }),
+  ]}
+>
+  <section class="bg-surface border-line pt-header border-b">
+    <div class="wrap py-16">
+      <Breadcrumbs elements={filAriane} />
+      <p class="text-overline text-accent mt-6 uppercase">Zone d’intervention · {codePostal}</p>
+      <h1 class="font-display text-h1 mt-3 max-w-measure">Entreprise de rénovation à {nom}</h1>
+      {
+        defaut && (
+          <p class="text-ink-700 mt-6 max-w-measure text-lead">{defaut.accroche}</p>
+        )
+      }
+      <a
+        href="/devis/"
+        class="bg-accent hover:bg-accent-hover text-on-accent rounded mt-8 inline-block px-6 py-4 text-body-sm font-semibold"
+      >
+        Demander un devis gratuit
+      </a>
+    </div>
+  </section>
+
+  <!-- Contexte local -->
+  <section class="section-y" aria-labelledby="titre-contexte">
+    <div class="wrap grid gap-12 lg:grid-cols-2">
+      <div>
+        <h2 id="titre-contexte" class="font-display text-h2 max-w-measure">
+          Le bâti de {nom}, et ce qu’il implique
+        </h2>
+        <div class="mt-8 flex flex-col gap-6">
+          {defaut?.paragraphes.map((p) => (
+            <p class="text-ink-700 max-w-measure text-body">{p}</p>
+          ))}
+        </div>
+        <RichText contenu={depuisSanity?.description} class="mt-6" />
+      </div>
+
+      {
+        defaut && (
+          <div>
+            <h3 class="text-overline text-accent uppercase">Ce que nous y rencontrons</h3>
+            <ul class="border-line mt-5 border-t">
+              {defaut.specificites.map((s) => (
+                <li class="border-line text-ink-700 border-b py-4 text-body-sm">{s}</li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Réalisations locales -->
+  {
+    realisations.length > 0 && (
+      <section class="bg-surface border-line section-y border-y" aria-labelledby="titre-chantiers">
+        <div class="wrap">
+          <p class="text-overline text-accent uppercase">Sur place</p>
+          <h2 id="titre-chantiers" class="font-display text-h2 mt-3 max-w-measure">
+            Nos chantiers à {nom}
+          </h2>
+          <div class="mt-12 grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+            {realisations.slice(0, 6).map((projet) => (
+              <ProjectCard projet={projet} />
+            ))}
+          </div>
+          <a
+            href={`/realisations/commune/${commune.slug}/`}
+            class="text-accent hover:text-accent-hover mt-10 inline-flex items-center gap-2 text-body-sm font-semibold"
+          >
+            Voir toutes nos réalisations à {nom}
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Services -->
+  <section class="section-y" aria-labelledby="titre-services">
+    <div class="wrap">
+      <h2 id="titre-services" class="font-display text-h2 max-w-measure">
+        Nos prestations à {nom}
+      </h2>
+      <div class="mt-12">
+        <ServiceGrid />
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    titre={`Un projet de rénovation à ${nom} ?`}
+    texte="Nous venons relever les lieux, puis vous recevez un devis détaillé poste par poste. La visite est gratuite et sans engagement."
+    contexteWhatsApp={`une rénovation à ${nom}`}
+  />
+</Page>
