@@ -277,3 +277,225 @@
   font-size: var(--text-caption);
   color: var(--color-ink-700);
 }
+
+/* --- Formulaire de devis --------------------------------------------------
+   Styles globaux : l'îlot React ne porte pas l'attribut de portée d'Astro. */
+
+.devis-progression {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: calc(var(--spacing) * 2);
+}
+
+.devis-jalon {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 2);
+}
+.devis-jalon-barre {
+  height: 3px;
+  border-radius: var(--radius-xs);
+  background-color: var(--color-line);
+}
+.devis-jalon[data-etat='fait'] .devis-jalon-barre {
+  background-color: var(--color-primary);
+}
+.devis-jalon[data-etat='courant'] .devis-jalon-barre {
+  background-color: var(--color-accent);
+}
+.devis-jalon-texte {
+  font-size: var(--text-caption);
+  color: var(--color-ink-500);
+}
+.devis-jalon[data-etat='courant'] .devis-jalon-texte {
+  color: var(--color-ink-900);
+  font-weight: 600;
+}
+/* Sur petit écran, seules les barres restent : six libellés côte à côte
+   deviendraient illisibles. Le libellé de l'étape est de toute façon répété
+   dans le titre et dans aria-valuetext. */
+@media (width < 860px) {
+  .devis-jalon-texte {
+    display: none;
+  }
+}
+
+.devis-titre {
+  margin-top: calc(var(--spacing) * 8);
+}
+/* Le titre reçoit le focus au changement d'étape : il ne doit pas afficher
+   d'anneau au clic, mais rester repérable au clavier. */
+.devis-titre:focus {
+  outline: none;
+}
+.devis-titre:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.devis-legende {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+}
+
+.devis-options {
+  display: grid;
+  gap: calc(var(--spacing) * 3);
+}
+@media (width >= 480px) {
+  .devis-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Option cliquable : l'étiquette entière est la cible, pas seulement la case. */
+.devis-option {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing) * 3);
+  min-height: 56px;
+  padding: calc(var(--spacing) * 3) calc(var(--spacing) * 4);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-paper);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-out-soft),
+    background-color var(--duration-fast) var(--ease-out-soft);
+}
+.devis-option:hover {
+  border-color: var(--color-primary);
+}
+/* L'état sélectionné se voit à la bordure ET au fond, jamais à la couleur
+   seule : `:has()` évite d'avoir à refléter l'état en JavaScript. */
+.devis-option:has(.devis-controle:checked) {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface);
+}
+.devis-option:has(.devis-controle:focus-visible) {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.devis-controle {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--color-accent);
+}
+.devis-option-texte {
+  font-size: var(--text-body-sm);
+}
+
+.devis-groupe {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 2);
+}
+.devis-libelle {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+}
+.devis-aide {
+  font-size: var(--text-caption);
+  color: var(--color-ink-700);
+}
+
+.devis-champ-enveloppe {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.devis-champ {
+  width: 100%;
+  min-height: 52px;
+  padding: calc(var(--spacing) * 3) calc(var(--spacing) * 4);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-paper);
+  font-size: var(--text-body-sm);
+}
+.devis-champ:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-color: var(--color-accent);
+}
+.devis-champ[aria-invalid='true'] {
+  border-color: var(--color-error);
+}
+.devis-suffixe {
+  position: absolute;
+  right: calc(var(--spacing) * 4);
+  font-size: var(--text-body-sm);
+  color: var(--color-ink-500);
+}
+
+/* L'erreur n'est pas signalée par la seule couleur : elle est précédée d'un
+   symbole et reliée au champ par aria-describedby. */
+.devis-message-erreur {
+  font-size: var(--text-caption);
+  color: var(--color-error);
+  font-weight: 600;
+}
+.devis-message-erreur::before {
+  content: '⚠ ';
+}
+
+.devis-erreur-envoi {
+  margin-top: calc(var(--spacing) * 6);
+  padding: calc(var(--spacing) * 4);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-md);
+  background-color: var(--color-error-tint);
+  color: var(--color-error);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+}
+
+.devis-consentement {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--spacing) * 3);
+  font-size: var(--text-small);
+  line-height: 1.6;
+  cursor: pointer;
+}
+.devis-consentement .devis-controle {
+  margin-top: 2px;
+}
+
+.devis-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing) * 3);
+  margin-top: calc(var(--spacing) * 10);
+}
+.devis-bouton {
+  min-height: 52px;
+  padding: calc(var(--spacing) * 3) calc(var(--spacing) * 7);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out-soft);
+}
+.devis-bouton:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+.devis-bouton:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.devis-bouton--secondaire {
+  background-color: transparent;
+  border-color: var(--color-line-strong);
+  color: var(--color-ink-900);
+}
+.devis-bouton--secondaire:hover:not(:disabled) {
+  background-color: var(--color-surface);
+  border-color: var(--color-primary);
+}

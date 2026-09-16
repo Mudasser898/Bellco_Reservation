@@ -1,0 +1,103 @@
+---
+/**
+ * Demande de devis — chemin de conversion principal du site.
+ */
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import QuoteForm from '~/components/islands/QuoteForm';
+import { ENTREPRISE, TEL_HREF, lienWhatsApp } from '~/lib/site';
+
+const cleTurnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const filAriane = [{ libelle: 'Demander un devis', href: '/devis/' }];
+---
+
+<Page
+  titre="Demander un devis gratuit"
+  description="Décrivez votre projet de rénovation en six étapes. Nous revenons vers vous sous 48 heures ouvrées pour convenir d’une visite, puis vous recevez un devis détaillé poste par poste."
+  filAriane={filAriane}
+>
+  {
+    cleTurnstile && (
+      <script
+        is:inline
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        async
+        defer
+        slot="head"
+      />
+    )
+  }
+
+  <section class="bg-surface border-line pt-header border-b">
+    <div class="wrap py-16">
+      <Breadcrumbs elements={filAriane} />
+      <p class="text-overline text-accent mt-6 uppercase">Devis gratuit</p>
+      <h1 class="font-display text-h1 mt-3 max-w-measure">Parlons de votre projet.</h1>
+      <p class="text-ink-700 mt-6 max-w-measure text-lead">
+        Six questions, deux minutes. Nous revenons vers vous sous 48 heures ouvrées
+        pour convenir d’une visite sur place — c’est elle qui permet de chiffrer
+        sérieusement, pas un formulaire.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-y">
+    <div class="wrap grid gap-12 lg:grid-cols-[1.6fr_1fr]">
+      <div>
+        <QuoteForm client:load cleTurnstile={cleTurnstile} />
+      </div>
+
+      <aside class="devis-aparte">
+        <h2 class="font-display text-h4">Vous préférez parler à quelqu’un ?</h2>
+        <p class="text-ink-700 mt-3 text-small">
+          C’est souvent plus rapide pour dégrossir un projet. Nous répondons aux
+          horaires d’ouverture.
+        </p>
+        <ul class="mt-5 flex flex-col gap-3 text-body-sm">
+          <li>
+            <a href={TEL_HREF} class="font-semibold">{ENTREPRISE.telephoneAffiche}</a>
+          </li>
+          <li>
+            <a href={lienWhatsApp()} class="link-rule" rel="noopener">Écrire sur WhatsApp</a>
+          </li>
+          <li>
+            <a href={`mailto:${ENTREPRISE.email}`} class="link-rule">{ENTREPRISE.email}</a>
+          </li>
+        </ul>
+
+        <h2 class="font-display text-h4 mt-10">Ce qui se passe ensuite</h2>
+        <ol class="text-ink-700 mt-4 flex flex-col gap-3 text-small">
+          <li>1. Nous vous rappelons pour caler une date de visite.</li>
+          <li>2. Relevé sur place, gratuit et sans engagement.</li>
+          <li>3. Devis écrit, détaillé poste par poste et corps de métier par corps de métier.</li>
+        </ol>
+
+        <p class="text-ink-500 mt-8 text-caption">
+          Vos informations servent uniquement à traiter votre demande. Elles ne sont
+          ni revendues ni utilisées à d’autres fins.
+          <a href="/politique-de-confidentialite/" class="link-rule">
+            Politique de confidentialité
+          </a>.
+        </p>
+      </aside>
+    </div>
+  </section>
+</Page>
+
+<style>
+  /* Tailwind v4 n'expose pas grid-template-columns au thème : la grille est
+     posée ici plutôt qu'en valeur arbitraire dans le markup. */
+  @media (width >= 1120px) {
+    .wrap.grid {
+      grid-template-columns: 1.6fr 1fr;
+    }
+  }
+
+  .devis-aparte {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: calc(var(--spacing) * 8);
+    align-self: start;
+  }
+</style>
