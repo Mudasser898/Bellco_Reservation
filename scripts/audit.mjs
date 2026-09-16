@@ -187,13 +187,60 @@ if (existsSync(cheminRobots)) {
   }
 }
 
-for (const attendu of ['_redirects']) {
-  if (!existsSync(join(RACINE, attendu))) warn('(racine)', `fichier absent : ${attendu}`);
-}
-
 /* --- Liens morts agreges ------------------------------------------------ */
 for (const [cible, pages] of [...liensMorts].sort()) {
   err('(liens)', `${cible} — cible inexistante, referencee par ${pages.size} page(s)`);
+}
+
+/* --- Redirections ---------------------------------------------------------
+   Les anciennes adresses portent le référencement acquis : une règle oubliée
+   se traduit par une page perdue. Les adresses de spam doivent répondre 410
+   et non 404, pour être retirées plus vite de l'index. */
+const REDIRECTIONS_ATTENDUES = [
+  ['/renovation-dappartement', '/services/renovation-appartement/'],
+  ['/renovation-de-maison-villa', '/services/renovation-maison-villa/'],
+  ['/renovation-de-studio', '/services/renovation-studio/'],
+  ['/renovation-de-salle-de-bain', '/services/renovation-salle-de-bain/'],
+  ['/renovation-de-cuisine', '/services/renovation-cuisine/'],
+  ['/pose-de-carrelage', '/services/pose-carrelage/'],
+  ['/vitrification-et-poncage-de-parquet', '/services/parquet/'],
+  ['/bellcoelect', '/services/electricite/'],
+  ['/travaux-delectricite', '/services/electricite/'],
+  ['/realisations', '/realisations/'],
+  ['/contact', '/contact/'],
+  ['/blog', '/blog/'],
+];
+const GONE_ATTENDUS = ['/software-beyond-compare', '/valorant-hack', '/fl-studio-crack'];
+
+const cheminRedirections = join(RACINE, '_redirects');
+if (!existsSync(cheminRedirections)) {
+  err('(racine)', '_redirects absent — toutes les anciennes adresses renverraient 404');
+} else {
+  const regles = readFileSync(cheminRedirections, 'utf8')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l && !l.startsWith('#'))
+    .map((l) => l.split(/\s+/));
+
+  for (const [source, cible] of REDIRECTIONS_ATTENDUES) {
+    const regle = regles.find((r) => r[0] === source);
+    if (!regle) err('(redirections)', `règle absente pour ${source}`);
+    else if (regle[1] !== cible) {
+      err('(redirections)', `${source} pointe vers ${regle[1]} au lieu de ${cible}`);
+    } else if (regle[2] !== '301') {
+      err('(redirections)', `${source} utilise un code ${regle[2]} au lieu de 301`);
+    } else if (!urlsConnues.has(cible)) {
+      err('(redirections)', `${source} redirige vers ${cible}, qui n'existe pas`);
+    }
+  }
+
+  for (const source of GONE_ATTENDUS) {
+    const regle = regles.find((r) => r[0] === source);
+    if (!regle) err('(redirections)', `page de spam non neutralisée : ${source}`);
+    else if (regle[2] !== '410') {
+      err('(redirections)', `${source} répond ${regle[2]} au lieu de 410`);
+    }
+  }
 }
 
 /* --- Rapport ------------------------------------------------------------ */

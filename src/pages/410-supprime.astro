@@ -1,0 +1,38 @@
+---
+/**
+ * Cible des règles 410.
+ *
+ * Les adresses de spam injectées lors de la compromission pointent ici. La
+ * page explique la situation au rare visiteur humain qui suivrait un vieux
+ * lien, et ne propose aucun chemin vers le contenu qu'il cherchait — ce
+ * contenu n'a jamais été le nôtre.
+ */
+import Page from '~/layouts/Page.astro';
+---
+
+<Page
+  titre="Page supprimée"
+  description="Cette adresse ne correspond à aucun contenu de Bellco Rénovation."
+  noindex={true}
+>
+  <section class="pt-header">
+    <div class="wrap section-y">
+      <p class="text-overline text-accent uppercase">Page supprimée</p>
+      <h1 class="font-display text-h1 mt-3 max-w-measure">Cette page a été supprimée.</h1>
+      <p class="text-ink-700 mt-6 max-w-measure text-body">
+        L’adresse que vous avez suivie correspond à un contenu qui n’a jamais été publié
+        par Bellco Rénovation. Elle provient d’une compromission de notre ancien site,
+        depuis entièrement reconstruit.
+      </p>
+      <p class="text-ink-700 mt-4 max-w-measure text-body">
+        Nous sommes une entreprise de rénovation installée à Saint-Denis.
+      </p>
+      <a
+        href="/"
+        class="bg-primary text-on-primary hover:bg-accent rounded mt-8 inline-block px-6 py-4 text-body-sm font-semibold"
+      >
+        Aller à l’accueil
+      </a>
+    </div>
+  </section>
+</Page>

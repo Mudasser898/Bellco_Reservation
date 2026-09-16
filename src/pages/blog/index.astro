@@ -1,0 +1,96 @@
+---
+/**
+ * Blog — liste des articles.
+ *
+ * Alimenté exclusivement par Sanity : sans article publié, la page affiche un
+ * état d'attente honnête plutôt qu'un contenu de remplissage.
+ */
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import Picture from '~/components/media/Picture.astro';
+import CTASection from '~/components/blocks/CTASection.astro';
+import { tousLesArticles } from '~/lib/sanity/queries';
+import { imageValide } from '~/lib/sanity/image';
+
+const articles = await tousLesArticles();
+const filAriane = [{ libelle: 'Blog', href: '/blog/' }];
+
+const dateFr = (iso: string) =>
+  new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Page
+  titre="Blog"
+  description="Conseils travaux, budget, réglementation et retours de chantier par Bellco Rénovation, entreprise de rénovation à Saint-Denis."
+  filAriane={filAriane}
+>
+  <section class="bg-surface border-line pt-header border-b">
+    <div class="wrap py-16">
+      <Breadcrumbs elements={filAriane} />
+      <p class="text-overline text-accent mt-6 uppercase">Blog</p>
+      <h1 class="font-display text-h1 mt-3 max-w-measure">Comprendre avant de commencer.</h1>
+      <p class="text-ink-700 mt-6 max-w-measure text-lead">
+        Ce qu’il faut savoir avant de lancer des travaux : comment lire un devis, ce que
+        couvre réellement une garantie, quelles autorisations prévoir, et ce qu’on
+        découvre en ouvrant une cloison.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-y" aria-labelledby="titre-articles">
+    <div class="wrap">
+      <h2 id="titre-articles" class="sr-only">Liste des articles</h2>
+
+      {
+        articles.length > 0 ? (
+          <ul class="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+            {articles.map((article) => (
+              <li>
+                <article>
+                  <a href={`/blog/${article.slug}/`} class="carte-article group block">
+                    {imageValide(article.image) && (
+                      <div class="rounded-xs mb-4 overflow-hidden">
+                        <Picture
+                          image={article.image}
+                          sizes="(min-width: 1120px) 33vw, (min-width: 860px) 50vw, 100vw"
+                          ratio={16 / 10}
+                        />
+                      </div>
+                    )}
+                    <p class="text-ink-500 text-caption">
+                      <time datetime={article.datePublication}>
+                        {dateFr(article.datePublication)}
+                      </time>
+                    </p>
+                    <h3 class="font-display text-h4 mt-2">{article.titre}</h3>
+                    <p class="text-ink-700 mt-2 text-small">{article.extrait}</p>
+                  </a>
+                </article>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="text-ink-700 max-w-measure text-body">
+            Les premiers articles sont en cours d’écriture. En attendant, la page
+            <a href="/services/" class="link-rule">services</a> détaille chaque
+            prestation, et chacune répond aux questions qu’on nous pose le plus souvent.
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <CTASection
+    titre="Une question sur votre projet ?"
+    texte="Plutôt que de chercher la réponse, posez-la-nous : la visite conseil est gratuite et sans engagement."
+  />
+</Page>
+
+<style>
+  .carte-article h3 {
+    transition: color var(--duration-fast) var(--ease-out-soft);
+  }
+  .carte-article:hover h3 {
+    color: var(--color-accent);
+  }
+</style>
