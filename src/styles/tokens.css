@@ -47,6 +47,13 @@
   --color-accent: var(--color-clay-600);
   --color-accent-hover: var(--color-clay-700);
   --color-accent-on-dark: var(--color-clay-300); /* accent SUR encre */
+
+  /* Contraste — vérifié, pas supposé.
+     Sur fond encre (--color-primary), les tons ink-500 (2,54:1) et sand-400
+     (3,95:1) échouent au critère AA. Les seuls tons de texte admis sur encre
+     sont sand-300 (8,19:1), sand-200, on-primary et accent-on-dark (6,05:1).
+     Pour atténuer un libellé sur fond sombre, on joue sur la taille ou la
+     formulation — jamais sur la couleur. */
   --color-accent-tint: var(--color-clay-50);
   --color-on-accent: var(--color-paper);
 

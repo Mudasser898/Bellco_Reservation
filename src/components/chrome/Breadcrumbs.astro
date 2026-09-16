@@ -30,7 +30,11 @@ const complet: ElementFilAriane[] = [{ libelle: 'Accueil', href: '/' }, ...eleme
                   {element.libelle}
                 </a>
               )}
-              {!dernier && <span aria-hidden="true" class="text-ink-500">/</span>}
+              {!dernier && (
+                <span aria-hidden="true" class={surFondSombre ? '' : 'text-ink-500'}>
+                  /
+                </span>
+              )}
             </li>
           );
         })}
