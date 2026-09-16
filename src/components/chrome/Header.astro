@@ -288,17 +288,26 @@ const estActif = (href: string) => chemin === href || chemin.startsWith(href);
     visibility: hidden;
     opacity: 0;
     transform: translateY(-4px);
+    /* `visibility` ne doit PAS se transitionner comme les autres propriétés.
+       Si elle bascule au bout des 150 ms, les liens du panneau restent
+       injoignables pendant ce délai — et un utilisateur qui tabule à vitesse
+       normale saute tout le menu Services sans le voir.
+       On retarde donc uniquement la disparition, pour garder le fondu de
+       fermeture ; l'apparition, elle, est immédiate (règle ci-dessous). */
     transition:
       opacity var(--duration-fast) var(--ease-out-soft),
       transform var(--duration-fast) var(--ease-out-soft),
-      visibility var(--duration-fast);
+      visibility 0s linear var(--duration-fast);
   }
   .nav-services:hover .mega,
   .nav-services:focus-within .mega {
     visibility: visible;
     opacity: 1;
     transform: none;
+    /* Aucun délai à l'ouverture : le panneau devient focusable immédiatement. */
+    transition-delay: 0s;
   }
+
   /* Échap lève ce drapeau : on referme même si le pointeur reste dessus. */
   .nav-services[data-echap='true'] .mega {
     visibility: hidden;
@@ -444,16 +453,31 @@ const estActif = (href: string) => chemin === href || chemin.startsWith(href);
     });
   }
 
-  /* 3. Échap referme le méga-menu ouvert au clavier. Le drapeau n’est levé
-        que le temps de la fermeture, pour ne pas bloquer le survol ensuite. */
+  /* 3. Échap referme le méga-menu ouvert au clavier et rend le focus au
+        déclencheur — le renvoyer en tête de page obligerait à retraverser
+        toute la navigation.
+        Le focus restant sur le déclencheur, `:focus-within` reste vrai : sans
+        drapeau, le panneau se rouvrirait aussitôt. Le drapeau tient donc
+        jusqu'à ce que le focus quitte réellement le groupe, et non pendant un
+        délai arbitraire. */
   if (services) {
     services.addEventListener('keydown', (evenement) => {
       if (evenement.key !== 'Escape') return;
       services.dataset.echap = 'true';
-      (document.activeElement as HTMLElement | null)?.blur();
-      window.setTimeout(() => {
+      services.querySelector<HTMLElement>('a')?.focus();
+    });
+
+    /* Le focus quitte le groupe : on repart d'un état neutre. */
+    services.addEventListener('focusout', (evenement) => {
+      const versOu = (evenement as FocusEvent).relatedTarget;
+      if (!(versOu instanceof Node) || !services.contains(versOu)) {
         delete services.dataset.echap;
-      }, 200);
+      }
+    });
+
+    /* Revenir à la souris rouvre le panneau : le refus était clavier. */
+    services.addEventListener('mouseenter', () => {
+      delete services.dataset.echap;
     });
   }
 </script>

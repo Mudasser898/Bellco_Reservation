@@ -8,10 +8,12 @@
  * Usage : node scripts/serve-dist.mjs [port]
  */
 import { createServer } from 'node:http';
+import { existsSync } from 'node:fs';
 import { readFile, stat } from 'node:fs/promises';
 import { join, extname } from 'node:path';
 
-const RACINE = 'dist/client';
+/* Racine selon la cible de construction, comme pour l audit. */
+const RACINE = existsSync('.vercel/output/static') ? '.vercel/output/static' : 'dist/client';
 const PORT = Number(process.argv[2] ?? 4322);
 
 const TYPES = {
@@ -55,4 +57,4 @@ createServer(async (requete, reponse) => {
     reponse.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     reponse.end('Introuvable');
   }
-}).listen(PORT, () => console.log(`dist/client servi sur http://localhost:${PORT}`));
+}).listen(PORT, () => console.log(`${RACINE} servi sur http://localhost:${PORT}`));

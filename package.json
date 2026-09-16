@@ -15,7 +15,9 @@
     "astro": "astro",
     "audit": "node scripts/audit.mjs",
     "verify": "node scripts/test-schema.mjs && astro check && astro build && node scripts/audit.mjs",
-    "test:schema": "node scripts/test-schema.mjs"
+    "test:schema": "node scripts/test-schema.mjs",
+    "test:clavier": "node scripts/test-clavier.mjs",
+    "test:perf": "node scripts/test-perf.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.1",
@@ -42,6 +44,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "playwright": "^1.63.0",
     "sharp": "^0.34.4",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3"
