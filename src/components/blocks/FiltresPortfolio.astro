@@ -1,0 +1,106 @@
+---
+/**
+ * Filtres du portfolio.
+ *
+ * Ce sont de vrais liens vers de vraies pages, pas un filtrage JavaScript :
+ * chaque combinaison est une URL indexable, partageable et fonctionnelle sans
+ * script. Seules les valeurs qui ont au moins un chantier sont proposées — pas
+ * de filtre menant à une page vide.
+ */
+import type { ProjetResume } from '~/lib/sanity/types';
+import { SERVICES } from '~/lib/site';
+
+interface Props {
+  readonly projets: readonly ProjetResume[];
+  /** Filtre actif : slug de service, slug de commune, ou rien. */
+  readonly actif?: { readonly type: 'service' | 'commune'; readonly slug: string } | undefined;
+}
+const { projets, actif } = Astro.props;
+
+const slugsServices = new Set(projets.flatMap((p) => p.corpsDeMetierSlugs ?? []));
+const services = SERVICES.filter((s) => slugsServices.has(s.slug));
+
+const communesVues = new Map<string, string>();
+for (const projet of projets) {
+  if (projet.commune) communesVues.set(projet.commune.slug, projet.commune.nom);
+}
+const communes = [...communesVues.entries()].sort((a, b) => a[1].localeCompare(b[1], 'fr'));
+---
+
+{
+  (services.length > 0 || communes.length > 0) && (
+    <div class="flex flex-col gap-5">
+      {services.length > 0 && (
+        <nav aria-label="Filtrer par métier">
+          <p class="text-overline text-ink-500 uppercase">Par métier</p>
+          <ul class="mt-3 flex flex-wrap gap-2">
+            <li>
+              <a href="/realisations/" class="puce" aria-current={!actif ? 'true' : undefined}>
+                Tous
+              </a>
+            </li>
+            {services.map((service) => (
+              <li>
+                <a
+                  href={`/realisations/metier/${service.slug}/`}
+                  class="puce"
+                  aria-current={
+                    actif?.type === 'service' && actif.slug === service.slug ? 'true' : undefined
+                  }
+                >
+                  {service.titre}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
+      {communes.length > 0 && (
+        <nav aria-label="Filtrer par commune">
+          <p class="text-overline text-ink-500 uppercase">Par commune</p>
+          <ul class="mt-3 flex flex-wrap gap-2">
+            {communes.map(([slug, nom]) => (
+              <li>
+                <a
+                  href={`/realisations/commune/${slug}/`}
+                  class="puce"
+                  aria-current={
+                    actif?.type === 'commune' && actif.slug === slug ? 'true' : undefined
+                  }
+                >
+                  {nom}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </div>
+  )
+}
+
+<style>
+  .puce {
+    display: inline-block;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-full);
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+    font-size: var(--text-small);
+    transition:
+      background-color var(--duration-fast) var(--ease-out-soft),
+      border-color var(--duration-fast) var(--ease-out-soft),
+      color var(--duration-fast) var(--ease-out-soft);
+  }
+  .puce:hover {
+    border-color: var(--color-primary);
+  }
+  /* Le filtre actif est signalé par la couleur ET par aria-current :
+     jamais par la couleur seule. */
+  .puce[aria-current] {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-on-primary);
+    font-weight: 600;
+  }
+</style>

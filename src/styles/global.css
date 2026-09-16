@@ -158,3 +158,120 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* --- Comparateur avant / après --------------------------------------------
+   Styles globaux : l'îlot React ne porte pas l'attribut de portée d'Astro. */
+.comparateur-cadre {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xs);
+  background-color: var(--color-surface);
+}
+
+.comparateur-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comparateur-calque {
+  position: absolute;
+  inset: 0;
+}
+
+.comparateur-etiquette {
+  position: absolute;
+  top: calc(var(--spacing) * 3);
+  z-index: 2;
+  background-color: color-mix(in srgb, var(--color-primary) 85%, transparent);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-xs);
+  padding: calc(var(--spacing) * 1) calc(var(--spacing) * 2);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.comparateur-etiquette--avant {
+  left: calc(var(--spacing) * 3);
+}
+.comparateur-etiquette--apres {
+  right: calc(var(--spacing) * 3);
+}
+
+.comparateur-poignee {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  width: 2px;
+  margin-left: -1px;
+  background-color: var(--color-paper);
+  pointer-events: none;
+}
+
+.comparateur-bouton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 44 px : cible tactile minimale (WCAG 2.5.5). */
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-paper);
+  color: var(--color-ink-900);
+  box-shadow: var(--shadow-handle);
+}
+
+/* Le curseur natif couvre toute la zone, invisible mais pleinement
+   opérationnel. On ne stylise que sa pastille, pour la rendre focusable
+   visuellement sans casser le comportement du contrôle. */
+.comparateur-curseur {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  cursor: ew-resize;
+}
+.comparateur-curseur::-webkit-slider-thumb {
+  appearance: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  cursor: ew-resize;
+}
+.comparateur-curseur::-moz-range-thumb {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  cursor: ew-resize;
+}
+/* Le focus clavier doit se voir : on entoure la poignée dessinée. */
+.comparateur-curseur:focus-visible {
+  outline: none;
+}
+.comparateur-curseur:focus-visible + .comparateur-poignee .comparateur-bouton,
+.comparateur-cadre:has(.comparateur-curseur:focus-visible) .comparateur-bouton {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.comparateur-legende {
+  margin-top: calc(var(--spacing) * 3);
+  font-size: var(--text-caption);
+  color: var(--color-ink-700);
+}

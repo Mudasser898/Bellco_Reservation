@@ -2,16 +2,20 @@
 /**
  * Rendu de l'annotation « lien » du texte riche Sanity.
  *
+ * L'adresse se trouve dans `node.markDef` et non sur le nœud lui-même : une
+ * annotation est une marque appliquée à un fragment de texte, sa définition
+ * est stockée à part.
+ *
  * Les liens sortants reçoivent rel="noopener" et une mention lisible par les
- * lecteurs d'écran, pour que l'ouverture dans un nouvel onglet ne soit pas
- * une surprise.
+ * lecteurs d'écran, pour que l'ouverture dans un nouvel onglet ne surprenne
+ * personne.
  */
-import type { Props as PortableTextProps } from 'astro-portabletext/types';
+import type { MarkProps } from 'astro-portabletext/types';
 
-type Props = PortableTextProps<{ _type: 'lien'; href?: string }>;
-const { node } = Astro.props as Props;
+type Props = MarkProps<{ href?: string }>;
+const { node } = Astro.props;
 
-const href = node.href ?? '#';
+const href = node.markDef?.href ?? '#';
 const externe = /^https?:\/\//.test(href) && !href.includes('bellcorenovation.com');
 ---
 

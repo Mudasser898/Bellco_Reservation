@@ -1,0 +1,71 @@
+---
+/**
+ * Portfolio filtré par corps de métier.
+ *
+ * Une page n'est générée que pour les métiers ayant au moins un chantier :
+ * pas de page de filtre vide, donc pas de contenu pauvre indexé.
+ */
+import type { GetStaticPaths } from 'astro';
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import ProjectCard from '~/components/blocks/ProjectCard.astro';
+import FiltresPortfolio from '~/components/blocks/FiltresPortfolio.astro';
+import CTASection from '~/components/blocks/CTASection.astro';
+import { toutesLesRealisations } from '~/lib/sanity/queries';
+import { SERVICES } from '~/lib/site';
+
+export const getStaticPaths = (async () => {
+  const projets = await toutesLesRealisations();
+  return SERVICES.filter((service) =>
+    projets.some((projet) => projet.corpsDeMetierSlugs?.includes(service.slug)),
+  ).map((service) => ({
+    params: { slug: service.slug },
+    props: {
+      service,
+      projets: projets.filter((projet) => projet.corpsDeMetierSlugs?.includes(service.slug)),
+      tous: projets,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { service, projets, tous } = Astro.props;
+const filAriane = [
+  { libelle: 'Réalisations', href: '/realisations/' },
+  { libelle: service.titre, href: `/realisations/metier/${service.slug}/` },
+];
+---
+
+<Page
+  titre={`Réalisations — ${service.titre}`}
+  description={`Chantiers de ${service.titre.toLowerCase()} réalisés par Bellco Rénovation à Saint-Denis, à Paris et en Île-de-France.`}
+  filAriane={filAriane}
+  contexteWhatsApp={service.syntagme}
+>
+  <section class="bg-surface border-line pt-header border-b">
+    <div class="wrap py-16">
+      <Breadcrumbs elements={filAriane} />
+      <p class="text-overline text-accent mt-6 uppercase">Réalisations</p>
+      <h1 class="font-display text-h1 mt-3 max-w-measure">{service.titre}</h1>
+      <p class="text-ink-700 mt-6 max-w-measure text-lead">
+        Les chantiers sur lesquels ce corps de métier est intervenu.
+        <a href={`/services/${service.slug}/`} class="link-rule">Voir la prestation</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-y" aria-labelledby="titre-liste">
+    <div class="wrap">
+      <h2 id="titre-liste" class="sr-only">Chantiers filtrés</h2>
+      <FiltresPortfolio projets={tous} actif={{ type: 'service', slug: service.slug }} />
+      <div class="mt-12 grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+        {projets.map((projet) => <ProjectCard projet={projet} />)}
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    titre={`Vous envisagez ${service.syntagme} ?`}
+    texte="Nous venons relever les lieux, puis vous recevez un devis détaillé poste par poste."
+    contexteWhatsApp={service.syntagme}
+  />
+</Page>

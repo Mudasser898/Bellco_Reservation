@@ -1,0 +1,68 @@
+---
+/**
+ * Portfolio filtré par commune.
+ *
+ * Générée uniquement pour les communes ayant au moins un chantier.
+ */
+import type { GetStaticPaths } from 'astro';
+import Page from '~/layouts/Page.astro';
+import Breadcrumbs from '~/components/chrome/Breadcrumbs.astro';
+import ProjectCard from '~/components/blocks/ProjectCard.astro';
+import FiltresPortfolio from '~/components/blocks/FiltresPortfolio.astro';
+import CTASection from '~/components/blocks/CTASection.astro';
+import { toutesLesRealisations } from '~/lib/sanity/queries';
+
+export const getStaticPaths = (async () => {
+  const projets = await toutesLesRealisations();
+  const communes = new Map<string, string>();
+  for (const projet of projets) {
+    if (projet.commune) communes.set(projet.commune.slug, projet.commune.nom);
+  }
+  return [...communes.entries()].map(([slug, nom]) => ({
+    params: { slug },
+    props: {
+      nom,
+      slug,
+      projets: projets.filter((projet) => projet.commune?.slug === slug),
+      tous: projets,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { nom, slug, projets, tous } = Astro.props;
+const filAriane = [
+  { libelle: 'Réalisations', href: '/realisations/' },
+  { libelle: nom, href: `/realisations/commune/${slug}/` },
+];
+---
+
+<Page
+  titre={`Réalisations à ${nom}`}
+  description={`Chantiers de rénovation livrés par Bellco Rénovation à ${nom} : appartements, maisons et studios, avec surface, durée et corps de métier.`}
+  filAriane={filAriane}
+  contexteWhatsApp={`une rénovation à ${nom}`}
+>
+  <section class="bg-surface border-line pt-header border-b">
+    <div class="wrap py-16">
+      <Breadcrumbs elements={filAriane} />
+      <p class="text-overline text-accent mt-6 uppercase">Réalisations</p>
+      <h1 class="font-display text-h1 mt-3 max-w-measure">Nos chantiers à {nom}</h1>
+    </div>
+  </section>
+
+  <section class="section-y" aria-labelledby="titre-liste">
+    <div class="wrap">
+      <h2 id="titre-liste" class="sr-only">Chantiers filtrés</h2>
+      <FiltresPortfolio projets={tous} actif={{ type: 'commune', slug }} />
+      <div class="mt-12 grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+        {projets.map((projet) => <ProjectCard projet={projet} />)}
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    titre={`Un projet de rénovation à ${nom} ?`}
+    texte="Nous intervenons dans toute la Seine-Saint-Denis et en Île-de-France. La visite conseil est gratuite."
+    contexteWhatsApp={`une rénovation à ${nom}`}
+  />
+</Page>

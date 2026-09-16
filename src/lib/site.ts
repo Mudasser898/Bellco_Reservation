@@ -186,3 +186,11 @@ export const NAV_PIED: readonly LienNav[] = [
   { href: '/mentions-legales/', libelle: 'Mentions légales' },
   { href: '/politique-de-confidentialite/', libelle: 'Politique de confidentialité' },
 ] as const;
+
+/** Libellés lisibles des types de bien, tels qu'ils s'affichent sur le site. */
+export const TYPES_DE_BIEN = {
+  appartement: 'Appartement',
+  maison: 'Maison',
+  studio: 'Studio',
+  'local-commercial': 'Local commercial',
+} as const satisfies Record<string, string>;
