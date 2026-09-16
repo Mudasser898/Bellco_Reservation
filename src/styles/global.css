@@ -264,7 +264,9 @@
 .comparateur-curseur:focus-visible {
   outline: none;
 }
-.comparateur-curseur:focus-visible + .comparateur-poignee .comparateur-bouton,
+/* Le curseur natif est invisible : le focus clavier est donc signalé sur la
+   poignée dessinée. Le sélecteur de voisinage ne convient pas — la poignée
+   précède l'input dans le DOM — d'où le :has() porté par le cadre. */
 .comparateur-cadre:has(.comparateur-curseur:focus-visible) .comparateur-bouton {
   outline: 3px solid var(--color-accent);
   outline-offset: 3px;

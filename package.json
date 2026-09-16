@@ -12,7 +12,9 @@
     "preview": "astro preview",
     "check": "astro check",
     "typecheck": "tsc --noEmit",
-    "astro": "astro"
+    "astro": "astro",
+    "audit": "node scripts/audit.mjs",
+    "verify": "astro check && astro build && node scripts/audit.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.1",

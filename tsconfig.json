@@ -8,7 +8,9 @@
     "dist",
     ".astro",
     "node_modules",
-    "Bellco Design System Review"
+    "Bellco Design System Review",
+    "public",
+    "scripts"
   ],
   "compilerOptions": {
     "strict": true,

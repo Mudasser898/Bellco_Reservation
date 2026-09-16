@@ -1,0 +1,5 @@
+# En-têtes servis par Cloudflare Pages.
+# L'adaptateur Astro ajoute ses propres règles de cache pour /_astro/*.
+
+/studio/*
+  X-Robots-Tag: noindex, nofollow

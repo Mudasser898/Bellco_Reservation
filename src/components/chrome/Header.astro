@@ -131,7 +131,7 @@ const estActif = (href: string) => chemin === href || chemin.startsWith(href);
       type="button"
       id="nav-toggle"
       hidden
-      class="lg:hidden -mr-2 flex flex-col gap-1.5 p-2"
+      class="bouton-menu lg:hidden -mr-2 flex flex-col items-center justify-center gap-1.5"
       aria-expanded="false"
       aria-controls="nav-mobile"
     >
@@ -346,6 +346,13 @@ const estActif = (href: string) => chemin === href || chemin.startsWith(href);
   .site-header[data-sur-hero='true'][data-scrolled='false'] .btn-devis:hover {
     background-color: var(--color-accent);
     border-color: var(--color-accent);
+  }
+
+  /* Cible tactile du bouton menu : 44 x 44 px. Il mesurait 40 x 34 px, ce qui
+     est court pour la commande de navigation principale sur telephone. */
+  .bouton-menu {
+    width: 44px;
+    height: 44px;
   }
 
   /* --- Tiroir mobile ------------------------------------------------------ */

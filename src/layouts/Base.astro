@@ -51,8 +51,14 @@ const blocs = jsonLd.filter((bloc): bloc is Record<string, unknown> => bloc !== 
 
     <title>{meta.titre}</title>
     <meta name="description" content={meta.description} />
-    <link rel="canonical" href={meta.canonique} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {/* Pas de canonique sur une page desindexee : elle designerait une URL
+        que l on demande justement aux moteurs d ignorer. La page 404 est
+        servie sous l adresse demandee, pas sous /404/. */}
+    {noindex ? (
+      <meta name="robots" content="noindex, nofollow" />
+    ) : (
+      <link rel="canonical" href={meta.canonique} />
+    )}
 
     <!-- Préchargement des deux polices du premier écran. `crossorigin` est
          obligatoire sur les polices, sans quoi le navigateur télécharge deux fois. -->
