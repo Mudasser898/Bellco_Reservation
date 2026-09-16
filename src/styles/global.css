@@ -68,7 +68,7 @@
   html {
     scroll-behavior: smooth;
     /* L'en-tête fixe ne doit pas masquer la cible d'une ancre. */
-    scroll-padding-top: calc(var(--spacing-header) + var(--spacing-4));
+    scroll-padding-top: calc(var(--spacing-header) + calc(var(--spacing) * 4));
     -webkit-text-size-adjust: 100%;
   }
 

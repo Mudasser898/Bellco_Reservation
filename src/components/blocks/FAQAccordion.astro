@@ -1,0 +1,85 @@
+---
+/**
+ * Accordéon de questions fréquentes.
+ *
+ * Bâti sur <details>/<summary> : l'ouverture, la navigation au clavier et
+ * l'annonce de l'état plié/déplié sont gérées par le navigateur. Aucun
+ * JavaScript, aucun attribut ARIA à maintenir — et le contenu reste lisible
+ * même si le CSS ne charge pas.
+ */
+import type { QuestionReponse } from '~/lib/sanity/types';
+
+interface Props {
+  readonly entrees: readonly QuestionReponse[];
+  /** Niveau de titre, pour ne pas casser la hiérarchie de la page. */
+  readonly niveauTitre?: 2 | 3;
+}
+const { entrees, niveauTitre = 3 } = Astro.props;
+const Titre = `h${niveauTitre}` as 'h2' | 'h3';
+---
+
+{
+  entrees.length > 0 && (
+    <div class="border-line border-t">
+      {entrees.map((entree) => (
+        <details class="faq-entree border-line border-b">
+          <summary class="faq-question">
+            <Titre class="font-display text-h4 pr-8">{entree.question}</Titre>
+            <span class="faq-signe" aria-hidden="true" />
+          </summary>
+          <div class="faq-reponse">
+            <p class="text-ink-700 max-w-measure text-body">{entree.reponse}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .faq-question {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: calc(var(--spacing) * 6);
+    padding-block: calc(var(--spacing) * 6);
+    cursor: pointer;
+    /* Retire le triangle natif sans perdre le comportement. */
+    list-style: none;
+  }
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+  .faq-question:hover {
+    color: var(--color-accent);
+  }
+
+  /* Signe + / − dessiné en CSS : deux barres, dont une pivote à l'ouverture. */
+  .faq-signe {
+    position: relative;
+    flex: none;
+    width: calc(var(--spacing) * 5);
+    height: calc(var(--spacing) * 5);
+    margin-top: calc(var(--spacing) * 2);
+  }
+  .faq-signe::before,
+  .faq-signe::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: 1.5px;
+    background-color: currentColor;
+  }
+  .faq-signe::after {
+    transform: rotate(90deg);
+    transition: transform var(--default-transition-duration) var(--ease-out-soft);
+  }
+  .faq-entree[open] .faq-signe::after {
+    transform: rotate(0deg);
+  }
+
+  .faq-reponse {
+    padding-bottom: calc(var(--spacing) * 6);
+  }
+</style>
