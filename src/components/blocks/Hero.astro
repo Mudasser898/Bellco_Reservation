@@ -1,0 +1,58 @@
+---
+/**
+ * Hero de l'accueil.
+ *
+ * Avec photo : elle est prioritaire (c'est le LCP) et reçoit un voile dégradé
+ * pour que le texte reste lisible quel que soit le cliché. Sans photo, on
+ * retombe sur un aplat encre — jamais sur une image d'illustration générique.
+ */
+import Picture from '~/components/media/Picture.astro';
+import { lienWhatsApp } from '~/lib/site';
+import { imageValide } from '~/lib/sanity/image';
+import type { ImageAvecAlt } from '~/lib/sanity/types';
+
+interface Props {
+  readonly surtitre: string;
+  readonly titre: string;
+  readonly accroche: string;
+  readonly image?: ImageAvecAlt | undefined;
+  readonly contexteWhatsApp?: string | undefined;
+}
+const { surtitre, titre, accroche, image, contexteWhatsApp } = Astro.props;
+const avecPhoto = imageValide(image);
+---
+
+<section class="on-ink bg-primary text-on-primary relative flex min-h-dvh items-end overflow-hidden">
+  {
+    avecPhoto && (
+      <>
+        <div class="absolute inset-0">
+          <Picture image={image!} sizes="100vw" prioritaire={true} />
+        </div>
+        <div class="bg-hero-scrim absolute inset-0" aria-hidden="true" />
+      </>
+    )
+  }
+
+  <div class="wrap pt-header relative pb-24">
+    <p class="text-overline text-accent-on-dark uppercase">{surtitre}</p>
+    <h1 class="font-display text-display mt-4 max-w-measure">{titre}</h1>
+    <p class="text-sand-300 mt-6 max-w-measure-narrow text-lead">{accroche}</p>
+
+    <div class="mt-10 flex flex-wrap gap-4">
+      <a
+        href="/devis/"
+        class="bg-accent hover:bg-accent-hover text-on-accent rounded px-6 py-4 text-body-sm font-semibold"
+      >
+        Demander un devis gratuit
+      </a>
+      <a
+        href={lienWhatsApp(contexteWhatsApp)}
+        class="border-sand-300 text-on-primary hover:bg-on-primary hover:text-primary rounded border px-6 py-4 text-body-sm font-semibold"
+        rel="noopener"
+      >
+        Écrire sur WhatsApp
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,60 @@
+---
+/**
+ * Déroulé du chantier, en quatre étapes numérotées.
+ *
+ * Contenu éditorial figé dans le code : il décrit la méthode de l'entreprise,
+ * qui ne change pas d'une page à l'autre et n'a pas vocation à être modifiée
+ * au coup par coup depuis le Studio.
+ */
+interface Props {
+  readonly niveauTitre?: 2 | 3;
+}
+const { niveauTitre = 3 } = Astro.props;
+const Titre = `h${niveauTitre}` as 'h2' | 'h3';
+
+const etapes = [
+  {
+    numero: '01',
+    titre: 'Visite conseil gratuite',
+    texte:
+      'Nous venons sur place, écoutons le projet et relevons les lieux. Sans engagement de votre part.',
+  },
+  {
+    numero: '02',
+    titre: 'Étude, plans et devis détaillé',
+    texte:
+      'Vous recevez des plans pour vous projeter et un devis poste par poste, chiffré corps de métier par corps de métier.',
+  },
+  {
+    numero: '03',
+    titre: 'Réalisation suivie',
+    texte:
+      'Un seul responsable de chantier coordonne les équipes, arbitre les imprévus et vous tient informé chaque semaine.',
+  },
+  {
+    numero: '04',
+    titre: 'Réception et garantie',
+    texte:
+      'Procès-verbal de réception, levée des réserves, puis garantie décennale sur le gros œuvre et l’étanchéité.',
+  },
+];
+---
+
+<ol class="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-4">
+  {
+    etapes.map((etape) => (
+      <li class="border-line border-t pt-5">
+        {/* sand-400 et non primary-muted : ce dernier est calibré pour l encre
+            (1,65:1 sur le fond clair, illisible). 3,41:1 ici, seuil grand texte. */}
+        <p class="font-display text-step-num text-sand-400" aria-hidden="true">
+          {etape.numero}
+        </p>
+        <Titre class="font-display text-h4 mt-3">
+          <span class="sr-only">Étape {etape.numero} —</span>
+          {etape.titre}
+        </Titre>
+        <p class="text-ink-700 mt-2 text-small">{etape.texte}</p>
+      </li>
+    ))
+  }
+</ol>

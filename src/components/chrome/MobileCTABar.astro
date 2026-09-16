@@ -17,7 +17,7 @@ const { reglages = {}, contexteWhatsApp } = Astro.props;
 const telLien = reglages.telephoneInternational ?? ENTREPRISE.telephoneE164;
 ---
 
-<div class="barre-mobile lg:hidden">
+<div class="barre-mobile">
   <a href={`tel:${telLien}`} class="barre-action">
     <svg class="size-5" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
       <path
@@ -87,5 +87,14 @@ const telLien = reglages.telephoneInternational ?? ENTREPRISE.telephoneE164;
   }
   .barre-devis:hover {
     background-color: var(--color-accent-hover);
+  }
+
+  /* Masquage au-delà de lg. Placé en fin de feuille à dessein : `lg:hidden`
+     perdrait face au sélecteur scopé d Astro, et un @media de même
+     spécificité placé avant la règle de base serait écrasé par elle. */
+  @media (width >= 1120px) {
+    .barre-mobile {
+      display: none;
+    }
   }
 </style>
