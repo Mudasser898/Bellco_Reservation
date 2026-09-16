@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.12.0 <25"
   },
   "scripts": {
     "dev": "astro dev",
@@ -52,6 +52,7 @@
   "allowScripts": {
     "esbuild": true,
     "sharp": true,
-    "styled-components": true
+    "styled-components": true,
+    "workerd": true
   }
 }
