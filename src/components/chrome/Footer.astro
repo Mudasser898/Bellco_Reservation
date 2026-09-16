@@ -1,0 +1,173 @@
+---
+/**
+ * Pied de page.
+ *
+ * Les coordonnées viennent des réglages Sanity quand ils sont renseignés, des
+ * constantes du site sinon. Les mentions qui ne peuvent pas être inventées
+ * (SIRET, police décennale) ne s'affichent que si elles existent réellement.
+ */
+import Logo from './Logo.astro';
+import {
+  COMMUNES,
+  ENTREPRISE,
+  HORAIRES,
+  JOUR_FERME,
+  NAV_PIED,
+  SERVICES,
+} from '~/lib/site';
+import type { Reglages } from '~/lib/sanity/types';
+
+interface Props {
+  readonly reglages?: Reglages;
+}
+const { reglages = {} } = Astro.props;
+
+const telAffiche = reglages.telephone ?? ENTREPRISE.telephoneAffiche;
+const telLien = reglages.telephoneInternational ?? ENTREPRISE.telephoneE164;
+const email = reglages.email ?? ENTREPRISE.email;
+const rue = reglages.adresseRue ?? ENTREPRISE.adresse.rue;
+const codePostal = reglages.adresseCodePostal ?? ENTREPRISE.adresse.codePostal;
+const ville = reglages.adresseVille ?? ENTREPRISE.adresse.ville;
+
+const horaires = reglages.horaires?.length
+  ? reglages.horaires.map((h) => ({
+      libelle: h.libelle ?? '',
+      plage: [h.ouverture, h.fermeture].filter(Boolean).join(' – '),
+    }))
+  : HORAIRES.map((h) => ({ libelle: h.libelle, plage: `${h.ouverture} – ${h.fermeture}` }));
+
+const reseaux = (reglages.reseaux ?? []).filter((r) => r.url && r.nom);
+const annee = new Date().getFullYear();
+---
+
+<footer class="bg-primary text-sand-300 border-ink-700 on-ink border-t">
+  <div class="wrap grid gap-10 pt-14 pb-10 md:grid-cols-2 lg:grid-cols-4">
+    <!-- Marque -->
+    <div>
+      <a href="/" class="text-on-primary inline-block" aria-label="Bellco Rénovation — accueil">
+        <Logo />
+      </a>
+      <p class="mt-4 max-w-measure-narrow text-small">
+        Entreprise de rénovation tous corps d’état à Saint-Denis. Devis détaillé par
+        corps de métier, interlocuteur unique, garantie décennale.
+      </p>
+      {
+        reseaux.length > 0 && (
+          <ul class="mt-5 flex flex-wrap gap-4 text-small">
+            {reseaux.map((reseau) => (
+              <li>
+                <a
+                  href={reseau.url}
+                  class="link-rule"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {reseau.nom}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <!-- Services -->
+    <nav aria-labelledby="pied-services">
+      <p id="pied-services" class="text-overline text-on-primary uppercase">Services</p>
+      <ul class="mt-3 flex flex-col gap-1 text-small">
+        {
+          SERVICES.map((service) => (
+            <li>
+              <a href={`/services/${service.slug}/`} class="hover:text-on-primary">
+                {service.titre}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <!-- Zones et entreprise -->
+    <nav aria-labelledby="pied-entreprise">
+      <p id="pied-entreprise" class="text-overline text-on-primary uppercase">L’entreprise</p>
+      <ul class="mt-3 flex flex-col gap-1 text-small">
+        <li><a href="/a-propos/" class="hover:text-on-primary">À propos</a></li>
+        <li><a href="/realisations/" class="hover:text-on-primary">Réalisations</a></li>
+        <li><a href="/blog/" class="hover:text-on-primary">Blog</a></li>
+        <li><a href="/contact/" class="hover:text-on-primary">Contact</a></li>
+        <li><a href="/devis/" class="hover:text-on-primary">Demander un devis</a></li>
+      </ul>
+
+      <p class="text-overline text-on-primary mt-6 uppercase">Zones d’intervention</p>
+      <ul class="mt-3 flex flex-col gap-1 text-small">
+        {
+          COMMUNES.map((commune) => (
+            <li>
+              <a href={`/zones-intervention/${commune.slug}/`} class="hover:text-on-primary">
+                {commune.nom}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <!-- Contact -->
+    <div>
+      <p class="text-overline text-on-primary uppercase">Contact</p>
+      <address class="mt-3 text-small not-italic">
+        {rue}<br />
+        {codePostal}&nbsp;{ville}
+      </address>
+      <p class="mt-3 text-small">
+        <a href={`tel:${telLien}`} class="text-on-primary font-semibold">{telAffiche}</a><br />
+        <a href={`mailto:${email}`} class="link-rule">{email}</a>
+      </p>
+
+      <p class="text-overline text-on-primary mt-6 uppercase">Horaires</p>
+      <ul class="mt-3 flex flex-col gap-1 text-small">
+        {
+          horaires.map((horaire) => (
+            <li class="flex justify-between gap-4">
+              <span>{horaire.libelle}</span>
+              <span class="text-on-primary">{horaire.plage}</span>
+            </li>
+          ))
+        }
+        <li class="text-ink-500">{JOUR_FERME}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Bandeau légal -->
+  <div class="border-ink-700 border-t">
+    <div class="wrap flex flex-wrap justify-between gap-x-6 gap-y-3 py-5 text-caption">
+      <p>
+        © {annee} {reglages.nomEntreprise ?? ENTREPRISE.nom}
+        {reglages.siret && <> · SIRET {reglages.siret}</>}
+        {
+          reglages.numeroPoliceDecennale ? (
+            <>
+              {' '}· Garantie décennale
+              {reglages.assuranceDecennale ? ` — ${reglages.assuranceDecennale}` : ''}, police
+              n° {reglages.numeroPoliceDecennale}
+            </>
+          ) : (
+            <> · Attestation de garantie décennale fournie avec chaque devis</>
+          )
+        }
+      </p>
+      <ul class="flex gap-5">
+        {
+          NAV_PIED.map((lien) => (
+            <li>
+              <a href={lien.href} class="hover:text-on-primary">
+                {lien.libelle}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</footer>

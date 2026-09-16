@@ -154,4 +154,5 @@ export type Reglages = {
   readonly noteGoogle?: number;
   readonly nombreAvisGoogle?: number;
   readonly urlAvisGoogle?: string;
+  readonly fourchettePrix?: string;
 };

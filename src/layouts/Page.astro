@@ -1,0 +1,88 @@
+---
+/**
+ * Gabarit des pages publiques : Base + en-tête, pied de page, barre d'action
+ * mobile et bandeau de consentement.
+ *
+ * Les réglages Sanity sont lus une seule fois ici et transmis aux composants
+ * qui en ont besoin, plutôt que requêtés par chacun d'eux.
+ */
+import Base from './Base.astro';
+import Header from '~/components/chrome/Header.astro';
+import Footer from '~/components/chrome/Footer.astro';
+import MobileCTABar from '~/components/chrome/MobileCTABar.astro';
+import CookieBanner from '~/components/chrome/CookieBanner.astro';
+import { reglages as chargerReglages } from '~/lib/sanity/queries';
+import { schemaFilAriane, schemaLocalBusiness } from '~/lib/seo/jsonld';
+import type { ElementFilAriane } from '~/lib/seo/jsonld';
+
+interface Props {
+  readonly titre: string;
+  readonly description: string;
+  readonly metaTitle?: string | undefined;
+  readonly metaDescription?: string | undefined;
+  readonly ogImage?: { readonly url: string; readonly alt: string } | undefined;
+  readonly typeOg?: 'website' | 'article';
+  readonly noindex?: boolean;
+  /** Hero photo pleine hauteur : l'en-tête devient transparent. */
+  readonly surHero?: boolean;
+  /** Fil d'Ariane, sans l'accueil (ajouté automatiquement). */
+  readonly filAriane?: readonly ElementFilAriane[];
+  /** Blocs JSON-LD propres à la page. LocalBusiness et BreadcrumbList sont ajoutés ici. */
+  readonly jsonLd?: readonly (Record<string, unknown> | null)[];
+  /** Contexte français du message WhatsApp pré-rempli. */
+  readonly contexteWhatsApp?: string | undefined;
+}
+
+const {
+  titre,
+  description,
+  metaTitle,
+  metaDescription,
+  ogImage,
+  typeOg = 'website',
+  noindex = false,
+  surHero = false,
+  filAriane = [],
+  jsonLd = [],
+  contexteWhatsApp,
+} = Astro.props;
+
+const reglages = await chargerReglages();
+
+/* LocalBusiness sur chaque page, fil d'Ariane dès qu'on quitte l'accueil,
+   puis les blocs propres à la page. */
+const blocs = [schemaLocalBusiness(reglages), schemaFilAriane(filAriane), ...jsonLd];
+
+const chemin = Astro.url.pathname;
+---
+
+<Base
+  titre={titre}
+  description={description}
+  metaTitle={metaTitle}
+  metaDescription={metaDescription}
+  ogImage={ogImage}
+  typeOg={typeOg}
+  noindex={noindex}
+  jsonLd={blocs}
+>
+  <Header surHero={surHero} chemin={chemin} />
+
+  <main id="contenu">
+    <slot />
+  </main>
+
+  <Footer reglages={reglages} />
+  <MobileCTABar reglages={reglages} contexteWhatsApp={contexteWhatsApp} />
+  <CookieBanner />
+</Base>
+
+<style is:global>
+  /* La barre d'action mobile flotte au-dessus du contenu : on réserve sa
+     hauteur en bas de page pour qu'elle ne masque jamais le pied de page. */
+  @media (width < 1120px) {
+    body {
+      padding-bottom: calc(60px + env(safe-area-inset-bottom));
+    }
+  }
+</style>

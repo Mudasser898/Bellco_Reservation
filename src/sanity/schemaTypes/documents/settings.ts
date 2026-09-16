@@ -254,6 +254,23 @@ export const settings = defineType({
       description: 'Permet au visiteur de vérifier la note lui-même.',
       validation: (Rule) => Rule.uri({ scheme: ['https'] }),
     }),
+    defineField({
+      name: 'fourchettePrix',
+      title: 'Positionnement tarifaire',
+      type: 'string',
+      group: 'preuves',
+      description:
+        'Indicateur large transmis à Google, pas un prix. « €€ » signifie milieu de gamme, « €€€ » haut de gamme. Laissez vide si vous préférez ne rien afficher.',
+      options: {
+        list: [
+          { title: '€ — économique', value: '€' },
+          { title: '€€ — milieu de gamme', value: '€€' },
+          { title: '€€€ — haut de gamme', value: '€€€' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: '€€',
+    }),
   ],
   preview: { prepare: () => ({ title: 'Réglages du site' }) },
 });

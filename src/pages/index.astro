@@ -1,35 +1,40 @@
 ---
 /**
- * Accueil — ébauche de l’étape 1, uniquement destinée à vérifier l’en-tête
- * et les jetons. Les neuf sections réelles arrivent à l’étape 4.
+ * Accueil — ébauche technique. Les neuf sections réelles arrivent à l'étape 4.
  */
-import Base from '~/layouts/Base.astro';
+import Page from '~/layouts/Page.astro';
 import { lienWhatsApp } from '~/lib/site';
 ---
 
-<Base
-  titre="Bellco Rénovation — entreprise de rénovation à Saint-Denis"
-  description="Rénovation d’appartement, de maison et de salle de bain à Saint-Denis, Paris et en Île-de-France. Devis détaillé et interlocuteur unique."
+<Page
+  titre="Entreprise de rénovation à Saint-Denis"
+  description="Rénovation d’appartement, de maison et de salle de bain à Saint-Denis, Paris et en Île-de-France. Devis détaillé par corps de métier et interlocuteur unique."
   surHero={true}
 >
   <!-- Hero provisoire : aplat encre en attendant les photos de chantier. -->
-  <section class="bg-primary text-on-primary relative flex min-h-dvh items-end">
+  <section class="bg-primary text-on-primary on-ink relative flex min-h-dvh items-end">
     <div class="wrap pt-header pb-24">
-      <p class="text-overline text-accent-on-dark uppercase">Entreprise de rénovation · Saint-Denis</p>
+      <p class="text-overline text-accent-on-dark uppercase">
+        Entreprise de rénovation · Saint-Denis
+      </p>
       <h1 class="font-display text-display mt-4 max-w-measure">
         Votre rénovation, menée comme un vrai chantier.
       </h1>
       <p class="text-sand-300 mt-6 max-w-measure-narrow text-lead">
-        Devis détaillé par corps de métier, plans 2D/3D, un seul interlocuteur
-        du premier plan à la dernière finition.
+        Devis détaillé par corps de métier, plans 2D/3D, un seul interlocuteur du
+        premier plan à la dernière finition.
       </p>
       <div class="mt-10 flex flex-wrap gap-4">
-        <a href="/devis/" class="bg-accent text-on-accent rounded px-6 py-4 text-body-sm font-semibold">
+        <a
+          href="/devis/"
+          class="bg-accent text-on-accent rounded px-6 py-4 text-body-sm font-semibold"
+        >
           Demander un devis gratuit
         </a>
         <a
           href={lienWhatsApp()}
           class="border-sand-300 text-on-primary rounded border px-6 py-4 text-body-sm font-semibold"
+          rel="noopener"
         >
           Écrire sur WhatsApp
         </a>
@@ -37,14 +42,14 @@ import { lienWhatsApp } from '~/lib/site';
     </div>
   </section>
 
-  <!-- Bloc clair, pour vérifier la bascule de l’en-tête au défilement. -->
   <section class="section-y">
     <div class="wrap">
       <h2 class="font-display text-h2 max-w-measure">Quatre étapes, aucune surprise.</h2>
       <p class="text-ink-700 mt-6 max-w-measure text-body">
         Cette page est une ébauche technique : elle sert à contrôler les jetons,
-        l’en-tête et le méga-menu avant de construire les sections réelles.
+        l’en-tête, le pied de page et les données structurées avant de construire
+        les sections réelles.
       </p>
     </div>
   </section>
-</Base>
+</Page>

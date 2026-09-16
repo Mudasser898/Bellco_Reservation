@@ -1,21 +1,46 @@
 ---
 /**
- * Gabarit de base — version minimale de l'étape 1.
+ * Gabarit de base : tout ce qui vit dans <head>, et rien d'autre.
  *
- * Sera complété à l'étape 3 : préchargement des polices, métadonnées uniques,
- * canonique, JSON-LD, contrôle du H1 en mode dev.
+ * L'en-tête, le pied de page et les barres d'action sont ajoutés par
+ * Page.astro. Ce fichier reste volontairement sans chrome pour que le Studio
+ * ou une page d'erreur puissent l'utiliser tels quels.
  */
 import '~/styles/global.css';
-import Header from '~/components/chrome/Header.astro';
-import { LANG } from '~/lib/site';
+import newsreaderLatin from '@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url';
+import instrumentLatin from '@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2?url';
+import { construireMeta } from '~/lib/seo/meta';
+import { LANG, LOCALE, ENTREPRISE } from '~/lib/site';
 
 interface Props {
   readonly titre: string;
   readonly description: string;
-  readonly surHero?: boolean;
+  readonly metaTitle?: string | undefined;
+  readonly metaDescription?: string | undefined;
+  /** Image de partage. Jamais le logo : une photo de chantier ou de service. */
+  readonly ogImage?: { readonly url: string; readonly alt: string } | undefined;
+  /** `article` pour les billets de blog, `website` partout ailleurs. */
+  readonly typeOg?: 'website' | 'article';
+  /** Retire la page des moteurs (Studio, pages techniques). */
+  readonly noindex?: boolean;
+  /** Blocs JSON-LD. Les entrées nulles sont ignorées. */
+  readonly jsonLd?: readonly (Record<string, unknown> | null)[];
 }
-const { titre, description, surHero = false } = Astro.props;
+
+const {
+  titre,
+  description,
+  metaTitle,
+  metaDescription,
+  ogImage,
+  typeOg = 'website',
+  noindex = false,
+  jsonLd = [],
+} = Astro.props;
+
 const chemin = Astro.url.pathname;
+const meta = construireMeta({ titre, description, metaTitle, metaDescription }, chemin);
+const blocs = jsonLd.filter((bloc): bloc is Record<string, unknown> => bloc !== null);
 ---
 
 <!doctype html>
@@ -23,14 +48,82 @@ const chemin = Astro.url.pathname;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{titre}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={new URL(chemin, Astro.site).href} />
+
+    <title>{meta.titre}</title>
+    <meta name="description" content={meta.description} />
+    <link rel="canonical" href={meta.canonique} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Préchargement des deux polices du premier écran. `crossorigin` est
+         obligatoire sur les polices, sans quoi le navigateur télécharge deux fois. -->
+    <link rel="preload" href={newsreaderLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={instrumentLatin} as="font" type="font/woff2" crossorigin />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Partage social -->
+    <meta property="og:type" content={typeOg} />
+    <meta property="og:locale" content={LOCALE.replace('-', '_')} />
+    <meta property="og:site_name" content={ENTREPRISE.nom} />
+    <meta property="og:title" content={meta.titre} />
+    <meta property="og:description" content={meta.description} />
+    <meta property="og:url" content={meta.canonique} />
+    {
+      ogImage && (
+        <>
+          <meta property="og:image" content={ogImage.url} />
+          <meta property="og:image:alt" content={ogImage.alt} />
+          <meta name="twitter:card" content="summary_large_image" />
+        </>
+      )
+    }
+    {!ogImage && <meta name="twitter:card" content="summary" />}
+
+    {
+      blocs.map((bloc) => (
+        <script type="application/ld+json" set:html={JSON.stringify(bloc)} is:inline />
+      ))
+    }
+
+    <slot name="head" />
   </head>
+
   <body>
-    <Header surHero={surHero} chemin={chemin} />
-    <main id="contenu">
-      <slot />
-    </main>
+    <slot />
+
+    {
+      /* Contrôle de structure en développement uniquement : une page doit avoir
+         exactement un H1, et la hiérarchie des titres ne doit pas sauter de
+         niveau. Sept des douze pages de l'ancien site n'avaient aucun H1. */
+      import.meta.env.DEV && (
+        <script is:inline>
+          {`
+          window.addEventListener('DOMContentLoaded', () => {
+            const h1 = document.querySelectorAll('h1');
+            if (h1.length !== 1) {
+              console.error(
+                '[structure] ' + h1.length + ' balise(s) H1 sur ' + location.pathname +
+                ' — il en faut exactement une.',
+                h1.length ? [...h1].map((n) => n.textContent?.trim()) : ''
+              );
+            }
+            const titres = [...document.querySelectorAll('h1,h2,h3,h4,h5,h6')];
+            let precedent = 0;
+            for (const titre of titres) {
+              const niveau = Number(titre.tagName[1]);
+              if (precedent && niveau > precedent + 1) {
+                console.warn(
+                  '[structure] Saut de niveau H' + precedent + ' vers H' + niveau +
+                  ' : « ' + (titre.textContent || '').trim().slice(0, 60) + ' »'
+                );
+              }
+              precedent = niveau;
+            }
+          });
+        `}
+        </script>
+      )
+    }
   </body>
 </html>
