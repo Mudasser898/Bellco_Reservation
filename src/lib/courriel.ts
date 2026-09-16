@@ -68,13 +68,34 @@ export async function verifierTurnstile(
 }
 
 /**
- * Adresse IP du client.
+ * Adresse IP du client, quelle que soit la plateforme.
  *
- * `Astro.clientAddress` n'est pas implémenté par l'adaptateur Cloudflare — y
- * accéder lève. Cloudflare renseigne l'adresse dans un en-tête.
+ * Chaque hébergeur la transmet dans son propre en-tête, et `Astro.clientAddress`
+ * n'est pas utilisable partout — l'adaptateur Cloudflare lève une exception si
+ * on y accède. On lit donc les en-têtes directement, du plus spécifique au plus
+ * général :
+ *
+ *   - `x-vercel-forwarded-for` : Vercel, non falsifiable par le client ;
+ *   - `CF-Connecting-IP`       : Cloudflare ;
+ *   - `x-forwarded-for`        : standard de fait, première entrée de la liste.
+ *
+ * L'adresse ne sert qu'à lier le jeton Turnstile à son émetteur. Une valeur
+ * absente n'invalide pas la vérification : Cloudflare accepte l'appel sans
+ * `remoteip`. Mieux vaut un contrôle légèrement moins strict qu'un formulaire
+ * qui refuse tout le monde.
  */
-export const ipClient = (request: Request): string | null =>
-  request.headers.get('CF-Connecting-IP');
+export function ipClient(request: Request): string | null {
+  const vercel = request.headers.get('x-vercel-forwarded-for');
+  if (vercel) return vercel.split(',')[0]!.trim();
+
+  const cloudflare = request.headers.get('CF-Connecting-IP');
+  if (cloudflare) return cloudflare.trim();
+
+  const transmis = request.headers.get('x-forwarded-for');
+  if (transmis) return transmis.split(',')[0]!.trim();
+
+  return request.headers.get('x-real-ip');
+}
 
 export type ResultatEnvoi =
   | { readonly ok: true }

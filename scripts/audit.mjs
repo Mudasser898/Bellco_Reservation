@@ -11,7 +11,9 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const RACINE = 'dist/client';
+/* La racine depend de la cible : Vercel ecrit dans .vercel/output/static,
+   Cloudflare dans dist/client. On prend celle qui existe. */
+const RACINE = existsSync('.vercel/output/static') ? '.vercel/output/static' : 'dist/client';
 /** Separateur de chemin Windows, sans antislash litteral dans la source. */
 const SEPARATEUR = String.fromCharCode(92);
 const SITE = 'https://bellcorenovation.com';
@@ -194,8 +196,12 @@ for (const [cible, pages] of [...liensMorts].sort()) {
 
 /* --- Redirections ---------------------------------------------------------
    Les anciennes adresses portent le référencement acquis : une règle oubliée
-   se traduit par une page perdue. Les adresses de spam doivent répondre 410
-   et non 404, pour être retirées plus vite de l'index. */
+   se traduit par une page perdue. Elles sont déclarées dans astro.config.mjs
+   et compilées par l'adaptateur ; on vérifie donc la source, valable pour les
+   deux plateformes, plutôt qu'un fichier propre à l'une d'elles.
+
+   Les adresses de spam ne sont pas des redirections : ce sont des routes
+   rendues à la demande qui répondent 410. On vérifie leur existence. */
 const REDIRECTIONS_ATTENDUES = [
   ['/renovation-dappartement', '/services/renovation-appartement/'],
   ['/renovation-de-maison-villa', '/services/renovation-maison-villa/'],
@@ -206,40 +212,46 @@ const REDIRECTIONS_ATTENDUES = [
   ['/vitrification-et-poncage-de-parquet', '/services/parquet/'],
   ['/bellcoelect', '/services/electricite/'],
   ['/travaux-delectricite', '/services/electricite/'],
-  ['/realisations', '/realisations/'],
-  ['/contact', '/contact/'],
-  ['/blog', '/blog/'],
 ];
-const GONE_ATTENDUS = ['/software-beyond-compare', '/valorant-hack', '/fl-studio-crack'];
+const SPAM_ATTENDU = ['software-beyond-compare', 'valorant-hack', 'fl-studio-crack'];
 
-const cheminRedirections = join(RACINE, '_redirects');
-if (!existsSync(cheminRedirections)) {
-  err('(racine)', '_redirects absent — toutes les anciennes adresses renverraient 404');
-} else {
-  const regles = readFileSync(cheminRedirections, 'utf8')
+const config = readFileSync('astro.config.mjs', 'utf8');
+
+if (!config.includes("trailingSlash: 'always'")) {
+  err(
+    '(redirections)',
+    "trailingSlash n'est plus en 'always' : /realisations, /contact et /blog " +
+      'sans barre finale ne seraient plus redirigées',
+  );
+}
+
+for (const [source, cible] of REDIRECTIONS_ATTENDUES) {
+  const ligne = config
     .split('\n')
-    .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith('#'))
-    .map((l) => l.split(/\s+/));
-
-  for (const [source, cible] of REDIRECTIONS_ATTENDUES) {
-    const regle = regles.find((r) => r[0] === source);
-    if (!regle) err('(redirections)', `règle absente pour ${source}`);
-    else if (regle[1] !== cible) {
-      err('(redirections)', `${source} pointe vers ${regle[1]} au lieu de ${cible}`);
-    } else if (regle[2] !== '301') {
-      err('(redirections)', `${source} utilise un code ${regle[2]} au lieu de 301`);
-    } else if (!urlsConnues.has(cible)) {
-      err('(redirections)', `${source} redirige vers ${cible}, qui n'existe pas`);
-    }
+    .find((l) => l.includes(`'${source}'`) && l.includes('destination'));
+  if (!ligne) {
+    err('(redirections)', `règle absente pour ${source}`);
+  } else if (!ligne.includes(`'${cible}'`)) {
+    err('(redirections)', `${source} ne pointe pas vers ${cible}`);
+  } else if (!ligne.includes('301')) {
+    err('(redirections)', `${source} n'est pas en 301`);
+  } else if (!urlsConnues.has(cible)) {
+    err('(redirections)', `${source} redirige vers ${cible}, qui n'existe pas`);
   }
+}
 
-  for (const source of GONE_ATTENDUS) {
-    const regle = regles.find((r) => r[0] === source);
-    if (!regle) err('(redirections)', `page de spam non neutralisée : ${source}`);
-    else if (regle[2] !== '410') {
-      err('(redirections)', `${source} répond ${regle[2]} au lieu de 410`);
-    }
+for (const slug of SPAM_ATTENDU) {
+  const chemin = `src/pages/${slug}.astro`;
+  if (!existsSync(chemin)) {
+    err('(410)', `page de spam non neutralisée : ${slug}`);
+    continue;
+  }
+  const source = readFileSync(chemin, 'utf8');
+  if (!source.includes('prerender = false')) {
+    err('(410)', `${slug} est prérendue : elle répondrait 200 au lieu de 410`);
+  }
+  if (!source.includes('status = 410')) {
+    err('(410)', `${slug} ne pose pas de statut 410`);
   }
 }
 

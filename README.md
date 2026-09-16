@@ -112,27 +112,71 @@ npm run verify     # tests de schéma + typage + build + audit
 
 ## Déploiement
 
-Le site est prévu pour Cloudflare Pages.
+Le site cible **Vercel** par défaut, et sait aussi se construire pour
+**Cloudflare Pages**. Les formats de sortie des deux plateformes sont
+incompatibles : on choisit donc la cible au build, via `DEPLOY_TARGET`.
 
-1. Connecter le dépôt à un projet Cloudflare Pages.
-2. Commande de construction : `npm run build`. Dossier de sortie : `dist`.
-3. Renseigner les variables d'environnement dans **Settings → Environment
-   variables**. Les variables serveur doivent être marquées comme secrètes.
-4. Faire pointer le domaine `bellcorenovation.com` sur le projet.
+```bash
+npm run build                          # Vercel (défaut) → .vercel/output/
+DEPLOY_TARGET=cloudflare npm run build # Cloudflare      → dist/
+```
 
-`public/_redirects` et `public/_headers` sont repris automatiquement.
-L'adaptateur Astro ajoute ses propres règles de cache à `_headers` sans
-écraser les nôtres.
+### Vercel
+
+1. Importer le dépôt dans Vercel. Le préréglage Astro est détecté seul ;
+   laisser la commande de build et le répertoire de sortie par défaut.
+2. Renseigner les variables d'environnement (**Settings → Environment
+   Variables**), pour *Production* **et** *Preview*. Marquer comme secrètes
+   toutes celles qui ne commencent pas par `PUBLIC_`.
+3. Fixer Node 22 dans **Settings → General → Node.js Version**.
+4. Rattacher le domaine `bellcorenovation.com`.
+
+Ce que l'adaptateur produit tout seul, sans configuration : la barre oblique
+finale (308), le cache immuable sur `/_astro/*`, et une fonction serverless
+unique servant `/api/devis/`, `/api/contact/` et les trois routes 410.
+
+`vercel.json` ne contient qu'une chose : l'en-tête `X-Robots-Tag` sur
+`/studio/*`.
+
+### Cloudflare Pages
+
+1. Commande de build : `DEPLOY_TARGET=cloudflare npm run build`.
+   Répertoire de sortie : `dist`.
+2. Mêmes variables d'environnement.
+
+`public/_headers` s'applique ici ; `vercel.json` y est ignoré. L'adaptateur
+écrit `dist/client/_redirects` à partir des redirections déclarées dans
+`astro.config.mjs`.
+
+### Redirections et pages de spam
+
+Les douze anciennes adresses sont déclarées **une seule fois**, dans
+`astro.config.mjs`. Chaque adaptateur les compile dans son propre format —
+rien à maintenir en double.
+
+Les trois pages de spam issues de la compromission ne sont pas des
+redirections : aucune plateforme ne sait renvoyer un 410 depuis sa
+configuration. Ce sont des routes rendues à la demande, dans `src/pages/`,
+qui posent elles-mêmes le statut 410.
+
+> **Piège.** Ne déclarez jamais une redirection d'une adresse vers sa propre
+> version avec barre finale (`'/blog': '/blog/'`). Astro considère alors que
+> la redirection possède la route et **supprime la page réelle** : `/blog/`
+> renvoie 404. `trailingSlash: 'always'` s'en charge déjà, en 308.
 
 ### Après la première mise en ligne
 
-- Vérifier que `https://bellcorenovation.com/studio/` demande bien une
-  connexion, et qu'il est absent des résultats Google.
-- Soumettre `https://bellcorenovation.com/sitemap-index.xml` dans la Search
-  Console.
-- Envoyer une demande de devis réelle et vérifier sa réception.
-- Surveiller les anciennes adresses : elles doivent renvoyer 301, et les trois
-  adresses de spam un 410.
+- Vérifier que `/studio/` demande une connexion et renvoie bien
+  `X-Robots-Tag: noindex` : `curl -I https://bellcorenovation.com/studio/`.
+  Si l'en-tête est absent, `vercel.json` n'est pas pris en compte à côté de la
+  Build Output API — `robots.txt` reste alors la seule protection, ce qui
+  empêche l'exploration mais pas l'indexation d'une URL découverte ailleurs.
+- Contrôler une ancienne adresse : `curl -I https://bellcorenovation.com/bellcoelect`
+  doit renvoyer 301.
+- Contrôler une adresse de spam : `curl -I https://bellcorenovation.com/valorant-hack`
+  doit finir en 410.
+- Soumettre `sitemap-index.xml` dans la Search Console.
+- Envoyer une vraie demande de devis et vérifier sa réception.
 
 ---
 

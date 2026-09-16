@@ -1,5 +1,8 @@
-# En-têtes servis par Cloudflare Pages.
-# L'adaptateur Astro ajoute ses propres règles de cache pour /_astro/*.
+# En-têtes Cloudflare Pages. Ignoré par Vercel, qui lit vercel.json.
+# L'adaptateur Cloudflare ajoute ses propres règles de cache pour /_astro/*.
+#
+# Le Studio ne doit pas être indexable. robots.txt en interdit l'exploration ;
+# cet en-tête interdit l'indexation d'une URL qui serait découverte autrement.
 
 /studio/*
   X-Robots-Tag: noindex, nofollow
